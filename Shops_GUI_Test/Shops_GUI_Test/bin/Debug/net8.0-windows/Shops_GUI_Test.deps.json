@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Shops_GUI_Test/1.0.0": {
+        "runtime": {
+          "Shops_GUI_Test.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Shops_GUI_Test/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
