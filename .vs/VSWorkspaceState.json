@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Content",
+    "\\Content\\Content",
+    "\\Content\\Content\\Repository"
   ],
+  "SelectedNode": "\\Content\\Content\\Repository\\ShopRepo.cs",
   "PreviewInSolutionExplorer": false
 }

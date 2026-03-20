@@ -8,24 +8,24 @@ namespace Content.Repository
 {
     class ReservationRepo
     {
-        private List<Domain.Reservation> reservations;
+        private Dictionary<int,Domain.Reservation> reservations;
 
         public ReservationRepo()
         {
-            reservations = new List<Domain.Reservation>();
+            reservations = new Dictionary<int,Domain.Reservation>();
         }
 
         public void addReservation(Domain.Reservation reservation)
         {
-            reservations.Insert(reservation.getId(), reservation);
+            reservations[reservation.getId()]=reservation;
         }
 
         public void deleteReservation(int id)
         {
-            reservations.RemoveAt(id);
+            reservations.Remove(id);
         }
 
-        public List<Domain.Reservation> getAllReservations()
+        public Dictionary<int,Domain.Reservation> getAllReservations()
         {
             return reservations;
         }

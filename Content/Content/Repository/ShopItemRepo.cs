@@ -8,24 +8,24 @@ namespace Content.Repository
 {
     class ShopItemRepo
     {
-        private List<Domain.ShopItem> shopItems;
+        private Dictionary<int,Domain.ShopItem> shopItems;
 
         public ShopItemRepo()
         {
-            shopItems = new List<Domain.ShopItem>();
+            shopItems = new Dictionary<int,Domain.ShopItem>();
         }
 
         public void addShopItem(Domain.ShopItem shopItem)
         {
-            shopItems.Insert(shopItem.getId(), shopItem);
+            shopItems[shopItem.getId()]=shopItem;
         }
 
         public void deleteShopItem(int id)
         {
-            shopItems.RemoveAt(id);
+            shopItems.Remove(id);
         }
 
-        public List<Domain.ShopItem> getAllShopItems()
+        public Dictionary<int,Domain.ShopItem> getAllShopItems()
         {
             return shopItems;
         }

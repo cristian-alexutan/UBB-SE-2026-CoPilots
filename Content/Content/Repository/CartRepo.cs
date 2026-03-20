@@ -8,24 +8,24 @@ namespace Content.Repository
 {
     class CartRepo
     {
-        private List<Domain.Cart> carts;
+        private Dictionary<int,Domain.Cart> carts;
 
         public CartRepo()
         {
-            carts = new List<Domain.Cart>();
+            carts = new Dictionary<int,Domain.Cart>();
         }
 
         public void addCart(Domain.Cart cart)
         {
-            carts.Insert(cart.getId(), cart);
+            carts[cart.getId()] = cart;
         }
 
         public void deleteCart(int id)
         {
-            carts.RemoveAt(id);
+            carts.Remove(id);
         }
 
-        public List<Domain.Cart> getAllCarts()
+        public Dictionary<int,Domain.Cart> getAllCarts()
         {
             return carts;
         }

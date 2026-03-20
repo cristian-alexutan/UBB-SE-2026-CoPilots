@@ -8,24 +8,24 @@ namespace Content.Repository
 {
     class ClientRepo
     {
-        private List<Domain.Client> clients;
+        private Dictionary<int,Domain.Client> clients;
 
         public ClientRepo()
         {
-            clients = new List<Domain.Client>();
+            clients = new Dictionary<int, Domain.Client>();
         }
 
         public void addClient(Domain.Client client)
         {
-            clients.Insert(client.getId(), client);
+            clients[client.getId()] = client;
         }
 
         public void deleteClient(int id)
         {
-            clients.RemoveAt(id);
+            clients.Remove(id);
         }
 
-        public List<Domain.Client> getAllClients()
+        public Dictionary<int, Domain.Client> getAllClients()
         {
             return clients;
         }

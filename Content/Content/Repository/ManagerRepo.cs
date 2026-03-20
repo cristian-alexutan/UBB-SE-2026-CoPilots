@@ -8,24 +8,24 @@ namespace Content.Repository
 {
     class ManagerRepo
     {
-        private List<Domain.Manager> managers;
+        private Dictionary<int,Domain.Manager> managers;
 
         public ManagerRepo()
         {
-            managers = new List<Domain.Manager>();
+            managers = new Dictionary<int,Domain.Manager>();
         }
 
         public void addManager(Domain.Manager manager)
         {
-            managers.Insert(manager.getId(),manager);
+            managers[manager.getId()]=manager;
         }
 
         public void deleteManager(int id)
         {
-            managers.RemoveAt(id);
+            managers.Remove(id);
         }
 
-        public List<Domain.Manager> getAllManagers()
+        public Dictionary<int,Domain.Manager> getAllManagers()
         {
             return managers;
         }
