@@ -266,3 +266,9 @@ C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net
 C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
 C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\ProjectArchitectures.txt
 C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\.winmd_cache\$Microsoft.Web.WebView2.Core.winmd_638789222360000000.json
+C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\profile_gui.svg
+C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\shopping-cart-outline-svgrepo-com.svg
+C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\shopping-cart-outline-svgrepo-com.xbf
+C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\shopping-cart-outline-svgrepo-com.xaml
+C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\shopping-cart-outline-svgrepo-com.xbf
+C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Assets\WhatsApp Image 2026-03-18 at 01.17.08.jpeg
