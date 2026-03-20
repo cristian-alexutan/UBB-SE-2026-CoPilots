@@ -29,7 +29,7 @@
     <AppXManifest Include="C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-03-20T09:36:01.308</Modified>
+      <Modified>2026-03-20T09:45:59.151</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +43,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>Shops_GUI_ISS.exe</PackagePath>
-      <Modified>2026-03-20T09:36:00.874</Modified>
+      <Modified>2026-03-20T09:45:58.700</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\Assets\profile_gui.svg">
       <PackagePath>Assets\profile_gui.svg</PackagePath>
@@ -55,7 +55,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Shops_GUI_ISS.dll">
       <PackagePath>Shops_GUI_ISS.dll</PackagePath>
-      <Modified>2026-03-20T09:36:00.867</Modified>
+      <Modified>2026-03-20T09:45:58.693</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\David\.nuget\packages\microsoft.netcore.app.runtime.win-x64\8.0.11\runtimes\win-x64\lib\net8.0\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -979,7 +979,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\David\source\repos\UBB-SE-2026-CoPilots\Shops_GUI_ISS\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2026-03-20T09:33:31.609</Modified>
+      <Modified>2026-03-20T09:45:45.675</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

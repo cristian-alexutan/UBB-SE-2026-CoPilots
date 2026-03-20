@@ -1,7 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.ObjectModel;
 
@@ -14,15 +13,23 @@ namespace Shops_GUI_ISS
         public MainWindow()
         {
             this.InitializeComponent();
+
+            // Pre-populate shops
             Shops.Add(new ShopItem { Name = "Chocolate Heaven", Category = "Food" });
             Shops.Add(new ShopItem { Name = "Cosmetics Corner", Category = "Beauty" });
             Shops.Add(new ShopItem { Name = "Designer Bags", Category = "Fashion" });
             Shops.Add(new ShopItem { Name = "Gourmet Delights", Category = "Food" });
             Shops.Add(new ShopItem { Name = "Luxury Boutique", Category = "Fashion" });
+
             ShopsGridView.ItemsSource = Shops;
 
+            // Only show AddShopButton if admin
+            AddShopButton.Visibility = App.CurrentAdmin ? Visibility.Visible : Visibility.Collapsed;
+
+            // Add click handlers
             AddShopButton.Click += AddShopButton_Click;
         }
+
 
         private async void AddShopButton_Click(object sender, RoutedEventArgs e)
         {
@@ -67,6 +74,8 @@ namespace Shops_GUI_ISS
 
         private async void EditShopButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!App.CurrentAdmin) return; // Only admins can edit
+
             if (sender is Button btn && btn.DataContext is ShopItem shop)
             {
                 var nameBox = new TextBox { Text = shop.Name };
@@ -98,6 +107,7 @@ namespace Shops_GUI_ISS
                     shop.Name = nameBox.Text;
                     shop.Category = categoryBox.Text;
 
+                    // Refresh GridView
                     ShopsGridView.ItemsSource = null;
                     ShopsGridView.ItemsSource = Shops;
                 }
@@ -106,6 +116,8 @@ namespace Shops_GUI_ISS
 
         private async void DeleteShopButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!App.CurrentAdmin) return; // Only admins can delete
+
             if (sender is Button btn && btn.DataContext is ShopItem shop)
             {
                 var dialog = new ContentDialog
@@ -113,8 +125,8 @@ namespace Shops_GUI_ISS
                     Title = "Delete Shop",
                     Content = $"Are you sure you want to delete \"{shop.Name}\"?",
                     PrimaryButtonText = "Yes",
-                    RequestedTheme = ElementTheme.Light,
                     CloseButtonText = "Cancel",
+                    RequestedTheme = ElementTheme.Light,
                     XamlRoot = btn.XamlRoot
                 };
 
@@ -126,9 +138,13 @@ namespace Shops_GUI_ISS
             }
         }
     }
+
     public class ShopItem
     {
         public string Name { get; set; }
         public string Category { get; set; }
+
+        // Admin-only buttons visibility
+        public Visibility AdminVisibility => App.CurrentAdmin ? Visibility.Visible : Visibility.Collapsed;
     }
 }

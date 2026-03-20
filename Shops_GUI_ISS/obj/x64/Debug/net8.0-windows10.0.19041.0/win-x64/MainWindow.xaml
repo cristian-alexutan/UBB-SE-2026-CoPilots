@@ -113,12 +113,14 @@
                                                VerticalAlignment="Center" />
 
                                     <Button x:ConnectionId='7' Width="40" Height="30" Grid.Column="1"                             
-                                            DataContext="{Binding}">
+                                            DataContext="{Binding}"
+                                                                                              >
                                         <TextBlock Text="✎" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Button>
 
-                                    <Button x:ConnectionId='8' Width="40" Height="30" Grid.Column="2" Margin="10,0,0,0"                               
-                                            DataContext="{Binding}">
+                                    <Button x:ConnectionId='8' Width="40" Height="30" Grid.Column="2"                               
+                                            DataContext="{Binding}"
+                                                                                              >
                                         <TextBlock Text="-" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Button>
                                 </Grid>

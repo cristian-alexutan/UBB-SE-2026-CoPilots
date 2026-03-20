@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Shops_GUI_ISS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4041d72d5ae16d54acc78613a032135c1bcbe7bd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+592532b45c742615dc5acf62693b91aa13fba7fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Shops_GUI_ISS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Shops_GUI_ISS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

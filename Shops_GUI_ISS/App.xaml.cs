@@ -34,6 +34,7 @@ namespace Shops_GUI_ISS
         {
             this.InitializeComponent();
         }
+        public static bool CurrentAdmin { get; set; } = false; // Set to true or false for testing
 
         /// <summary>
         /// Invoked when the application is launched.

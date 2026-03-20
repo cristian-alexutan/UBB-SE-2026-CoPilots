@@ -113,12 +113,14 @@
                                                VerticalAlignment="Center" />
 
                                     <Button Width="40" Height="30" Grid.Column="1" Click="EditShopButton_Click"
-                                            DataContext="{Binding}">
+                                            DataContext="{Binding}"
+                                            Visibility="{x:Bind AdminVisibility, Mode=OneWay}">
                                         <TextBlock Text="✎" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Button>
 
-                                    <Button Width="40" Height="30" Grid.Column="2" Margin="10,0,0,0" Click="DeleteShopButton_Click"
-                                            DataContext="{Binding}">
+                                    <Button Width="40" Height="30" Grid.Column="2" Click="DeleteShopButton_Click"
+                                            DataContext="{Binding}"
+                                            Visibility="{x:Bind AdminVisibility, Mode=OneWay}">
                                         <TextBlock Text="-" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Button>
                                 </Grid>
