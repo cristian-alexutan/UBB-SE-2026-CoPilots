@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -31,10 +31,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Bookmark",
@@ -48,7 +44,7 @@
               "RelativeDocumentMoniker": "LandingPage\\LandingPage.xaml",
               "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\LandingPage\\LandingPage\\LandingPage.xaml",
               "RelativeToolTip": "LandingPage\\LandingPage.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAACAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-03-19T10:13:02.181Z",
               "EditorCaption": ""
@@ -75,8 +71,7 @@
               "RelativeToolTip": "LandingPage\\LandingPage.xaml.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAYwBMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T10:21:07.271Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-19T10:21:07.271Z"
             }
           ]
         }

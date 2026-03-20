@@ -42,9 +42,9 @@
               "Title": "LandingPage.xaml",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\LandingPage\\LandingPage\\LandingPage.xaml",
               "RelativeDocumentMoniker": "LandingPage\\LandingPage.xaml",
-              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\LandingPage\\LandingPage\\LandingPage.xaml*",
-              "RelativeToolTip": "LandingPage\\LandingPage.xaml*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAACAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\LandingPage\\LandingPage\\LandingPage.xaml",
+              "RelativeToolTip": "LandingPage\\LandingPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-03-19T10:13:02.181Z",
               "EditorCaption": ""
@@ -71,8 +71,7 @@
               "RelativeToolTip": "LandingPage\\LandingPage.xaml.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAYwBMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-19T10:21:07.271Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-19T10:21:07.271Z"
             }
           ]
         }
