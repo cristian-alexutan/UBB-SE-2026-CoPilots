@@ -12,8 +12,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Top Header -->
-        <Grid Padding="30" ColumnSpacing="20">
+        <Grid Padding="20 30 30 30" ColumnSpacing="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -21,24 +20,27 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="DutyFree Shops"
-                       FontSize="28"
-                       FontWeight="SemiBold"
-                       Foreground="#2bb8c0"
-                       VerticalAlignment="Center" />
+            <TextBlock
+                Grid.Column="0"
+                Text="DutyFree Shops"
+                FontSize="32"
+                FontWeight="SemiBold"
+                Foreground="#2bb8c0" />
 
-            <AutoSuggestBox Grid.Column="1"
-                            Height="40"
-                            PlaceholderText="Search shops or categories..."
-                            CornerRadius="8" 
-                            Width="500"
-                            BorderBrush="LightGray"/>
+            <AutoSuggestBox
+                Grid.Column="1"
+                Height="40"
+                PlaceholderText="Search shops or categories..."
+                CornerRadius="8"
+                Width="500"
+                Margin="0 5 0 0"
+                BorderBrush="LightGray" />
 
             <Button Grid.Column="2"
                     CornerRadius="4"
                     Padding="15,8"
                     BorderThickness="0">
-                <SymbolIcon Symbol="Contact" Foreground="Gray"/>
+                <SymbolIcon Symbol="Contact" Foreground="Gray" />
             </Button>
 
             <Button Grid.Column="3"
@@ -46,28 +48,29 @@
                     Foreground="White"
                     CornerRadius="4"
                     Padding="15,8">
-                <SymbolIcon Symbol="Shop"/>
+                <SymbolIcon Symbol="Shop" />
             </Button>
         </Grid>
 
-        <!-- Controls -->
-        <Grid Grid.Row="1" Margin="0,0,40,10">
+        <Grid Grid.Row="1" Margin="0,0,30,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" /> <!-- added this for space -->
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Padding="30,0,0,0" VerticalAlignment="Center">
-                <!-- Add Shop button with name for code-behind -->
-                <Button x:Name="AddShopButton"
-                        Height="35" Width="110"
-                        Background="#2bb8c0" Foreground="White" 
-                        Padding="5"
-                        Content="+ Add Shop" />
-            </StackPanel>
+            <Button
+                Margin="20 0 0 0 "
+                Grid.Column="0"
+                x:Name="AddShopButton"
+                Height="35" Width="110"
+                Background="#2bb8c0" Foreground="White"
+                Padding="5"
+                Content="+ Add Shop" />
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" VerticalAlignment="Center">
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10"
+                        VerticalAlignment="Center">
                 <TextBlock Text="Sort by:" VerticalAlignment="Center" Opacity="0.7" />
                 <ComboBox Width="220" SelectedIndex="0" Padding="5,2">
                     <ComboBoxItem Content="Shop Name" />
@@ -76,27 +79,27 @@
             </StackPanel>
         </Grid>
 
-        <!-- Shops GridView -->
         <ScrollViewer Grid.Row="2">
             <GridView x:Name="ShopsGridView" Padding="20">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Horizontal"
-                                       MaximumRowsOrColumns="4" />
+                                       MaximumRowsOrColumns="5"
+                                       />
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
 
+                
+
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="local:ShopItem">
-                        <Border Width="300"
+                        <Border MinWidth="300"
                                 Height="120"
                                 Margin="10"
                                 CornerRadius="12"
                                 Background="WhiteSmoke"
                                 Padding="15">
-                            <Border.Shadow>
-                                <ThemeShadow/>
-                            </Border.Shadow>
+
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -105,23 +108,26 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{x:Bind Name}" 
+                                    <TextBlock Text="{x:Bind Name}"
                                                FontSize="16"
                                                FontWeight="SemiBold"
-                                               Foreground="Black" 
+                                               Foreground="Black"
                                                Grid.Column="0"
                                                VerticalAlignment="Center" />
 
                                     <Button Width="40" Height="30" Grid.Column="1" Click="EditShopButton_Click"
                                             DataContext="{Binding}"
+                                            Margin="0 0 10 0"
                                             Visibility="{x:Bind AdminVisibility, Mode=OneWay}">
-                                        <TextBlock Text="✎" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Text="✎" FontSize="14" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
                                     </Button>
 
                                     <Button Width="40" Height="30" Grid.Column="2" Click="DeleteShopButton_Click"
                                             DataContext="{Binding}"
                                             Visibility="{x:Bind AdminVisibility, Mode=OneWay}">
-                                        <TextBlock Text="-" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Text="-"  FontSize="20" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
                                     </Button>
                                 </Grid>
 

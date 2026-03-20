@@ -6,29 +6,37 @@ using System.Collections.ObjectModel;
 
 namespace Shops_GUI_ISS
 {
+    public class ShopItem
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+
+        // Check if the current user is an admin or a client and hide buttons accordingly
+        public Visibility AdminVisibility = App.isAdmin == true ? Visibility.Visible : Visibility.Collapsed;
+    }
     public sealed partial class MainWindow : Window
     {
         public ObservableCollection<ShopItem> Shops { get; set; } = new ObservableCollection<ShopItem>();
 
+       
         public MainWindow()
         {
             this.InitializeComponent();
 
-            // Pre-populate shops
+            ShopsGridView.ItemsSource = Shops;
+
             Shops.Add(new ShopItem { Name = "Chocolate Heaven", Category = "Food" });
             Shops.Add(new ShopItem { Name = "Cosmetics Corner", Category = "Beauty" });
             Shops.Add(new ShopItem { Name = "Designer Bags", Category = "Fashion" });
             Shops.Add(new ShopItem { Name = "Gourmet Delights", Category = "Food" });
             Shops.Add(new ShopItem { Name = "Luxury Boutique", Category = "Fashion" });
 
-            ShopsGridView.ItemsSource = Shops;
 
-            // Only show AddShopButton if admin
-            AddShopButton.Visibility = App.CurrentAdmin ? Visibility.Visible : Visibility.Collapsed;
+            AddShopButton.Visibility = App.isAdmin ? Visibility.Visible : Visibility.Collapsed;
 
-            // Add click handlers
             AddShopButton.Click += AddShopButton_Click;
         }
+    
 
 
         private async void AddShopButton_Click(object sender, RoutedEventArgs e)
@@ -74,7 +82,7 @@ namespace Shops_GUI_ISS
 
         private async void EditShopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!App.CurrentAdmin) return; // Only admins can edit
+            if (!App.isAdmin) return; 
 
             if (sender is Button btn && btn.DataContext is ShopItem shop)
             {
@@ -107,7 +115,6 @@ namespace Shops_GUI_ISS
                     shop.Name = nameBox.Text;
                     shop.Category = categoryBox.Text;
 
-                    // Refresh GridView
                     ShopsGridView.ItemsSource = null;
                     ShopsGridView.ItemsSource = Shops;
                 }
@@ -116,7 +123,7 @@ namespace Shops_GUI_ISS
 
         private async void DeleteShopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!App.CurrentAdmin) return; // Only admins can delete
+            if (!App.isAdmin) return;
 
             if (sender is Button btn && btn.DataContext is ShopItem shop)
             {
@@ -139,12 +146,4 @@ namespace Shops_GUI_ISS
         }
     }
 
-    public class ShopItem
-    {
-        public string Name { get; set; }
-        public string Category { get; set; }
-
-        // Admin-only buttons visibility
-        public Visibility AdminVisibility => App.CurrentAdmin ? Visibility.Visible : Visibility.Collapsed;
-    }
 }

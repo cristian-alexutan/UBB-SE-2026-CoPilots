@@ -34,7 +34,7 @@ namespace Shops_GUI_ISS
         {
             this.InitializeComponent();
         }
-        public static bool CurrentAdmin { get; set; } = false; // Set to true or false for testing
+        public static bool isAdmin { get; set; } = true; // currently the user has admin rights.
 
         /// <summary>
         /// Invoked when the application is launched.
