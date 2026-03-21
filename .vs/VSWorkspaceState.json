@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Content\\Content",
-    "\\Content\\Content\\obj"
+    "\\Content",
+    "\\Content\\Domain",
+    "\\Content\\Pages",
+    "\\Content\\Repository",
+    "\\Content\\Service"
   ],
+  "SelectedNode": "\\Content\\Service",
   "PreviewInSolutionExplorer": false
 }
