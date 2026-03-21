@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Content\\Pages\\CartPage",
+    "\\LandingPage",
+    "\\LandingPage\\LandingPage"
   ],
+  "SelectedNode": "\\LandingPage\\LandingPage\\LandingPage.xaml",
   "PreviewInSolutionExplorer": false
 }
