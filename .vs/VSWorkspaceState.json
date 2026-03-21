@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Shops_GUI_ISS"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\Shops_GUI_ISS\\MainWindow.xaml.cs",
   "PreviewInSolutionExplorer": false
 }
