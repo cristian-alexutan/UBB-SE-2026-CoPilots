@@ -6,29 +6,22 @@ using System.Threading.Tasks;
 
 namespace Content.Domain
 {
-    class CartItem
+    public class CartItem
     {
-        private int id;
-        private ShopItem shopItem;
-        private int quantity;
+        public int Id { get; set; }
+        public ShopItem ShopItem { get; set; }
+        public int Quantity { get; set; }
 
-        public CartItem(int id, ShopItem shopItem, int quantity)
+        public CartItem(int Id, ShopItem ShopItem, int Quantity)
         {
-            this.id = id;
-            this.shopItem = shopItem;
-            this.quantity = quantity;
+            this.Id = Id;
+            this.ShopItem = ShopItem;
+            this.Quantity = Quantity;
         }
 
-        public int getId() { return id; }
-        public ShopItem getShopItem() { return shopItem; }
-        public int getQuantity() { return quantity; }
-        public void setShopItem(ShopItem shopItem) { this.shopItem = shopItem; }
-        public void setId(int id) { this.id = id; }
-        public void setQuantity(int quantity) { this.quantity = quantity; }
-
-        public float getTotalPrice()
+        public float GetTotalPrice()
         {
-            return shopItem.getPrice() * quantity;
+            return ShopItem.Price * Quantity;
         }
     }
 }

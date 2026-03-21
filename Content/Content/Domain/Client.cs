@@ -6,25 +6,15 @@ using System.Threading.Tasks;
 
 namespace Content.Domain
 {
-    class Client
+    public class Client
     {
-        private int id;
-        private string name;
-
-        public Client(int id, string name)
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public Client(int Id, string Name)
         {
-            this.id = id;
-            this.name = name;
+            this.Id = Id;
+            this.Name = Name;
         }
-        public int getId()
-        {
-            return id;
-        }
-        public string getName()
-        {
-            return name;
-        }
-        public void setId(int id) { this.id = id; }
-        public void setName(string name) { this.name = name; }
+        
     }
 }

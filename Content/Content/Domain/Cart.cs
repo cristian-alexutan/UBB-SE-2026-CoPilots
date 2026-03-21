@@ -6,42 +6,46 @@ using System.Threading.Tasks;
 
 namespace Content.Domain
 {
-    class Cart
+    public class Cart
     {
-        private int id;
-        private Client client;
-        private List<CartItem> cartItems;
+        public int Id { get; set; }
+        public Client Client { get; set; }
+        public Dictionary<int,CartItem> CartItems { get; set; }
 
-        public Cart(int id, Client client, List<CartItem> cartItems)
+        public Cart(int Id, Client Client, Dictionary<int,CartItem> CartItems)
         {
-            this.id = id;
-            this.client = client;
-            this.cartItems = cartItems;
+            this.Id = Id;
+            this.Client = Client;
+            this.CartItems = CartItems;
         }
-        public int getId() { return id; }
-        public Client getClient() { return client; }
-        public List<CartItem> getCartItems() { return cartItems; }
-        public void setClient(Client client) { this.client = client; }
-        public void setCartItems(List<CartItem> cartItems) { this.cartItems = cartItems; }
-        public void setId(int id) { this.id = id; }
-        public float getOverallPrice()
+        public float GetOverallPrice()
         {
-            float totalPrice = 0;
-            foreach (CartItem cartItem in cartItems)
+            float OverallPrice = 0;
+            foreach (CartItem CartItem in CartItems.Values)
             {
-                totalPrice += cartItem.getTotalPrice();
+                OverallPrice += CartItem.GetTotalPrice();
             }
-            return totalPrice;
+            return OverallPrice;
         }
 
-        public void clearCart()
+        public void ClearCart()
         {
-            cartItems.Clear();
+            CartItems.Clear();
         }
 
-        public void updateQuantity(int cartItemId, int quantity)
+        public void UpdateQuantity(int CartItemId, int Quantity)
         {
-            cartItems[cartItemId].setQuantity(quantity);
+            CartItems[CartItemId].Quantity=Quantity;
+        }
+
+        public void AddCartItem(CartItem CartItem)
+        {
+            CartItems[CartItem.Id] = CartItem;
+        }
+
+        public void RemoveCartItem(int CartItemId)
+        {
+            CartItems.Remove(CartItemId);
         }
 
     }

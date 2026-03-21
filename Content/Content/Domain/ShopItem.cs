@@ -6,31 +6,23 @@ using System.Threading.Tasks;
 
 namespace Content.Domain
 {
-    class ShopItem
+    public class ShopItem
     {
-        private int id;
-        private int quantity;
-        private float price;
-        private Shop shop;
+        public int Id { get; set; }
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public Shop Shop { get; set; }
+        public string Photo { get; set; }
 
-        public ShopItem(int id, int quantity, float price, Shop shop)
+        public ShopItem(int Id, int Quantity, float Price, Shop Shop, string Photo)
         {
-            this.id = id;
-            this.quantity = quantity;
-            this.price = price;
-            this.shop = shop;
+            this.Id = Id;
+            this.Quantity = Quantity;
+            this.Price = Price;
+            this.Shop = Shop;
+            this.Photo = Photo;
         }
-        public int getId() { return id; }
-        public int getQuantity() { return quantity; }
-        public float getPrice() { return price; }
-        public Shop getShop() { return shop; }
-        public void setShop(Shop shop)
-        {
-            this.shop = shop;
-        }
-        public void setId(int id) { this.id = id; }
-        public void setQuantity(int quantity) { this.quantity = quantity; }
-        public void setPrice(float price) { this.price = price; }
+        
 
     }
 }

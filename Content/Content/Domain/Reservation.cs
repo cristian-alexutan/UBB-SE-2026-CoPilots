@@ -6,30 +6,22 @@ using System.Threading.Tasks;
 
 namespace Content.Domain
 {
-    class Reservation
+    public class Reservation
     {
 
-        private int id;
-        private Cart reservationCart;
-        private bool active;
-        private DateTime reservationDate;
+        public int Id { get; set; }
+        public Cart ReservationCart { get; set; }
+        public bool Active { get; set; }
+        public DateTime ReservationDate { get; set; }
 
-        public Reservation(int id, Cart reservationCart, bool active, DateTime reservationDate)
+        public Reservation(int Id, Cart ReservationCart, bool Active, DateTime ReservationDate)
         {
-            this.id = id;
-            this.reservationCart = reservationCart;
-            this.active = active;
-            this.reservationDate = reservationDate;
+            this.Id = Id;
+            this.ReservationCart = ReservationCart;
+            this.Active = Active;
+            this.ReservationDate = ReservationDate;
         }
 
-        public int getId() { return id; }
-        public Cart getReservationCart() { return reservationCart; }
-        public bool getActive() { return active; }
-        public DateTime getReservationDate() { return reservationDate; }
-        public void setId(int id) { this.id = id; }
-        public void setReservationCart(Cart reservationCart) { this.reservationCart = reservationCart; }
-        public void setActive(bool active) { this.active = active; }
-        public void setReservationDate(DateTime reservationDate) { this.reservationDate = reservationDate; }
-
+        
     }
 }

@@ -29,21 +29,21 @@
     <AppXManifest Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-03-19T22:40:07.058</Modified>
+      <Modified>2026-03-21T10:17:37.917</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\LandingPage.runtimeconfig.json">
       <PackagePath>LandingPage.runtimeconfig.json</PackagePath>
-      <Modified>2026-03-19T09:57:12.509</Modified>
+      <Modified>2026-03-21T10:17:37.453</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>LandingPage.exe</PackagePath>
-      <Modified>2026-03-19T22:40:06.857</Modified>
+      <Modified>2026-03-21T10:17:36.955</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\LandingPage.dll">
       <PackagePath>LandingPage.dll</PackagePath>
-      <Modified>2026-03-19T22:40:06.854</Modified>
+      <Modified>2026-03-21T10:17:36.920</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\.nuget\packages\microsoft.netcore.app.runtime.win-x64\8.0.13\runtimes\win-x64\lib\net8.0\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -927,39 +927,39 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\LandingPage.deps.json">
       <PackagePath>LandingPage.deps.json</PackagePath>
-      <Modified>2026-03-19T22:37:33.277</Modified>
+      <Modified>2026-03-21T10:17:37.351</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\DutyFreeShopsLOGO.png">
       <PackagePath>Assets\DutyFreeShopsLOGO.png</PackagePath>
-      <Modified>2026-03-19T22:23:33.844</Modified>
+      <Modified>2026-03-20T09:33:10.052</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.066</Modified>
+      <Modified>2026-03-20T09:33:10.052</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.067</Modified>
+      <Modified>2026-03-20T09:33:10.053</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\Square150x150Logo.scale-200.png">
       <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.067</Modified>
+      <Modified>2026-03-20T09:33:10.053</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\Square44x44Logo.scale-200.png">
       <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.068</Modified>
+      <Modified>2026-03-20T09:33:10.054</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
       <PackagePath>Assets\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.068</Modified>
+      <Modified>2026-03-20T09:33:10.054</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\StoreLogo.png">
       <PackagePath>Assets\StoreLogo.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.068</Modified>
+      <Modified>2026-03-20T09:33:10.054</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\Assets\Wide310x150Logo.scale-200.png">
       <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
-      <Modified>2025-02-24T20:56:24.069</Modified>
+      <Modified>2026-03-20T09:33:10.054</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\.nuget\packages\microsoft.web.webview2\1.0.3179.45\build\..\lib\Microsoft.Web.WebView2.Core.winmd">
       <PackagePath>Microsoft.Web.WebView2.Core.winmd</PackagePath>
@@ -967,7 +967,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\LandingPage\LandingPage\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2026-03-19T22:40:06.915</Modified>
+      <Modified>2026-03-21T10:17:37.614</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

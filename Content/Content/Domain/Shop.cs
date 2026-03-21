@@ -6,31 +6,29 @@ using System.Threading.Tasks;
 
 namespace Content.Domain
 {
-    class Shop
+    public class Shop
     {
-        private int id;
-        private string name;
-        private string type;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
 
-        public Shop(int id, string name, string type)
+        public Manager Manager { get; set; }
+
+        public Shop(int Id, string Name, string Type, Manager manager)
         {
-            this.id = id;
-            this.name = name;
-            this.type = type;
+            this.Id = Id;
+            this.Name = Name;
+            this.Type = Type;
+            Manager = manager;
         }
 
-        public int getId() { return id; }
-        public string getName() { return name; }
-        public string getType() { return type; }
 
         public override string ToString()
         {
-            return $"Shop [id={id}, name={name}, type={type}]";
+            return $"Shop [id={Id}, name={Name}, type={Type}, manager={Manager}]";
         }
 
-        public void setId(int id) { this.id = id; }
-        public void setName(string name) { this.name = name; }
-        public void setType(string type) { this.type = type; }
+        
 
     }
 }
