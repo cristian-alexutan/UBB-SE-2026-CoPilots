@@ -37,6 +37,8 @@ namespace Content.Repository.Database
                         (int)Reader["item_id"],
                         (int)Reader["stock"],
                         (float)Reader["price"],
+                        (string)Reader["name"],
+                        (string)Reader["description"],
                         _shopRepo.GetById(ShopId),
                         (string)Reader["img"]
                     );
@@ -63,6 +65,8 @@ namespace Content.Repository.Database
                         (int)Reader["item_id"],
                         (int)Reader["stock"],
                         (float)Reader["price"],
+                        (string)Reader["name"],
+                        (string)Reader["description"],
                         _shopRepo.GetById(ShopId),
                         (string)Reader["img"]
                     );
@@ -78,14 +82,19 @@ namespace Content.Repository.Database
             {
                 Conn.Open();
                 var Cmd = new SqlCommand(
-                    "INSERT INTO Item (shop_id, stock, price, img) VALUES (@ShopId, @Stock, @Price, @Img)",
+                    "INSERT INTO Item (stock, price, name, description, img) VALUES (@Stock, @Price, @Name, @Description, @Img); " +
+                    "SELECT SCOPE_IDENTITY();",
                     Conn
                 );
-                Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
+                // !!! what do we do about shop ID? !!!
                 Cmd.Parameters.AddWithValue("@Stock", ShopItem.Quantity);
                 Cmd.Parameters.AddWithValue("@Price", ShopItem.Price);
+                Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
+                Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
                 Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
-                Cmd.ExecuteNonQuery();
+
+                int newId = Convert.ToInt32(Cmd.ExecuteScalar());
+                ShopItem.Id = newId;
             }
         }
 
@@ -106,12 +115,14 @@ namespace Content.Repository.Database
             {
                 Conn.Open();
                 var Cmd = new SqlCommand(
-                    "UPDATE Item SET shop_id=@ShopId, stock=@Stock, price=@Price, img=@Img WHERE item_id=@Id",
+                    "UPDATE Item SET shop_id=@ShopId, stock=@Stock, price=@Price, name=@Name, description=@Description, img=@Img WHERE item_id=@Id",
                     Conn
                 );
                 Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
                 Cmd.Parameters.AddWithValue("@Stock", ShopItem.Quantity);
                 Cmd.Parameters.AddWithValue("@Price", ShopItem.Price);
+                Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
+                Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
                 Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
                 Cmd.Parameters.AddWithValue("@Id", ShopItem.Id);
                 Cmd.ExecuteNonQuery();
