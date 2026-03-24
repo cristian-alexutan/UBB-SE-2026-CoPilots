@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Shops_GUI_ISS"
+    "\\Content",
+    "\\Content\\Service"
   ],
-  "SelectedNode": "\\Shops_GUI_ISS\\MainWindow.xaml.cs",
+  "SelectedNode": "\\Content\\Service",
   "PreviewInSolutionExplorer": false
 }
