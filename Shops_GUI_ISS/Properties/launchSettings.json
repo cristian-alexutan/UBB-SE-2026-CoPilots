@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Shops_GUI_ISS (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Shops_GUI_ISS (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
