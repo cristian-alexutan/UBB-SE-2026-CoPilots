@@ -31,8 +31,16 @@ namespace Content
             // Service layer
             var managerService = new ManagerService(managerDbRepo);
             var ticketService = new TicketService(ticketDbRepo);
+            var cartService = new CartService(cartDbRepo);
+            var shopService = new ShopService(shopDbRepo);
+            var shopItemService = new ShopItemService(shopItemDbRepo);
+            var clientService = new ClientService(clientDbRepo);
+            var reservationService = new ReservationService(reservationDbRepo);
 
-            m_window = new MainWindow(managerService, ticketService /*, other services */);
+            //Main service
+            var mainService = new MainService(cartService, shopService, null, clientService, managerService, reservationService, shopItemService);
+
+            m_window = new MainWindow(mainService);
             m_window.Activate();
         }
 

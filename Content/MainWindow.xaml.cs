@@ -1,22 +1,20 @@
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Content.Service; // make sure your services namespace is included
+using Content.Service; 
 using Content.Domain;
 
 namespace Content
 {
     public sealed partial class MainWindow : Window
     {
-        private readonly ManagerService _managerService;
-        private readonly TicketService _ticketService;
+        private readonly MainService _mainService;
 
-        public MainWindow(ManagerService managerService, TicketService ticketService)
+        public MainWindow(MainService mainService)
         {
             this.InitializeComponent();
 
-            _managerService = managerService;
-            _ticketService = ticketService;
+            _mainService = mainService;
         }
 
         private void myButton_Click(object sender, RoutedEventArgs e)
