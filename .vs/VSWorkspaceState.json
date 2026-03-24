@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Content",
-    "\\Content\\Domain",
-    "\\Content\\Pages",
     "\\Content\\Repository",
+    "\\Content\\Repository\\Interface",
     "\\Content\\Service"
   ],
-  "SelectedNode": "\\Content\\Service",
+  "SelectedNode": "\\Content\\Repository\\Interface\\IManagerRepo.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ieVa+lpxLlw=",
+  "dgSpecHash": "SeYRrYZ7kGI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj",
+  "projectFilePath": "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Alexandra\\.nuget\\packages\\microsoft.bcl.cryptography\\8.0.0\\microsoft.bcl.cryptography.8.0.0.nupkg.sha512",
     "C:\\Users\\Alexandra\\.nuget\\packages\\microsoft.data.sqlclient\\7.0.0\\microsoft.data.sqlclient.7.0.0.nupkg.sha512",
