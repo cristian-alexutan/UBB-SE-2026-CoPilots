@@ -55,7 +55,7 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Content\\Pages\\ItemDetailsPage\\ItemDetailsPage.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Pages\\CartPage\\CartPage.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Pages\\CartPage\\CartPage.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Content\\Pages\\CartPage\\CartPage.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
@@ -111,8 +111,7 @@
               "RelativeToolTip": "Content\\MainWindow.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T23:15:58.005Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:15:58.005Z"
             },
             {
               "$type": "Document",
@@ -124,8 +123,7 @@
               "RelativeToolTip": "Content\\App.xaml.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAAACYAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T23:12:35.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:12:35.662Z"
             },
             {
               "$type": "Document",
@@ -137,8 +135,7 @@
               "RelativeToolTip": "Content\\App.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T23:12:29.114Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:12:29.114Z"
             },
             {
               "$type": "Document",
@@ -150,8 +147,7 @@
               "RelativeToolTip": "Content\\Content.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-21T23:10:04.607Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:10:04.607Z"
             },
             {
               "$type": "Document",
@@ -163,8 +159,7 @@
               "RelativeToolTip": "Content\\Pages\\LandingPage\\LandingPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T23:06:32.448Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:06:32.448Z"
             },
             {
               "$type": "Document",
@@ -176,8 +171,7 @@
               "RelativeToolTip": "Content\\Pages\\LandingPage\\LandingPage.xaml.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T23:06:45.667Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:06:45.667Z"
             },
             {
               "$type": "Document",
@@ -189,8 +183,7 @@
               "RelativeToolTip": "Content\\Pages\\ShopItemsPage\\ShopItemsPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T23:07:44.952Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:07:44.952Z"
             },
             {
               "$type": "Document",
@@ -202,8 +195,7 @@
               "RelativeToolTip": "Content\\Pages\\ShopItemsPage\\ShopItemsPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T23:07:32.583Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:07:32.583Z"
             },
             {
               "$type": "Document",
@@ -215,8 +207,7 @@
               "RelativeToolTip": "Content\\Pages\\ShopPage\\ShopPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T23:08:26.117Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:08:26.117Z"
             },
             {
               "$type": "Document",
@@ -228,8 +219,7 @@
               "RelativeToolTip": "Content\\Pages\\ShopPage\\ShopPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T23:08:55.254Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:08:55.254Z"
             },
             {
               "$type": "Document",
@@ -241,8 +231,7 @@
               "RelativeToolTip": "Content\\Pages\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T23:06:03.506Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:06:03.506Z"
             },
             {
               "$type": "Document",
@@ -254,8 +243,7 @@
               "RelativeToolTip": "Content\\Pages\\ItemDetailsPage\\ItemDetailsPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T23:05:55.567Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:05:55.567Z"
             },
             {
               "$type": "Document",
@@ -267,21 +255,19 @@
               "RelativeToolTip": "Content\\Pages\\CartPage\\CartPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-21T23:00:18.79Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T23:00:18.79Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
               "Title": "CartPage.xaml",
-              "DocumentMoniker": "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Pages\\CartPage\\CartPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Pages\\CartPage\\CartPage.xaml",
               "RelativeDocumentMoniker": "Content\\Pages\\CartPage\\CartPage.xaml",
-              "ToolTip": "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Pages\\CartPage\\CartPage.xaml",
+              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Pages\\CartPage\\CartPage.xaml",
               "RelativeToolTip": "Content\\Pages\\CartPage\\CartPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-21T22:59:47.954Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T22:59:47.954Z"
             },
             {
               "$type": "Document",
@@ -293,8 +279,7 @@
               "RelativeToolTip": ".gitignore",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-03-21T21:15:00.949Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-21T21:15:00.949Z"
             }
           ]
         }

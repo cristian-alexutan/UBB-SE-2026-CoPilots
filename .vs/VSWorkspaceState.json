@@ -1,12 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Content",
-    "\\Content\\Domain",
-    "\\Content\\Pages",
-    "\\Content\\Repository",
-    "\\Content\\Service"
+    "\\Content"
   ],
-  "SelectedNode": "\\Content\\Service",
+  "SelectedNode": "\\Content\\MainWindow.xaml",
   "PreviewInSolutionExplorer": false
 }
