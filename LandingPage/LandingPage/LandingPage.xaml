@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="LandingPage.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LandingPage"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="LandingPage">
+
+    <Grid Background="White">
+        <StackPanel Background="Transparent" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <!--logo here-->
+            <Image Source="Assets/DutyFreeShopsLOGO.png" Width="500" Height="Auto" HorizontalAlignment="Center" Margin="0,0,0,60"/>
+            <!--Buttons-->
+                <StackPanel Background="Transparent" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Style="{StaticResource ButtonStyle}" x:Name="ClientButton" Click="ClientButton_Click"  >I'm a client</Button>
+                <Button Style="{StaticResource ButtonStyle}" x:Name="AdminButton" Click="AdminButton_Click" >I'm an admin</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

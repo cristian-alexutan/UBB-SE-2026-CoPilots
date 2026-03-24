@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LandingPage (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "LandingPage (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
