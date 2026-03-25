@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj": {}
+    "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj": {
+    "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj",
+        "projectUniqueName": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj",
         "projectName": "Content",
-        "projectPath": "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj",
+        "projectPath": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Content.csproj",
         "packagesPath": "C:\\Users\\Alexandra\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Alexandra\\Source\\Repos\\UBB-SE-2026-CoPilots\\Content\\Content\\obj\\",
         "projectStyle": "PackageReference",

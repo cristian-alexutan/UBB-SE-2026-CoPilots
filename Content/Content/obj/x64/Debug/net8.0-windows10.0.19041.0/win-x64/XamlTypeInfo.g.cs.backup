@@ -284,7 +284,6 @@ namespace Content.Content_XamlTypeInfo
         }
 
         private object Activate_0_XamlControlsResources() { return new global::Microsoft.UI.Xaml.Controls.XamlControlsResources(); }
-        private object Activate_4_MainWindow() { return new global::Content.MainWindow(); }
         private object Activate_6_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_XamlControlsResources() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources).TypeHandle);
         private void StaticInitializer_4_MainWindow() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.MainWindow).TypeHandle);
@@ -337,7 +336,6 @@ namespace Content.Content_XamlTypeInfo
 
             case 4:   //  Content.MainWindow
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.Activator = Activate_4_MainWindow;
                 userType.StaticInitializer = StaticInitializer_4_MainWindow;
                 userType.SetIsLocalType();
                 xamlType = userType;
