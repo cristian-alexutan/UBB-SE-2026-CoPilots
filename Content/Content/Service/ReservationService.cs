@@ -1,6 +1,7 @@
 using Content.Domain;
 using Content.Repository.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace Content.Service
 {
@@ -38,12 +39,12 @@ namespace Content.Service
         {
             Reservation reservation = _reservationRepo.GetById(id);
             Reservation updatedReservation = new Reservation
-            {
-                Id = reservation.Id,
-                ReservationCart = reservation.ReservationCart,
-                Active = false,
-                ReservationDate = reservation.ReservationDate
-            };
+            (
+                reservation.Id,
+                reservation.ReservationCart,
+                false,
+                reservation.ReservationDate
+            );
         }
     }
 }

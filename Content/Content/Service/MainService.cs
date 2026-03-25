@@ -1,24 +1,40 @@
 using Content.Service;
 using System.Configuration;
-
-public class MainService
+using Content.Repository;
+using Content.Repository.Database;
+namespace Content.Service
 {
-    public CartService cartService { get; }
-    public ShopService shopService { get; }
-    public TicketService ticketService { get; }
-    public ClientService clientService { get; }
-    public ManagerService managerService { get; }
-    public ReservationService reservationService { get; }
-    public ShopItemService shopItemService { get; }
-
-    public MainService(CartService cartService, ShopService shopService, TicketService ticketService, ClientService clientService, ManagerService managerService, ReservationService reservationService, ShopItemService shopItemService)
+    public class MainService
     {
-        this.cartService = cartService;
-        this.shopService = shopService;
-        this.ticketService = ticketService;
-        this.clientService = clientService;
-        this.managerService = managerService;
-        this.reservationService = reservationService;
-        this.shopItemService = shopItemService;
+        public CartService cartService { get; }
+        public ShopService shopService { get; }
+        public TicketService ticketService { get; }
+        public ClientService clientService { get; }
+        public ManagerService managerService { get; }
+        public ReservationService reservationService { get; }
+        public ShopItemService shopItemService { get; }
+
+        public MainService(string connectionString)
+        {
+
+            var clientRepo = new ClientDbRepo(connectionString);
+            var ticketRepo = new TicketDbRepo(connectionString);
+            var managerRepo = new ManagerDbRepo(connectionString);
+            var shopRepo = new ShopDbRepo(connectionString, managerRepo);
+            var shopItemRepo = new ShopItemDbRepo(connectionString,shopRepo);
+            var cartRepo = new CartDbRepo(connectionString, clientRepo, shopItemRepo);
+            var reservationRepo = new ReservationDbRepo(connectionString, cartRepo);
+
+
+            this.cartService = new CartService(cartRepo);
+            this.shopService = new ShopService(shopRepo);
+            this.ticketService = new TicketService(ticketRepo);
+            this.clientService = new ClientService(clientRepo);
+            this.managerService = new ManagerService(managerRepo);
+            this.reservationService = new ReservationService(reservationRepo);
+            this.shopItemService = new ShopItemService(shopRepo, shopItemRepo);
+        }
     }
+
+
 }

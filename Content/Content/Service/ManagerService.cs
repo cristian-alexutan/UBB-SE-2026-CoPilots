@@ -36,5 +36,10 @@ namespace Content.Service
         {
             _managerRepo.Delete(id);
         }
+
+        public Manager GetAnyManager()
+        {
+            return _managerRepo.GetAll().First();
+        }
     }
 }

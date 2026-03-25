@@ -50,7 +50,7 @@ namespace Content.Service
         {
             if (quantity > 0 && price > 0 && shop != null && !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(desc))
             {
-                ShopItem newShopItem = new ShopItem(quantity, price, name, desc, shop, photo);
+                ShopItem newShopItem = new ShopItem(quantity, price, shop, photo, name, desc);
                 _shopItemRepo.Add(newShopItem);
             }
             else throw new Exception("One of your fields is wrong loser");

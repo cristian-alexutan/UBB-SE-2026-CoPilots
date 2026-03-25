@@ -15,8 +15,16 @@
             <Image Source="Assets/DutyFreeShopsLOGO.png" Width="500" Height="Auto" HorizontalAlignment="Center" Margin="0,0,0,60"/>
             <!--Buttons-->
                 <StackPanel Background="Transparent" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Style="{StaticResource ButtonStyle}" x:Name="ClientButton" Click="ClientButton_Click"  >I'm a client</Button>
-                <Button Style="{StaticResource ButtonStyle}" x:Name="AdminButton" Click="AdminButton_Click" >I'm an admin</Button>
+                <Button x:Name="ClientButton"
+                        Style="{StaticResource ButtonStyle}"
+                        Content="I'm a client"
+                        Command="{Binding SelectClientCommand}"
+                        />
+
+                <Button x:Name="AdminButton"
+                        Style="{StaticResource ButtonStyle}"
+                        Content="I'm an admin"
+                        Command="{Binding SelectAdminCommand}" />
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -38,7 +38,9 @@ namespace Content.Repository.Database
                         (int)Reader["stock"],
                         (float)Reader["price"],
                         _shopRepo.GetById(ShopId),
-                        (string)Reader["img"]
+                        (string)Reader["img"],
+                        (string)Reader["name"],
+                        (string)Reader["description"]
                     );
                     ShopItems.Add(ShopItem);
                 }
@@ -64,7 +66,9 @@ namespace Content.Repository.Database
                         (int)Reader["stock"],
                         (float)Reader["price"],
                         _shopRepo.GetById(ShopId),
-                        (string)Reader["img"]
+                        (string)Reader["img"],
+                        (string)Reader["name"],
+                        (string)Reader["description"]
                     );
                 }
             }
@@ -78,13 +82,15 @@ namespace Content.Repository.Database
             {
                 Conn.Open();
                 var Cmd = new SqlCommand(
-                    "INSERT INTO Item (shop_id, stock, price, img) VALUES (@ShopId, @Stock, @Price, @Img)",
+                    "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@ShopId, @Stock, @Price, @Img, @Name, @Description)",
                     Conn
                 );
                 Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
                 Cmd.Parameters.AddWithValue("@Stock", ShopItem.Quantity);
                 Cmd.Parameters.AddWithValue("@Price", ShopItem.Price);
                 Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
+                Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
+                Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
                 Cmd.ExecuteNonQuery();
             }
         }
@@ -106,13 +112,15 @@ namespace Content.Repository.Database
             {
                 Conn.Open();
                 var Cmd = new SqlCommand(
-                    "UPDATE Item SET shop_id=@ShopId, stock=@Stock, price=@Price, img=@Img WHERE item_id=@Id",
+                    "UPDATE Item SET shop_id=@ShopId, stock=@Stock, price=@Price, img=@Img, name=@Name, description=@Description WHERE item_id=@Id",
                     Conn
                 );
                 Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
                 Cmd.Parameters.AddWithValue("@Stock", ShopItem.Quantity);
                 Cmd.Parameters.AddWithValue("@Price", ShopItem.Price);
                 Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
+                Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
+                Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
                 Cmd.Parameters.AddWithValue("@Id", ShopItem.Id);
                 Cmd.ExecuteNonQuery();
             }

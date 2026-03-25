@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace Content // Make sure this matches your project name
+namespace Content
 {
     public sealed partial class CartPage : Window
     {
@@ -249,10 +249,5 @@ namespace Content // Make sure this matches your project name
     }
 
    
-    public class ShopItem
-    {
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public string DisplayPrice => $"${Price:0.00}";
-    }
+    
 }

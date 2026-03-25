@@ -1,6 +1,7 @@
 using Content.Domain;
 using Content.Repository.Interface;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Content.Service
 {
@@ -33,6 +34,10 @@ namespace Content.Service
             _clientRepo.Delete(id);
         }
 
+        public Client GetAnyClient()
+        {
+            return _clientRepo.GetAll().First();
+        }
 
     }
 }

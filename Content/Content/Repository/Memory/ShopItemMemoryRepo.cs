@@ -32,7 +32,7 @@ namespace Content.Repository
             return ShopItems.Values;
         }
 
-        public Domain.ShopItem GetById(int Id)
+        public ShopItem GetById(int Id)
         {
             ShopItems.TryGetValue(Id, out ShopItem ShopItem);
             return ShopItem;
