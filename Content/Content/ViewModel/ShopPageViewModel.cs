@@ -28,21 +28,22 @@ namespace Content.ViewModel
             _service = service;
             _session = session;
 
-            Shops.Add(new Shop(nextId++, "Chocolate Heaven", "Food", null));
-            Shops.Add(new Shop(nextId++, "Cosmetics Corner", "Beauty", null));
-            Shops.Add(new Shop(nextId++, "Designer Bags", "Fashion", null));
-            Shops.Add(new Shop(nextId++, "Gourmet Delights", "Food", null));
-            Shops.Add(new Shop(nextId++, "Luxury Boutique", "Fashion", null));
+            //Shops.Add(new Shop(nextId++, "Chocolate Heaven", "Food", null));
+            //Shops.Add(new Shop(nextId++, "Cosmetics Corner", "Beauty", null));
+            //Shops.Add(new Shop(nextId++, "Designer Bags", "Fashion", null));
+            //Shops.Add(new Shop(nextId++, "Gourmet Delights", "Food", null));
+            //Shops.Add(new Shop(nextId++, "Luxury Boutique", "Fashion", null));
         }
 
         public void AddShop(string name, string type)
         {
             if (string.IsNullOrWhiteSpace(name)) return;
-            Shops.Add(new Shop(nextId++, name, type, null));
+            _service.shopService.AddShop(new Shop(nextId++, name, type, _session.UserId));
         }
 
         public void EditShop(Shop shop, string newName, string newType)
         {
+            _service.shopService.Update(new Shop(shop.Id, newName, newType, _session.UserId));
             shop.Name = newName;
             shop.Type = newType;
         }

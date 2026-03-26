@@ -39,7 +39,7 @@ namespace Content.Repository.Database
                         (int)Reader["shop_id"],
                         (string)Reader["name"],
                         (string)Reader["type"],
-                        _managerRepo.GetById(ManagerId)
+                        ManagerId
                     );
 
                     Shops.Add(Shop);
@@ -65,7 +65,7 @@ namespace Content.Repository.Database
                         (int)Reader["shop_id"],
                         (string)Reader["name"],
                         (string)Reader["type"],
-                        _managerRepo.GetById(ManagerId)
+                        ManagerId
                     );
                 }
             }
@@ -85,7 +85,7 @@ namespace Content.Repository.Database
 
                 Cmd.Parameters.AddWithValue("@Name", Shop.Name);
                 Cmd.Parameters.AddWithValue("@Type", Shop.Type);
-                Cmd.Parameters.AddWithValue("@ManagerId", Shop.Manager.Id);
+                Cmd.Parameters.AddWithValue("@ManagerId", Shop.ManagerId);
 
                 Cmd.ExecuteNonQuery();
             }
@@ -114,7 +114,7 @@ namespace Content.Repository.Database
 
                 Cmd.Parameters.AddWithValue("@Name", Shop.Name);
                 Cmd.Parameters.AddWithValue("@Type", Shop.Type);
-                Cmd.Parameters.AddWithValue("@ManagerId", Shop.Manager.Id);
+                Cmd.Parameters.AddWithValue("@ManagerId", Shop.ManagerId);
                 Cmd.Parameters.AddWithValue("@Id", Shop.Id);
 
                 Cmd.ExecuteNonQuery();

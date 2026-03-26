@@ -12,20 +12,21 @@ namespace Content.Domain
         public string Name { get; set; }
         public string Type { get; set; }
 
-        public Manager Manager { get; set; }
+        public int ManagerId { get; set; }
 
-        public Shop(int Id, string Name, string Type, Manager manager)
+        public Shop() { }
+        public Shop(int Id, string Name, string Type, int ManagerId)
         {
             this.Id = Id;
             this.Name = Name;
             this.Type = Type;
-            Manager = manager;
+            this.ManagerId = ManagerId;
         }
 
 
         public override string ToString()
         {
-            return $"Shop [id={Id}, name={Name}, type={Type}, manager={Manager}]";
+            return $"Shop [id={Id}, name={Name}, type={Type}, manager={ManagerId}]";
         }
 
         

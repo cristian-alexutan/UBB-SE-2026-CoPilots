@@ -29,7 +29,7 @@
     <AppXManifest Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-03-26T11:51:28.465</Modified>
+      <Modified>2026-03-26T12:20:28.443</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -39,15 +39,15 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>Content.exe</PackagePath>
-      <Modified>2026-03-26T11:49:37.679</Modified>
+      <Modified>2026-03-26T12:20:28.222</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Content.dll">
       <PackagePath>Content.dll</PackagePath>
-      <Modified>2026-03-26T11:49:37.676</Modified>
+      <Modified>2026-03-26T12:20:28.217</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\App.config">
       <PackagePath>Content.dll.config</PackagePath>
-      <Modified>2026-03-26T11:51:26.441</Modified>
+      <Modified>2026-03-26T11:58:31.142</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\.nuget\packages\microsoft.netcore.app.runtime.win-x64\8.0.13\runtimes\win-x64\lib\net8.0\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
