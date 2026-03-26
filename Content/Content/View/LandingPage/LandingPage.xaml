@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+    
 <Window
     x:Class="Content.LandingPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -9,17 +10,44 @@
     mc:Ignorable="d"
     Title="LandingPage">
 
+
     <Grid Background="White">
+        <Grid.Resources>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="Background" Value="#2bb8c0"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="CornerRadius" Value="15"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
+                                          Foreground="{TemplateBinding Foreground}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
         <StackPanel Background="Transparent" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" >
             <!--logo here-->
-            <Image Source="Assets/DutyFreeShopsLOGO.png" Width="500" Height="Auto" HorizontalAlignment="Center" Margin="0,0,0,60"/>
+            <Image Source="/Assets/DutyFreeShopsLOGO.png" Width="500" Height="Auto" HorizontalAlignment="Center" Margin="0,0,0,60"/>
             <!--Buttons-->
                 <StackPanel Background="Transparent" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button x:Name="ClientButton"
                         Style="{StaticResource ButtonStyle}"
                         Content="I'm a client"
-                        Command="{Binding SelectClientCommand}"
-                        />
+                        Command="{Binding SelectClientCommand}"/>
 
                 <Button x:Name="AdminButton"
                         Style="{StaticResource ButtonStyle}"

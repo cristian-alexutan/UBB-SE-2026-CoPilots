@@ -14,6 +14,7 @@ namespace Content.ViewModel
     {
         private readonly MainService _service;
         private readonly UserSession _session;
+        public bool IsRoleSelected { get; private set; }
 
         public ICommand SelectAdminCommand { get; }
         public ICommand SelectClientCommand { get; }
@@ -31,12 +32,21 @@ namespace Content.ViewModel
         {
             var manager = _service.managerService.GetAnyManager();
             _session.SetAdmin(manager.Id);
+            IsRoleSelected = true;
         }
 
         private void SetClient()
         {
             var client = _service.clientService.GetAnyClient();
             _session.SetClient(client.Id);
+            IsRoleSelected = true;
         }
+
+
+      
+
     }
+
+    
+    
 }

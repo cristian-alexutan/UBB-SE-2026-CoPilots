@@ -42,21 +42,26 @@ namespace Content
 
         private void ClientButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.SelectClientCommand.Execute(null);
-
-            var shopPage = new ShopPage(_service, _session);
-            shopPage.Activate();
-
-            this.Close();
+            if (ViewModel.SelectClientCommand.CanExecute(null))
+            {
+                ViewModel.SelectClientCommand.Execute(null);
+                OpenShop();
+            }
         }
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.SelectAdminCommand.Execute(null);
+            if (ViewModel.SelectAdminCommand.CanExecute(null))
+            {
+                ViewModel.SelectAdminCommand.Execute(null);
+                OpenShop();
+            }
+        }
 
+        private void OpenShop()
+        {
             var shopPage = new ShopPage(_service, _session);
             shopPage.Activate();
-
             this.Close();
         }
 

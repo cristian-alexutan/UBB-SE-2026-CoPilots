@@ -1,30 +1,60 @@
+using Content;
+using Content.Domain;
+using Content.Helper;
+using Content.Service;
+using Content.User;
+using Content.ViewModel;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI;
+using Microsoft.UI.Xaml.Media.Imaging;
+using System;
+
 
 namespace Content
 {
     public sealed partial class ItemDetailsPage : Window
     {
+        private readonly MainService _service;
+        private readonly UserSession _session;
+        private readonly ShopItem _item;
+        private readonly Cart _cart;
+
+        public ItemDetailsViewModel ViewModel { get; }
+
         private int _qty = 1;
 
-        // Demo product model
-        private string _productName = "Premium Gold Watch";
-        private string _productDesc =
-            "An exquisite timepiece crafted with precision and elegance. This premium gold watch features a sophisticated design with a durable stainless steel case, sapphire crystal glass, and a luxurious gold-tone finish. Perfect for any occasion, combining timeless style with modern functionality.";
-        private string _productPrice = "$2,499.00";
-        private int _stock = 15;
+        private string _productName;
+        private string _productDesc;
+        private string _productPrice;
+        private int _stock;
 
-        public ItemDetailsPage()
+
+        public ItemDetailsPage(MainService service, UserSession session, ShopItem item, Cart cart)
         {
+
             InitializeComponent();
+
+            _service = service;
+            _session = session;
+            _item = item;
+            _cart = cart;
+            ViewModel = new ItemDetailsViewModel(service, session, item, cart);
+            _productName = _item.Name;
+            _productDesc = _item.Description;
+            _productPrice = $"{_item.Price:C}";
+            _stock = _item.Quantity;
+
+
+
 
             ApplyProductModelToUI();
             LoadAdminFieldsFromModel();
             UpdateQuantityUI();
 
-            SetMode(isClient: true);
+            SetMode(isAdmin: session.IsAdmin);
+            _cart = cart;
         }
 
         private void UpdateQuantityUI()
@@ -75,6 +105,8 @@ namespace Content
                 return;
             }
 
+            ViewModel.AddToCartCommand.Execute(_qty);
+
             var dlg = new ContentDialog
             {
                 Title = "Added to cart",
@@ -84,58 +116,41 @@ namespace Content
             };
 
             _ = dlg.ShowAsync();
+
+            this.Close(); // will force user to re-open details page to change quantity, which will refresh stock display based on model
+
         }
 
         private void ViewCart_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new ContentDialog
-            {
-                Title = "Cart",
-                Content = "View Cart clicked (cart page not implemented yet).",
-                CloseButtonText = "OK",
-                XamlRoot = Root.XamlRoot
-            };
-
-            _ = dlg.ShowAsync();
+            //modify once CartPage is implemented
+            var cartPage = new CartPage(_service,_session);
+            cartPage.Activate();
+            this.Close();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            // Placeholder for navigation
+            this.Close();
         }
 
-        private void ClientToggle_Click(object sender, RoutedEventArgs e) => SetMode(isClient: true);
-        private void AdminToggle_Click(object sender, RoutedEventArgs e) => SetMode(isClient: false);
-
-        private void SetMode(bool isClient)
+        private void SetMode(bool isAdmin)
         {
-            ClientToggle.IsChecked = isClient;
-            AdminToggle.IsChecked = !isClient;
+            // Disable for admin
+            ViewCartButton.IsEnabled = !isAdmin;
 
-            ClientActionsPanel.Visibility = isClient ? Visibility.Visible : Visibility.Collapsed;
-            AdminActionsPanel.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+            // Keep icon/text clearly visible in client; greyed in admin
+            var fg = isAdmin ? Colors.Gray : ColorHelper.FromArgb(255, 17, 24, 39); // #111827
+            var brush = new SolidColorBrush(fg);
 
-            var accent = (Brush)Root.Resources["AccentTeal"];
-            if (isClient)
+            ViewCartIcon.Foreground = brush;
+            ViewCartText.Foreground = brush;
+
+            ClientActionsPanel.Visibility = isAdmin ? Visibility.Collapsed : Visibility.Visible;
+            AdminActionsPanel.Visibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;
+
+            if (isAdmin)
             {
-                ClientToggle.Background = accent;
-                ClientToggle.Foreground = new SolidColorBrush(Colors.White);
-                ClientToggle.BorderThickness = new Thickness(0);
-
-                AdminToggle.Background = new SolidColorBrush(Colors.Transparent);
-                AdminToggle.Foreground = new SolidColorBrush(Colors.Black);
-                AdminToggle.BorderThickness = new Thickness(1);
-            }
-            else
-            {
-                AdminToggle.Background = accent;
-                AdminToggle.Foreground = new SolidColorBrush(Colors.White);
-                AdminToggle.BorderThickness = new Thickness(0);
-
-                ClientToggle.Background = new SolidColorBrush(Colors.Transparent);
-                ClientToggle.Foreground = new SolidColorBrush(Colors.Black);
-                ClientToggle.BorderThickness = new Thickness(1);
-
                 LoadAdminFieldsFromModel();
                 AdminStatusText.Text = "";
             }
@@ -157,10 +172,24 @@ namespace Content
 
             StockUnitsRun.Text = $"{_stock} units";
 
+            SetProductImageFromItem();
+
             if (_qty > _stock) _qty = _stock;
             if (_qty < 1) _qty = 1;
             UpdateQuantityUI();
         }
+
+        void SetProductImageFromItem()
+        {
+            var photo = (_item.Photo ?? "").Trim();
+
+            Uri uri;
+            uri = new Uri($"ms-appx:///View/ItemDetailsPage/{photo}");
+
+            ProductImage.Source = new BitmapImage(uri);
+
+        }
+
 
         private void AdminSave_Click(object sender, RoutedEventArgs e)
         {
@@ -176,14 +205,13 @@ namespace Content
 
             _stock = parsedStock;
 
+            ShopItem updatedItem = new ShopItem(_item.Id, _stock, float.TryParse(_productPrice, System.Globalization.NumberStyles.Currency, null, out var price) ? price : _item.Price, _item.Shop, _item.Photo, _productName, _productDesc);
+
+            ViewModel.UpdateItemCommand.Execute(updatedItem);
+
             ApplyProductModelToUI();
-            AdminStatusText.Text = "Saved (demo only).";
+            AdminStatusText.Text = "Saved";
         }
 
-        private void AdminReset_Click(object sender, RoutedEventArgs e)
-        {
-            LoadAdminFieldsFromModel();
-            AdminStatusText.Text = "Reset.";
-        }
     }
 }

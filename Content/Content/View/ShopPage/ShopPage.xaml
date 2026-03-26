@@ -2,7 +2,8 @@
     x:Class="Content.ShopPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Content">
+    xmlns:local="using:Content"
+    xmlns:domain="using:Content.Domain">
 
     <Grid Background="#F9FAFB" Padding="100 0 0 0" RequestedTheme="Light">
 
@@ -37,6 +38,7 @@
                 BorderBrush="LightGray" />
 
             <Button Grid.Column="2"
+                    x:Name="CartButton"
                     CornerRadius="4"
                     Padding="15,8"
                     BorderThickness="0">
@@ -55,19 +57,18 @@
         <Grid Grid.Row="1" Margin="0,0,30,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" /> <!-- added this for space -->
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Button
-                Margin="20 0 0 0 "
+                Margin="20 0 0 0"
                 Grid.Column="0"
                 x:Name="AddShopButton"
                 Height="35" Width="110"
                 Background="#2bb8c0" Foreground="White"
                 Padding="5"
                 Content="+ Add Shop" />
-
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10"
                         VerticalAlignment="Center">
@@ -84,15 +85,12 @@
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Horizontal"
-                                       MaximumRowsOrColumns="5"
-                                       />
+                                       MaximumRowsOrColumns="5" />
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
 
-                
-
                 <GridView.ItemTemplate>
-                    <DataTemplate x:DataType="local:ShopItem">
+                    <DataTemplate x:DataType="domain:Shop">
                         <Border MinWidth="300"
                                 Height="120"
                                 Margin="10"
@@ -115,23 +113,27 @@
                                                Grid.Column="0"
                                                VerticalAlignment="Center" />
 
-                                    <Button Width="40" Height="30" Grid.Column="1" Click="EditShopButton_Click"
+                                    <Button Width="40" Height="30" Grid.Column="1"
+                                            Click="EditShopButton_Click"
                                             DataContext="{Binding}"
                                             Margin="0 0 10 0"
-                                            Visibility="{x:Bind AdminVisibility, Mode=OneWay}">
-                                        <TextBlock Text="✎" FontSize="14" HorizontalAlignment="Center"
+                                            Tag="{Binding}">
+                                        <TextBlock Text="✎" FontSize="14"
+                                                   HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" />
                                     </Button>
 
-                                    <Button Width="40" Height="30" Grid.Column="2" Click="DeleteShopButton_Click"
+                                    <Button Width="40" Height="30" Grid.Column="2"
+                                            Click="DeleteShopButton_Click"
                                             DataContext="{Binding}"
-                                            Visibility="{x:Bind AdminVisibility, Mode=OneWay}">
-                                        <TextBlock Text="-"  FontSize="20" HorizontalAlignment="Center"
+                                            Tag="{Binding}">
+                                        <TextBlock Text="-" FontSize="20"
+                                                   HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" />
                                     </Button>
                                 </Grid>
 
-                                <TextBlock Text="{x:Bind Category}"
+                                <TextBlock Text="{x:Bind Type}"
                                            Margin="0,5,0,0"
                                            Opacity="0.6"
                                            Foreground="Black" />

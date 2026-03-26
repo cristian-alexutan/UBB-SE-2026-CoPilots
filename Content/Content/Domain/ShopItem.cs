@@ -16,6 +16,11 @@ namespace Content.Domain
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public ShopItem()
+        {
+        }
+
+
         public ShopItem(int Id, int Quantity, float Price, Shop Shop, string Photo, string Name, string Description)
         {
             this.Id = Id;
@@ -27,6 +32,7 @@ namespace Content.Domain
             this.Description = Description;
         }
 
+       
 
     }
 }

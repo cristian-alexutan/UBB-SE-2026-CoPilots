@@ -2,10 +2,8 @@ using Content.Domain;
 using Content.Repository.Interface;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Content.Service
 {
@@ -46,24 +44,39 @@ namespace Content.Service
             _shopItemRepo.Delete(shopItemID);
         }
 
-        public void AddShopItem(int quantity, float price, string name, string desc, Shop shop, string photo)
+        public void AddShopItem(ShopItem item)
         {
-            if (quantity > 0 && price > 0 && shop != null && !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(desc))
+            if (item.Quantity > 0 && item.Price > 0 && item.Shop != null && !string.IsNullOrEmpty(item.Name))
             {
-                ShopItem newShopItem = new ShopItem(quantity, price, shop, photo, name, desc);
-                _shopItemRepo.Add(newShopItem);
+                _shopItemRepo.Add(item);
             }
             else throw new Exception("One of your fields is wrong loser");
         }
 
-        public void UpdateShopItem(int id, int quantity, float price, string name, string desc, Shop shop, string photo)
+        public void UpdateShopItem(ShopItem item)
         {
-            if (quantity > 0 && price > 0 && shop != null && !string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(desc))
+            if (item.Quantity > 0 && item.Price > 0 && !string.IsNullOrEmpty(item.Name))
             {
-                ShopItem newShopItem = new ShopItem(id, quantity, price, name, desc, shop, photo);
-                _shopItemRepo.Update(newShopItem);
+                _shopItemRepo.Update(item);
             }
             else throw new Exception("One of your fields is wrong loser");
+        }
+
+        public IEnumerable<ShopItem> SortByPrice()
+        {
+            IEnumerable<ShopItem> sorted = _shopItemRepo.GetAll()
+                .OrderBy(item => item.Price);
+
+            return sorted;
+
+        }
+
+        public IEnumerable<ShopItem> SortAlphabetically()
+        {
+            IEnumerable<ShopItem> sorted = _shopItemRepo.GetAll()
+                .OrderBy(item => item.Name);
+
+            return sorted;
         }
     }
 

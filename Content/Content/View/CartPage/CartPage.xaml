@@ -69,7 +69,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Image Grid.Column="0" Source="ms-appx:///Assets/placeholder.png" Width="80" Height="80" Margin="0,0,20,0"/>
+                        <Image Grid.Column="0" Source="/Assets/PlaceHolder.png" Width="80" Height="80" Margin="0,0,20,0"/>
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock Text="{Binding ShopItem.Name}" FontSize="18" FontWeight="SemiBold"/>

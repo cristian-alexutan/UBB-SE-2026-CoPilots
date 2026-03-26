@@ -36,7 +36,7 @@ namespace Content.Repository.Database
                     var ShopItem = new ShopItem(
                         (int)Reader["item_id"],
                         (int)Reader["stock"],
-                        (float)Reader["price"],
+                        Convert.ToSingle(Reader["price"]),
                         _shopRepo.GetById(ShopId),
                         (string)Reader["img"],
                         (string)Reader["name"],
@@ -64,7 +64,7 @@ namespace Content.Repository.Database
                     return new ShopItem(
                         (int)Reader["item_id"],
                         (int)Reader["stock"],
-                        (float)Reader["price"],
+                        Convert.ToSingle(Reader["price"]),
                         _shopRepo.GetById(ShopId),
                         (string)Reader["img"],
                         (string)Reader["name"],
@@ -82,7 +82,8 @@ namespace Content.Repository.Database
             {
                 Conn.Open();
                 var Cmd = new SqlCommand(
-                    "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@ShopId, @Stock, @Price, @Img, @Name, @Description)",
+                    "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@ShopId, @Stock, @Price, @Img, @Name, @Description);" +
+                        "SELECT SCOPE_IDENTITY();",
                     Conn
                 );
                 Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
@@ -91,7 +92,8 @@ namespace Content.Repository.Database
                 Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
                 Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
                 Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
-                Cmd.ExecuteNonQuery();
+
+                ShopItem.Id = Convert.ToInt32(Cmd.ExecuteScalar());
             }
         }
 

@@ -811,8 +811,14 @@
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Content.deps.json">
       <PackagePath>Content.deps.json</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\Assets\DutyFreeShopsLOGO.png">
+      <PackagePath>Assets\DutyFreeShopsLOGO.png</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\Assets\PlaceHolder.png">
+      <PackagePath>Assets\PlaceHolder.png</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>

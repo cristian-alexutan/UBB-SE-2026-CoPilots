@@ -1,43 +1,102 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Content.ViewModel;
 using Microsoft.UI.Xaml.Media;
-using System;
-using System.Collections.ObjectModel;
 using Content.Domain;
+using Content.Service;
+using Content.User;
+using System;
+
+
 namespace Content
 {
-    
-    public sealed partial class ShopPage : Window
+    public sealed partial class ShopPage : Window 
     {
-        public ObservableCollection<ShopItem> Shops { get; set; } = new ObservableCollection<ShopItem>();
+        public ShopPageViewModel ViewModel { get; }
+        private readonly MainService _service;
+        private readonly UserSession _session;
 
-       
-        public ShopPage()
+        public ShopPage(MainService Service, UserSession Session)
         {
             this.InitializeComponent();
+            this._service = Service;
+            this._session = Session;
 
-            ShopsGridView.ItemsSource = Shops;
+            ViewModel = new ShopPageViewModel(Service, Session);
 
-            Shops.Add(new ShopItem { Name = "Chocolate Heaven", Category = "Food" });
-            Shops.Add(new ShopItem { Name = "Cosmetics Corner", Category = "Beauty" });
-            Shops.Add(new ShopItem { Name = "Designer Bags", Category = "Fashion" });
-            Shops.Add(new ShopItem { Name = "Gourmet Delights", Category = "Food" });
-            Shops.Add(new ShopItem { Name = "Luxury Boutique", Category = "Fashion" });
+            ShopsGridView.ItemsSource = ViewModel.Shops;
 
-
-            AddShopButton.Visibility = App.isAdmin ? Visibility.Visible : Visibility.Collapsed;
-
+            AddShopButton.Visibility = ViewModel.AddShopVisibility;
             AddShopButton.Click += AddShopButton_Click;
-        }
-    
 
+            CartButton.IsEnabled = ViewModel.IsCartEnabled;
+            CartButton.Opacity = ViewModel.CartOpacity;
+            CartButton.Click += CartButton_Click;
+
+            ShopsGridView.ItemClick += ShopsGridView_ItemClick;
+            ShopsGridView.Loaded += ShopsGridView_Loaded;
+        }
+
+        private void ShopsGridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!ViewModel.IsAdmin)
+                HideAdminButtons();
+        }
+
+        private void HideAdminButtons()
+        {
+            foreach (var item in ViewModel.Shops)
+            {
+                var container = ShopsGridView.ContainerFromItem(item) as GridViewItem;
+                if (container == null) continue;
+
+                var editBtn = FindChildByName(container, "EditButton") as Button;
+                var deleteBtn = FindChildByName(container, "DeleteButton") as Button;
+
+                if (editBtn != null) editBtn.Visibility = Visibility.Collapsed;
+                if (deleteBtn != null) deleteBtn.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private DependencyObject FindChildByName(DependencyObject parent, string name)
+        {
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is FrameworkElement fe && fe.Name == name)
+                    return child;
+                var result = FindChildByName(child, name);
+                if (result != null) return result;
+            }
+            return null;
+        }
+
+        private void ShopsGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+            if (e.ClickedItem is Shop shop)
+            {
+                var shopItemPage = new ShopItemsPage(_service, _session, shop);
+                shopItemPage.Activate();
+                this.Close();
+            }
+        }
+
+        private void CartButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SelectClientCommand.Execute(null);
+            var cart = new CartPage(_service, _session);
+            cart.Activate();
+            this.Close();
+        }
 
         private async void AddShopButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
 
             var nameBox = new TextBox { PlaceholderText = "Enter shop name" };
-            var categoryBox = new TextBox { PlaceholderText = "Enter category" };
+            var typeBox = new TextBox { PlaceholderText = "Enter type" };
 
             var dialog = new ContentDialog
             {
@@ -53,8 +112,8 @@ namespace Content
                     {
                         new TextBlock { Text = "Shop Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                         nameBox,
-                        new TextBlock { Text = "Category", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                        categoryBox
+                        new TextBlock { Text = "Type", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                        typeBox
                     }
                 }
             };
@@ -62,25 +121,20 @@ namespace Content
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                if (!string.IsNullOrWhiteSpace(nameBox.Text))
-                {
-                    Shops.Add(new ShopItem
-                    {
-                        Name = nameBox.Text,
-                        Category = categoryBox.Text
-                    });
-                }
+                ViewModel.AddShop(nameBox.Text, typeBox.Text);
+                ShopsGridView.ItemsSource = null;
+                ShopsGridView.ItemsSource = ViewModel.Shops;
             }
         }
 
         private async void EditShopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!App.isAdmin) return; 
+            if (!ViewModel.IsAdmin) return;
 
-            if (sender is Button btn && btn.DataContext is ShopItem shop)
+            if (sender is Button btn && btn.DataContext is Shop shop)
             {
                 var nameBox = new TextBox { Text = shop.Name };
-                var categoryBox = new TextBox { Text = shop.Category };
+                var typeBox = new TextBox { Text = shop.Type };
 
                 var dialog = new ContentDialog
                 {
@@ -96,8 +150,8 @@ namespace Content
                         {
                             new TextBlock { Text = "Shop Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             nameBox,
-                            new TextBlock { Text = "Category", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            categoryBox
+                            new TextBlock { Text = "Type", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                            typeBox
                         }
                     }
                 };
@@ -105,20 +159,18 @@ namespace Content
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    shop.Name = nameBox.Text;
-                    shop.Category = categoryBox.Text;
-
+                    ViewModel.EditShop(shop, nameBox.Text, typeBox.Text);
                     ShopsGridView.ItemsSource = null;
-                    ShopsGridView.ItemsSource = Shops;
+                    ShopsGridView.ItemsSource = ViewModel.Shops;
                 }
             }
         }
 
         private async void DeleteShopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!App.isAdmin) return;
+            if (!ViewModel.IsAdmin) return;
 
-            if (sender is Button btn && btn.DataContext is ShopItem shop)
+            if (sender is Button btn && btn.DataContext is Shop shop)
             {
                 var dialog = new ContentDialog
                 {
@@ -133,10 +185,9 @@ namespace Content
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    Shops.Remove(shop);
+                    ViewModel.DeleteShop(shop);
                 }
             }
         }
     }
-
 }
