@@ -12,6 +12,8 @@ namespace Content.Domain
         public Client Client { get; set; }
         public Dictionary<int,CartItem> CartItems { get; set; }
 
+
+        public Cart() { }
         public Cart(int Id, Client Client, Dictionary<int,CartItem> CartItems)
         {
             this.Id = Id;

@@ -81,7 +81,7 @@
         </Grid>
 
         <ScrollViewer Grid.Row="2">
-            <GridView x:Name="ShopsGridView" Padding="20">
+            <GridView x:Name="ShopsGridView" ItemsSource="{x:Bind ViewModel.Shops, Mode=OneWay}"  Padding="20">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Horizontal"

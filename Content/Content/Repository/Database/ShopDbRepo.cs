@@ -79,7 +79,7 @@ namespace Content.Repository.Database
             {
                 Conn.Open();
                 var Cmd = new SqlCommand(
-                    "INSERT INTO Shop (name, type, manager_id) VALUES (@Name, @Type, @ManagerId)",
+                    "INSERT INTO Shop (name, type, manager_id) VALUES (@Name, @Type, @ManagerId);"+ "SELECT SCOPE_IDENTITY();",
                     Conn
                 );
 
@@ -87,7 +87,7 @@ namespace Content.Repository.Database
                 Cmd.Parameters.AddWithValue("@Type", Shop.Type);
                 Cmd.Parameters.AddWithValue("@ManagerId", Shop.ManagerId);
 
-                Cmd.ExecuteNonQuery();
+                Shop.Id = Convert.ToInt32(Cmd.ExecuteScalar());
             }
         }
 

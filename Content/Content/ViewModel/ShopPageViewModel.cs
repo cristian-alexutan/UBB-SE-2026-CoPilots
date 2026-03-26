@@ -4,15 +4,16 @@ using Content.Domain;
 using Content.Service;
 using Content.User;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace Content.ViewModel
 {
-    public class ShopPageViewModel
+    public class ShopPageViewModel :INotifyPropertyChanged
     {
         private readonly MainService _service;
         private readonly UserSession _session;
 
-        public ObservableCollection<Shop> Shops { get; set; } = new ObservableCollection<Shop>();
+        public ObservableCollection<Shop> Shops { get; set; }
         private int nextId = 1;
 
         public bool IsAdmin => _session.IsAdmin;
@@ -27,18 +28,25 @@ namespace Content.ViewModel
         {
             _service = service;
             _session = session;
+            LoadItems();
 
-            //Shops.Add(new Shop(nextId++, "Chocolate Heaven", "Food", null));
-            //Shops.Add(new Shop(nextId++, "Cosmetics Corner", "Beauty", null));
-            //Shops.Add(new Shop(nextId++, "Designer Bags", "Fashion", null));
-            //Shops.Add(new Shop(nextId++, "Gourmet Delights", "Food", null));
-            //Shops.Add(new Shop(nextId++, "Luxury Boutique", "Fashion", null));
         }
 
+        public void LoadItems()
+        {
+            var shops = _service.shopService.GetAllAvailableShops();
+            Shops = new ObservableCollection<Shop>(shops);
+            OnPropertyChanged(nameof(Shops));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         public void AddShop(string name, string type)
         {
             if (string.IsNullOrWhiteSpace(name)) return;
-            _service.shopService.AddShop(new Shop(nextId++, name, type, _session.UserId));
+            _service.shopService.AddShop(new Shop(nextId, name, type, _session.UserId));
+            LoadItems();
         }
 
         public void EditShop(Shop shop, string newName, string newType)
@@ -46,11 +54,13 @@ namespace Content.ViewModel
             _service.shopService.Update(new Shop(shop.Id, newName, newType, _session.UserId));
             shop.Name = newName;
             shop.Type = newType;
+            LoadItems();
         }
 
         public void DeleteShop(Shop shop)
         {
-            Shops.Remove(shop);
+            _service.shopService.DeleteShop(shop.Id);
+            LoadItems();
         }
     }
 }

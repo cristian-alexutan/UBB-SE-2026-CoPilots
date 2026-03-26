@@ -122,8 +122,8 @@ namespace Content
             if (result == ContentDialogResult.Primary)
             {
                 ViewModel.AddShop(nameBox.Text, typeBox.Text);
-                ShopsGridView.ItemsSource = null;
-                ShopsGridView.ItemsSource = ViewModel.Shops;
+                //ShopsGridView.ItemsSource = null;
+                //ShopsGridView.ItemsSource = ViewModel.Shops;
             }
         }
 
@@ -160,8 +160,8 @@ namespace Content
                 if (result == ContentDialogResult.Primary)
                 {
                     ViewModel.EditShop(shop, nameBox.Text, typeBox.Text);
-                    ShopsGridView.ItemsSource = null;
-                    ShopsGridView.ItemsSource = ViewModel.Shops;
+                    //ShopsGridView.ItemsSource = null;
+                    //ShopsGridView.ItemsSource = ViewModel.Shops;
                 }
             }
         }

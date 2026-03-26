@@ -100,12 +100,12 @@ namespace Content.Repository.Database
                 Conn.Open();
 
                 var Cmd = new SqlCommand(
-                    "INSERT INTO Cart(client_id, status) VALUES(@ClientId, @Status)", Conn);
+                    "INSERT INTO Cart(client_id, status) VALUES(@ClientId, @Status);"+ "SELECT SCOPE_IDENTITY();", Conn);
 
                 Cmd.Parameters.AddWithValue("@ClientId", Cart.Client.Id);
                 Cmd.Parameters.AddWithValue("@Status", "active");
 
-                Cmd.ExecuteNonQuery();
+                Cart.Id = Convert.ToInt32(Cmd.ExecuteScalar());
             }
         }
 
