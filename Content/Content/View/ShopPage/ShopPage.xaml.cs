@@ -10,7 +10,7 @@ using System;
 
 namespace Content
 {
-    public sealed partial class ShopPage : Window 
+    public sealed partial class ShopPage : Window
     {
         public ShopPageViewModel ViewModel { get; }
         private readonly MainService _service;
@@ -35,6 +35,16 @@ namespace Content
 
             ShopsGridView.ItemClick += ShopsGridView_ItemClick;
             ShopsGridView.Loaded += ShopsGridView_Loaded;
+
+            ProfileButton.Click += ProfileButton_Click;
+        }
+
+
+        private void ProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            var landingPage = new LandingPage(_service, _session);
+            landingPage.Activate();
+            this.Close();
         }
 
         private void ShopsGridView_Loaded(object sender, RoutedEventArgs e)
@@ -50,8 +60,8 @@ namespace Content
                 var container = ShopsGridView.ContainerFromItem(item) as GridViewItem;
                 if (container == null) continue;
 
-                var editBtn = FindChildByName(container, "EditButton") as Button;
-                var deleteBtn = FindChildByName(container, "DeleteButton") as Button;
+                var editBtn = FindChildByName(container, "EditShopButton") as Button;
+                var deleteBtn = FindChildByName(container, "DeleteShopButton") as Button;
 
                 if (editBtn != null) editBtn.Visibility = Visibility.Collapsed;
                 if (deleteBtn != null) deleteBtn.Visibility = Visibility.Collapsed;
@@ -75,17 +85,13 @@ namespace Content
         private void ShopsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
 
-            if (e.ClickedItem is Shop shop)
-            {
-                var shopItemPage = new ShopItemsPage(_service, _session, shop);
-                shopItemPage.Activate();
-                this.Close();
-            }
+            var shopItemPage = new ShopItemsPage(_service, _session, ((Shop)e.ClickedItem));
+            shopItemPage.Activate();
+            this.Close();
         }
 
         private void CartButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.SelectClientCommand.Execute(null);
             var cart = new CartPage(_service, _session);
             cart.Activate();
             this.Close();
@@ -189,5 +195,6 @@ namespace Content
                 }
             }
         }
+
     }
 }

@@ -5,10 +5,12 @@ using Content.Service;
 using Content.User;
 using System.Windows.Input;
 using System.ComponentModel;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Content.ViewModel
 {
-    public class ShopPageViewModel :INotifyPropertyChanged
+    public class ShopPageViewModel : INotifyPropertyChanged
     {
         private readonly MainService _service;
         private readonly UserSession _session;
@@ -18,7 +20,7 @@ namespace Content.ViewModel
 
         public bool IsAdmin => _session.IsAdmin;
         public Visibility AddShopVisibility => _session.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility AdminVisibility => _session.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
+
         public bool IsCartEnabled => !_session.IsAdmin;
         public double CartOpacity => _session.IsAdmin ? 0.4 : 1.0;
 
@@ -62,5 +64,6 @@ namespace Content.ViewModel
             _service.shopService.DeleteShop(shop.Id);
             LoadItems();
         }
+
     }
 }

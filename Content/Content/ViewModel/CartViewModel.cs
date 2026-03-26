@@ -74,6 +74,11 @@ namespace Content.ViewModel
             CalculateOverallTotal();
         }
 
+
+        public void Reload()
+        {
+            LoadCartItems();
+        }
         public void ChangeQuantity(CartShopItem item, int newQuantity)
         {
             item.Quantity = newQuantity;

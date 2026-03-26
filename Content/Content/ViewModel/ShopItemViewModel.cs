@@ -68,6 +68,11 @@ namespace Content.ViewModel
             OnPropertyChanged(nameof(Items));
         }
 
+        public void AddToCart(ShopItem item, int quantity)
+        {
+            _service.cartService.AddItemToCart(_session.UserId, new CartItem(item.Id, item, quantity));
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

@@ -11,6 +11,10 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -13,17 +13,24 @@ namespace Content
         public CartViewModel ViewModel { get; }
 
         // 1. Changed constructor to accept service and session
+        private readonly MainService _service;
+        private readonly UserSession _session;
         public CartPage(MainService service, UserSession session)
         {
             // 2. Added safety check to kick out admins if they somehow get here
+            _service = service;
+            _session = session;
+
             if (session.IsAdmin)
             {
                 throw new UnauthorizedAccessException("Admins are not allowed to view or enter the Cart.");
             }
 
-            // 3. Pass the service and session to the new database-connected ViewModel
             ViewModel = new CartViewModel(service, session);
             this.InitializeComponent();
+
+            ViewModel.Reload();
+
         }
 
         private async void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
@@ -132,7 +139,14 @@ namespace Content
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            // Intentionally left blank
+            // Create the landing page passing the stored service and session
+            var landingPage = new LandingPage(_service, _session);
+
+            // Show the landing page
+            landingPage.Activate();
+
+
+            this.Close();
         }
     }
 

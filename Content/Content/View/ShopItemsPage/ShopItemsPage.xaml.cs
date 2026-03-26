@@ -8,7 +8,9 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Content
 {
@@ -53,15 +55,18 @@ namespace Content
     {
 
         private Button _activeSortButton;
-        private ShopItemsViewModel ViewModel;
+        public ShopItemsViewModel ViewModel { get; }
         private readonly UserSession _session;
-        private readonly Shop _currentShop;
+        private Shop _currentShop;
+        private readonly MainService _service;
 
         public ShopItemsPage(MainService service, UserSession session, Shop currentShop)
         {
             this.InitializeComponent();
+            _service = service;
             _session = session;
             _currentShop = currentShop;
+
 
             ViewModel = new ShopItemsViewModel(service, session, currentShop);
             RootGrid.DataContext = ViewModel;
@@ -74,6 +79,7 @@ namespace Content
             {
                 AddButton.Visibility = Visibility.Visible;
             }
+            RootGrid.DataContext = ViewModel;
         }
 
 
@@ -86,7 +92,7 @@ namespace Content
                 Title = "Error",
                 Content = message,
                 CloseButtonText = "OK",
-                XamlRoot=RootGrid.XamlRoot
+                XamlRoot = RootGrid.XamlRoot
             };
 
             _ = dialog.ShowAsync();
@@ -96,7 +102,6 @@ namespace Content
         {
             // Reset all buttons to default style
             ResetButtonStyle(SortAlphabeticButton);
-            ResetButtonStyle(SortComplaintsButton);
             ResetButtonStyle(SortPriceButton);
 
             // Set the active button style
@@ -118,16 +123,9 @@ namespace Content
         // Sort button click handlers
         private void SortAlphabetic_Click(object sender, RoutedEventArgs e)
         {
- 
+
             SetActiveSortButton(SortAlphabeticButton);
             ViewModel.SortByName();
-        }
-
-        private void SortComplaints_Click(object sender, RoutedEventArgs e)
-        {
-            /*SetActiveSortButton(SortComplaintsButton);
-            var sortedItems = _allItems.OrderBy(item => item.Complaints).ToList();
-            ItemsGridView.ItemsSource = sortedItems;*/
         }
 
         private void SortPrice_Click(object sender, RoutedEventArgs e)
@@ -185,7 +183,15 @@ namespace Content
                     float.TryParse(priceBox.Text, out float price) &&
                     int.TryParse(quantityBox.Text, out int quantity))
                 {
-                    var newItem = new ShopItem();
+                    var newItem = new ShopItem
+                    {
+                        Price = price,
+                        Quantity = quantity,
+                        Shop = _currentShop,
+                        Photo = "img",
+                        Name = nameBox.Text,
+                        Description = descBox.Text
+                    };
 
                     try { ViewModel.AddItem(newItem); }
                     catch (Exception ex)
@@ -199,8 +205,6 @@ namespace Content
                         SortAlphabetic_Click(null, null);
                     else if (_activeSortButton == SortPriceButton)
                         SortPrice_Click(null, null);
-                    else if (_activeSortButton == SortComplaintsButton)
-                        SortComplaints_Click(null, null);
                 }
             }
         }
@@ -274,8 +278,6 @@ namespace Content
                         SortAlphabetic_Click(null, null);
                     else if (_activeSortButton == SortPriceButton)
                         SortPrice_Click(null, null);
-                    else if (_activeSortButton == SortComplaintsButton)
-                        SortComplaints_Click(null, null);
                 }
             }
         }
@@ -311,10 +313,27 @@ namespace Content
                         SortAlphabetic_Click(null, null);
                     else if (_activeSortButton == SortPriceButton)
                         SortPrice_Click(null, null);
-                    else if (_activeSortButton == SortComplaintsButton)
-                        SortComplaints_Click(null, null);
                 }
             }
+        }
+
+        private void OpenCartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var cartPage = new CartPage(_service, _session);
+            cartPage.Activate();
+
+            this.Close();
+        }
+
+        private void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var item = button?.Tag as ShopItem;
+
+            if (item == null) return;
+
+            ViewModel.AddToCart(item, 1);
+
         }
     }
 }

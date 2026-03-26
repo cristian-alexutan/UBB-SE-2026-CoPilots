@@ -38,10 +38,10 @@
                 BorderBrush="LightGray" />
 
             <Button Grid.Column="2"
-                    x:Name="CartButton"
                     CornerRadius="4"
                     Padding="15,8"
-                    BorderThickness="0">
+                    BorderThickness="0"
+                    x:Name="ProfileButton">
                 <SymbolIcon Symbol="Contact" Foreground="Gray" />
             </Button>
 
@@ -49,7 +49,8 @@
                     Background="#2bb8c0"
                     Foreground="White"
                     CornerRadius="4"
-                    Padding="15,8">
+                    Padding="15,8"
+                    x:Name="CartButton">
                 <SymbolIcon Symbol="Shop" />
             </Button>
         </Grid>
@@ -73,7 +74,9 @@
             <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10"
                         VerticalAlignment="Center">
                 <TextBlock Text="Sort by:" VerticalAlignment="Center" Opacity="0.7" />
-                <ComboBox Width="220" SelectedIndex="0" Padding="5,2">
+                <ComboBox Width="220" SelectedIndex="0" 
+                          Padding="5,2">
+                    <ComboBoxItem Content="None"/>
                     <ComboBoxItem Content="Shop Name" />
                     <ComboBoxItem Content="Reviews" />
                 </ComboBox>
@@ -81,7 +84,7 @@
         </Grid>
 
         <ScrollViewer Grid.Row="2">
-            <GridView x:Name="ShopsGridView" ItemsSource="{x:Bind ViewModel.Shops, Mode=OneWay}"  Padding="20">
+            <GridView x:Name="ShopsGridView" ItemsSource="{x:Bind ViewModel.Shops, Mode=OneWay}" IsItemClickEnabled="True"  Padding="20">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Horizontal"
@@ -111,13 +114,15 @@
                                                FontWeight="SemiBold"
                                                Foreground="Black"
                                                Grid.Column="0"
-                                               VerticalAlignment="Center" />
+                                               VerticalAlignment="Center"
+                                               />
 
                                     <Button Width="40" Height="30" Grid.Column="1"
                                             Click="EditShopButton_Click"
                                             DataContext="{Binding}"
                                             Margin="0 0 10 0"
-                                            Tag="{Binding}">
+                                            Tag="{Binding}"
+                                            x:Name="EditShopButton">
                                         <TextBlock Text="✎" FontSize="14"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" />
@@ -126,7 +131,8 @@
                                     <Button Width="40" Height="30" Grid.Column="2"
                                             Click="DeleteShopButton_Click"
                                             DataContext="{Binding}"
-                                            Tag="{Binding}">
+                                            Tag="{Binding}"
+                                            x:Name="DeleteShopButton">
                                         <TextBlock Text="-" FontSize="20"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" />
