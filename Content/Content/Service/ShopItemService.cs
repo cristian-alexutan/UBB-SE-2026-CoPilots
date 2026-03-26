@@ -62,18 +62,18 @@ namespace Content.Service
             else throw new Exception("One of your fields is wrong loser");
         }
 
-        public IEnumerable<ShopItem> SortByPrice()
+        public IEnumerable<ShopItem> SortByPrice(Shop currentShop)
         {
-            IEnumerable<ShopItem> sorted = _shopItemRepo.GetAll()
+            IEnumerable<ShopItem> sorted = this.GetShopItemsByShop(currentShop.Id)
                 .OrderBy(item => item.Price);
 
             return sorted;
 
         }
 
-        public IEnumerable<ShopItem> SortAlphabetically()
+        public IEnumerable<ShopItem> SortAlphabetically(Shop currentShop)
         {
-            IEnumerable<ShopItem> sorted = _shopItemRepo.GetAll()
+            IEnumerable<ShopItem> sorted = this.GetShopItemsByShop(currentShop.Id)
                 .OrderBy(item => item.Name);
 
             return sorted;

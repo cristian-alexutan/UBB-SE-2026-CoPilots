@@ -16,6 +16,8 @@ namespace Content.ViewModel
         private readonly MainService _service;
         private readonly UserSession _session;
         private readonly Shop _currentShop;
+
+        private List<ShopItem> _allItems;
         public bool IsAdmin => _session.IsAdmin;
         public ObservableCollection<ShopItem> Items { get; set; }
 
@@ -30,6 +32,7 @@ namespace Content.ViewModel
         public void LoadItems()
         {
             var items = _service.shopItemService.GetShopItemsByShop(_currentShop.Id);
+            _allItems = items.ToList();
             Items = new ObservableCollection<ShopItem>(items);
             OnPropertyChanged(nameof(Items));
         }
@@ -55,7 +58,7 @@ namespace Content.ViewModel
         public void SortByName()
         {
             Items = new ObservableCollection<ShopItem>(
-                _service.shopItemService.SortAlphabetically()
+                _service.shopItemService.SortAlphabetically(_currentShop)
             );
             OnPropertyChanged(nameof(Items));
         }
@@ -63,7 +66,7 @@ namespace Content.ViewModel
         public void SortByPrice()
         {
             Items = new ObservableCollection<ShopItem>(
-                _service.shopItemService.SortByPrice()
+                _service.shopItemService.SortByPrice(_currentShop)
             );
             OnPropertyChanged(nameof(Items));
         }
@@ -71,6 +74,23 @@ namespace Content.ViewModel
         public void AddToCart(ShopItem item, int quantity)
         {
             _service.cartService.AddItemToCart(_session.UserId, new CartItem(item.Id, item, quantity));
+        }
+
+        public void Search(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                LoadItems(); // reset list
+                return;
+            }
+
+            var filtered = _allItems
+                .Where(i => i.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            Items.Clear();
+            foreach (var item in filtered)
+                Items.Add(item);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

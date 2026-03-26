@@ -14,7 +14,7 @@
             <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
-
+            <local:PathToImageConverter x:Key="PathToImageConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

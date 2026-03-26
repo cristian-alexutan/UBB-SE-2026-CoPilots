@@ -29,8 +29,6 @@ namespace Content
             ViewModel = new CartViewModel(service, session);
             this.InitializeComponent();
 
-            ViewModel.Reload();
-
         }
 
         private async void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
@@ -133,7 +131,14 @@ namespace Content
 
             if (result == ContentDialogResult.Primary)
             {
-                // Navigate back logic goes here
+
+                var shopPage = new ShopPage(_service, _session);
+
+
+                shopPage.Activate();
+
+
+                this.Close();
             }
         }
 

@@ -218,6 +218,7 @@
                         Height="560"
                         VerticalAlignment="Top">
                     <Image x:Name="ProductImage"
+                           Source="{Binding Photo, Converter={StaticResource PathToImageConverter}}"
                            Stretch="Uniform"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>

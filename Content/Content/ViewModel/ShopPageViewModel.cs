@@ -7,13 +7,14 @@ using System.Windows.Input;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
-
+using System;
 namespace Content.ViewModel
 {
     public class ShopPageViewModel : INotifyPropertyChanged
     {
         private readonly MainService _service;
         private readonly UserSession _session;
+        private List<Shop> _allShops;
 
         public ObservableCollection<Shop> Shops { get; set; }
         private int nextId = 1;
@@ -37,6 +38,7 @@ namespace Content.ViewModel
         public void LoadItems()
         {
             var shops = _service.shopService.GetAllAvailableShops();
+            _allShops = shops.ToList();
             Shops = new ObservableCollection<Shop>(shops);
             OnPropertyChanged(nameof(Shops));
         }
@@ -64,6 +66,25 @@ namespace Content.ViewModel
             _service.shopService.DeleteShop(shop.Id);
             LoadItems();
         }
+
+        public void Search(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                LoadItems();
+                return;
+            }
+
+            var filtered = _allShops
+                .Where(i => i.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            Shops.Clear();
+            foreach (var item in filtered)
+                Shops.Add(item);
+        }
+
+        
 
     }
 }

@@ -12,10 +12,6 @@
 
     <Grid x:Name="RootGrid">
 
-        <Grid.Resources>
-            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-        </Grid.Resources>
-        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -30,10 +26,12 @@
                             Margin="5"
                             Spacing="5">
 
-                    <Grid>
-                        <SymbolIcon Width="10" Height="10" Foreground="#2bb8c0" HorizontalAlignment="Left" Symbol="Back"/>
-                        <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" Foreground="#2bb8c0" Text="Back to Shops" />
-                    </Grid>
+                    <Button Click="BackToShops_Click" Background="Transparent" BorderThickness="0">
+                        <Grid>
+                            <SymbolIcon Width="10" Height="10" Foreground="#2bb8c0" HorizontalAlignment="Left" Symbol="Back"/>
+                            <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" Foreground="#2bb8c0" Text="Back to Shops" />
+                        </Grid>
+                    </Button>
 
                     <Border Width="1" Grid.Column="1" Background="LightGray" Margin="5,0" Height="30"/>
 
@@ -42,6 +40,7 @@
                     <Grid Padding="50,0,0,0" Width="500" Height="50">
                         <TextBox FontSize="18px" x:Name="SearchBox"
                                  PlaceholderText="Search"
+                                 KeyDown="SearchBox_KeyDown"
                                  Padding="35,13,0,0" 
                                  VerticalAlignment="Stretch"
                                  HorizontalAlignment="Stretch"/>
@@ -53,7 +52,14 @@
                                     Foreground="Gray"/>
                     </Grid>
 
-                    <SymbolIcon Symbol="Contact" Margin="50,20,0,20"/>
+                    <Button Click="BackToLandingPage_Click"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="0"
+                        MinWidth="0"
+                        MinHeight="0">
+                        <SymbolIcon Symbol="Contact"/>
+                    </Button>
 
                     <Button Width="100"
                             Height="45"
@@ -123,14 +129,15 @@
                             Height="40"/>
                 </Grid>
 
-                <GridView ItemsSource="{Binding Items}">
+                <GridView ItemsSource="{Binding Items}" IsItemClickEnabled="True"
+          ItemClick="GridView_ItemClick">
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Padding="10" Margin="5">
                                 <StackPanel Width="250" Height="300">
 
                                     <Grid Height="180" Width="200">
-                                        <Image Source="{Binding Photo}" Stretch="UniformToFill"/>
+                                        <Image Source="{Binding Photo, Converter={StaticResource PathToImageConverter}}" Stretch="UniformToFill"/>
 
                                         <StackPanel Orientation="Horizontal"
                                                     HorizontalAlignment="Right"

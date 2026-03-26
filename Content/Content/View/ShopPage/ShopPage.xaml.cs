@@ -196,5 +196,10 @@ namespace Content
             }
         }
 
+        private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            ViewModel.Search(sender.Text);
+        }
+
     }
 }

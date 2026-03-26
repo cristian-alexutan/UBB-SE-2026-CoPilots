@@ -105,6 +105,13 @@ namespace Content
                 return;
             }
 
+            var cart = _service.cartService.GetCartById(_session.UserId);
+            if (cart == null)
+            {
+                cart = new Cart(_session.UserId, new Client(_session.UserId, "Current Client"), new System.Collections.Generic.Dictionary<int, CartItem>());
+                _service.cartService.AddCart(cart);
+            }
+
             ViewModel.AddToCartCommand.Execute(_qty);
 
             var dlg = new ContentDialog
@@ -117,6 +124,9 @@ namespace Content
 
             _ = dlg.ShowAsync();
 
+            var prevPage = new ShopItemsPage(_service, _session, _item.Shop);
+            prevPage.Activate();
+
             this.Close(); // will force user to re-open details page to change quantity, which will refresh stock display based on model
 
         }
@@ -124,13 +134,15 @@ namespace Content
         private void ViewCart_Click(object sender, RoutedEventArgs e)
         {
             //modify once CartPage is implemented
-            var cartPage = new CartPage(_service,_session);
+            var cartPage = new CartPage(_service, _session);
             cartPage.Activate();
             this.Close();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            var prevPage = new ShopItemsPage(_service, _session, _item.Shop);
+            prevPage.Activate();
             this.Close();
         }
 

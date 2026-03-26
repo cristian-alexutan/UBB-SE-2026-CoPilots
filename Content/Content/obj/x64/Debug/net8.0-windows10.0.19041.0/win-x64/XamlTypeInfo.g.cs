@@ -226,7 +226,7 @@ namespace Content.Content_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[30];
+            _typeNameTable = new string[31];
             _typeNameTable[0] = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
             _typeNameTable[1] = "Microsoft.UI.Xaml.ResourceDictionary";
             _typeNameTable[2] = "Object";
@@ -234,31 +234,32 @@ namespace Content.Content_XamlTypeInfo
             _typeNameTable[4] = "Content.InverseBooleanConverter";
             _typeNameTable[5] = "Content.BoolToVisibilityConverter";
             _typeNameTable[6] = "Content.InverseBoolToVisibilityConverter";
-            _typeNameTable[7] = "Microsoft.UI.Xaml.Media.MicaBackdrop";
-            _typeNameTable[8] = "Microsoft.UI.Xaml.Media.SystemBackdrop";
-            _typeNameTable[9] = "Microsoft.UI.Composition.SystemBackdrops.MicaKind";
-            _typeNameTable[10] = "System.Enum";
-            _typeNameTable[11] = "System.ValueType";
-            _typeNameTable[12] = "Content.CartPage";
-            _typeNameTable[13] = "Microsoft.UI.Xaml.Window";
-            _typeNameTable[14] = "Content.ViewModel.CartViewModel";
-            _typeNameTable[15] = "Microsoft.UI.Xaml.Thickness";
-            _typeNameTable[16] = "Double";
-            _typeNameTable[17] = "Content.ItemDetailsPage";
-            _typeNameTable[18] = "Content.ViewModel.ItemDetailsViewModel";
-            _typeNameTable[19] = "Microsoft.UI.Xaml.Controls.Button";
-            _typeNameTable[20] = "Content.LandingPage";
-            _typeNameTable[21] = "Content.ViewModel.LandingViewModel";
-            _typeNameTable[22] = "Content.ShopItemsPage";
-            _typeNameTable[23] = "Content.ViewModel.ShopItemsViewModel";
-            _typeNameTable[24] = "Content.ShopPage";
-            _typeNameTable[25] = "Content.ViewModel.ShopPageViewModel";
-            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[27] = "Microsoft.UI.Xaml.DependencyObject";
-            _typeNameTable[28] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[29] = "Int32";
+            _typeNameTable[7] = "Content.PathToImageConverter";
+            _typeNameTable[8] = "Microsoft.UI.Xaml.Media.MicaBackdrop";
+            _typeNameTable[9] = "Microsoft.UI.Xaml.Media.SystemBackdrop";
+            _typeNameTable[10] = "Microsoft.UI.Composition.SystemBackdrops.MicaKind";
+            _typeNameTable[11] = "System.Enum";
+            _typeNameTable[12] = "System.ValueType";
+            _typeNameTable[13] = "Content.CartPage";
+            _typeNameTable[14] = "Microsoft.UI.Xaml.Window";
+            _typeNameTable[15] = "Content.ViewModel.CartViewModel";
+            _typeNameTable[16] = "Microsoft.UI.Xaml.Thickness";
+            _typeNameTable[17] = "Double";
+            _typeNameTable[18] = "Content.ItemDetailsPage";
+            _typeNameTable[19] = "Content.ViewModel.ItemDetailsViewModel";
+            _typeNameTable[20] = "Microsoft.UI.Xaml.Controls.Button";
+            _typeNameTable[21] = "Content.LandingPage";
+            _typeNameTable[22] = "Content.ViewModel.LandingViewModel";
+            _typeNameTable[23] = "Content.ShopItemsPage";
+            _typeNameTable[24] = "Content.ViewModel.ShopItemsViewModel";
+            _typeNameTable[25] = "Content.ShopPage";
+            _typeNameTable[26] = "Content.ViewModel.ShopPageViewModel";
+            _typeNameTable[27] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[28] = "Microsoft.UI.Xaml.DependencyObject";
+            _typeNameTable[29] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[30] = "Int32";
 
-            _typeTable = new global::System.Type[30];
+            _typeTable = new global::System.Type[31];
             _typeTable[0] = typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources);
             _typeTable[1] = typeof(global::Microsoft.UI.Xaml.ResourceDictionary);
             _typeTable[2] = typeof(global::System.Object);
@@ -266,29 +267,30 @@ namespace Content.Content_XamlTypeInfo
             _typeTable[4] = typeof(global::Content.InverseBooleanConverter);
             _typeTable[5] = typeof(global::Content.BoolToVisibilityConverter);
             _typeTable[6] = typeof(global::Content.InverseBoolToVisibilityConverter);
-            _typeTable[7] = typeof(global::Microsoft.UI.Xaml.Media.MicaBackdrop);
-            _typeTable[8] = typeof(global::Microsoft.UI.Xaml.Media.SystemBackdrop);
-            _typeTable[9] = typeof(global::Microsoft.UI.Composition.SystemBackdrops.MicaKind);
-            _typeTable[10] = typeof(global::System.Enum);
-            _typeTable[11] = typeof(global::System.ValueType);
-            _typeTable[12] = typeof(global::Content.CartPage);
-            _typeTable[13] = typeof(global::Microsoft.UI.Xaml.Window);
-            _typeTable[14] = typeof(global::Content.ViewModel.CartViewModel);
-            _typeTable[15] = typeof(global::Microsoft.UI.Xaml.Thickness);
-            _typeTable[16] = typeof(global::System.Double);
-            _typeTable[17] = typeof(global::Content.ItemDetailsPage);
-            _typeTable[18] = typeof(global::Content.ViewModel.ItemDetailsViewModel);
-            _typeTable[19] = typeof(global::Microsoft.UI.Xaml.Controls.Button);
-            _typeTable[20] = typeof(global::Content.LandingPage);
-            _typeTable[21] = typeof(global::Content.ViewModel.LandingViewModel);
-            _typeTable[22] = typeof(global::Content.ShopItemsPage);
-            _typeTable[23] = typeof(global::Content.ViewModel.ShopItemsViewModel);
-            _typeTable[24] = typeof(global::Content.ShopPage);
-            _typeTable[25] = typeof(global::Content.ViewModel.ShopPageViewModel);
-            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[27] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
-            _typeTable[28] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[29] = typeof(global::System.Int32);
+            _typeTable[7] = typeof(global::Content.PathToImageConverter);
+            _typeTable[8] = typeof(global::Microsoft.UI.Xaml.Media.MicaBackdrop);
+            _typeTable[9] = typeof(global::Microsoft.UI.Xaml.Media.SystemBackdrop);
+            _typeTable[10] = typeof(global::Microsoft.UI.Composition.SystemBackdrops.MicaKind);
+            _typeTable[11] = typeof(global::System.Enum);
+            _typeTable[12] = typeof(global::System.ValueType);
+            _typeTable[13] = typeof(global::Content.CartPage);
+            _typeTable[14] = typeof(global::Microsoft.UI.Xaml.Window);
+            _typeTable[15] = typeof(global::Content.ViewModel.CartViewModel);
+            _typeTable[16] = typeof(global::Microsoft.UI.Xaml.Thickness);
+            _typeTable[17] = typeof(global::System.Double);
+            _typeTable[18] = typeof(global::Content.ItemDetailsPage);
+            _typeTable[19] = typeof(global::Content.ViewModel.ItemDetailsViewModel);
+            _typeTable[20] = typeof(global::Microsoft.UI.Xaml.Controls.Button);
+            _typeTable[21] = typeof(global::Content.LandingPage);
+            _typeTable[22] = typeof(global::Content.ViewModel.LandingViewModel);
+            _typeTable[23] = typeof(global::Content.ShopItemsPage);
+            _typeTable[24] = typeof(global::Content.ViewModel.ShopItemsViewModel);
+            _typeTable[25] = typeof(global::Content.ShopPage);
+            _typeTable[26] = typeof(global::Content.ViewModel.ShopPageViewModel);
+            _typeTable[27] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[28] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
+            _typeTable[29] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[30] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -327,29 +329,31 @@ namespace Content.Content_XamlTypeInfo
         private object Activate_4_InverseBooleanConverter() { return new global::Content.InverseBooleanConverter(); }
         private object Activate_5_BoolToVisibilityConverter() { return new global::Content.BoolToVisibilityConverter(); }
         private object Activate_6_InverseBoolToVisibilityConverter() { return new global::Content.InverseBoolToVisibilityConverter(); }
-        private object Activate_7_MicaBackdrop() { return new global::Microsoft.UI.Xaml.Media.MicaBackdrop(); }
-        private object Activate_26_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_7_PathToImageConverter() { return new global::Content.PathToImageConverter(); }
+        private object Activate_8_MicaBackdrop() { return new global::Microsoft.UI.Xaml.Media.MicaBackdrop(); }
+        private object Activate_27_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_XamlControlsResources() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources).TypeHandle);
         private void StaticInitializer_4_InverseBooleanConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.InverseBooleanConverter).TypeHandle);
         private void StaticInitializer_5_BoolToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.BoolToVisibilityConverter).TypeHandle);
         private void StaticInitializer_6_InverseBoolToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.InverseBoolToVisibilityConverter).TypeHandle);
-        private void StaticInitializer_7_MicaBackdrop() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Media.MicaBackdrop).TypeHandle);
-        private void StaticInitializer_9_MicaKind() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Composition.SystemBackdrops.MicaKind).TypeHandle);
-        private void StaticInitializer_10_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
-        private void StaticInitializer_11_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
-        private void StaticInitializer_12_CartPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.CartPage).TypeHandle);
-        private void StaticInitializer_14_CartViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.CartViewModel).TypeHandle);
-        private void StaticInitializer_15_Thickness() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Thickness).TypeHandle);
-        private void StaticInitializer_17_ItemDetailsPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ItemDetailsPage).TypeHandle);
-        private void StaticInitializer_18_ItemDetailsViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.ItemDetailsViewModel).TypeHandle);
-        private void StaticInitializer_20_LandingPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.LandingPage).TypeHandle);
-        private void StaticInitializer_21_LandingViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.LandingViewModel).TypeHandle);
-        private void StaticInitializer_22_ShopItemsPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ShopItemsPage).TypeHandle);
-        private void StaticInitializer_23_ShopItemsViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.ShopItemsViewModel).TypeHandle);
-        private void StaticInitializer_24_ShopPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ShopPage).TypeHandle);
-        private void StaticInitializer_25_ShopPageViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.ShopPageViewModel).TypeHandle);
-        private void StaticInitializer_26_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_28_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void StaticInitializer_7_PathToImageConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.PathToImageConverter).TypeHandle);
+        private void StaticInitializer_8_MicaBackdrop() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Media.MicaBackdrop).TypeHandle);
+        private void StaticInitializer_10_MicaKind() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Composition.SystemBackdrops.MicaKind).TypeHandle);
+        private void StaticInitializer_11_Enum() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Enum).TypeHandle);
+        private void StaticInitializer_12_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
+        private void StaticInitializer_13_CartPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.CartPage).TypeHandle);
+        private void StaticInitializer_15_CartViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.CartViewModel).TypeHandle);
+        private void StaticInitializer_16_Thickness() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Thickness).TypeHandle);
+        private void StaticInitializer_18_ItemDetailsPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ItemDetailsPage).TypeHandle);
+        private void StaticInitializer_19_ItemDetailsViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.ItemDetailsViewModel).TypeHandle);
+        private void StaticInitializer_21_LandingPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.LandingPage).TypeHandle);
+        private void StaticInitializer_22_LandingViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.LandingViewModel).TypeHandle);
+        private void StaticInitializer_23_ShopItemsPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ShopItemsPage).TypeHandle);
+        private void StaticInitializer_24_ShopItemsViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.ShopItemsViewModel).TypeHandle);
+        private void StaticInitializer_25_ShopPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ShopPage).TypeHandle);
+        private void StaticInitializer_26_ShopPageViewModel() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Content.ViewModel.ShopPageViewModel).TypeHandle);
+        private void StaticInitializer_27_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_29_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
         private void MapAdd_0_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -357,7 +361,7 @@ namespace Content.Content_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newKey, newItem);
         }
-        private void VectorAdd_28_IList(object instance, object item)
+        private void VectorAdd_29_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -419,61 +423,69 @@ namespace Content.Content_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 7:   //  Microsoft.UI.Xaml.Media.MicaBackdrop
+            case 7:   //  Content.PathToImageConverter
+                userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                userType.Activator = Activate_7_PathToImageConverter;
+                userType.StaticInitializer = StaticInitializer_7_PathToImageConverter;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 8:   //  Microsoft.UI.Xaml.Media.MicaBackdrop
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Media.SystemBackdrop"));
-                userType.Activator = Activate_7_MicaBackdrop;
-                userType.StaticInitializer = StaticInitializer_7_MicaBackdrop;
+                userType.Activator = Activate_8_MicaBackdrop;
+                userType.StaticInitializer = StaticInitializer_8_MicaBackdrop;
                 userType.AddMemberName("Kind");
                 xamlType = userType;
                 break;
 
-            case 8:   //  Microsoft.UI.Xaml.Media.SystemBackdrop
+            case 9:   //  Microsoft.UI.Xaml.Media.SystemBackdrop
                 xamlType = new global::Content.Content_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 9:   //  Microsoft.UI.Composition.SystemBackdrops.MicaKind
+            case 10:   //  Microsoft.UI.Composition.SystemBackdrops.MicaKind
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.Enum"));
-                userType.StaticInitializer = StaticInitializer_9_MicaKind;
+                userType.StaticInitializer = StaticInitializer_10_MicaKind;
                 userType.AddEnumValue("Base", global::Microsoft.UI.Composition.SystemBackdrops.MicaKind.Base);
                 userType.AddEnumValue("BaseAlt", global::Microsoft.UI.Composition.SystemBackdrops.MicaKind.BaseAlt);
                 xamlType = userType;
                 break;
 
-            case 10:   //  System.Enum
+            case 11:   //  System.Enum
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
-                userType.StaticInitializer = StaticInitializer_10_Enum;
+                userType.StaticInitializer = StaticInitializer_11_Enum;
                 xamlType = userType;
                 break;
 
-            case 11:   //  System.ValueType
+            case 12:   //  System.ValueType
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_11_ValueType;
+                userType.StaticInitializer = StaticInitializer_12_ValueType;
                 xamlType = userType;
                 break;
 
-            case 12:   //  Content.CartPage
+            case 13:   //  Content.CartPage
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.StaticInitializer = StaticInitializer_12_CartPage;
+                userType.StaticInitializer = StaticInitializer_13_CartPage;
                 userType.AddMemberName("ViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 13:   //  Microsoft.UI.Xaml.Window
+            case 14:   //  Microsoft.UI.Xaml.Window
                 xamlType = new global::Content.Content_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 14:   //  Content.ViewModel.CartViewModel
+            case 15:   //  Content.ViewModel.CartViewModel
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_14_CartViewModel;
+                userType.StaticInitializer = StaticInitializer_15_CartViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 15:   //  Microsoft.UI.Xaml.Thickness
+            case 16:   //  Microsoft.UI.Xaml.Thickness
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("System.ValueType"));
-                userType.StaticInitializer = StaticInitializer_15_Thickness;
+                userType.StaticInitializer = StaticInitializer_16_Thickness;
                 userType.AddMemberName("Left");
                 userType.AddMemberName("Top");
                 userType.AddMemberName("Right");
@@ -481,83 +493,83 @@ namespace Content.Content_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 16:   //  Double
+            case 17:   //  Double
                 xamlType = new global::Content.Content_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 17:   //  Content.ItemDetailsPage
+            case 18:   //  Content.ItemDetailsPage
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.StaticInitializer = StaticInitializer_17_ItemDetailsPage;
+                userType.StaticInitializer = StaticInitializer_18_ItemDetailsPage;
                 userType.AddMemberName("ViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 18:   //  Content.ViewModel.ItemDetailsViewModel
+            case 19:   //  Content.ViewModel.ItemDetailsViewModel
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_18_ItemDetailsViewModel;
+                userType.StaticInitializer = StaticInitializer_19_ItemDetailsViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 19:   //  Microsoft.UI.Xaml.Controls.Button
+            case 20:   //  Microsoft.UI.Xaml.Controls.Button
                 xamlType = new global::Content.Content_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 20:   //  Content.LandingPage
+            case 21:   //  Content.LandingPage
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.StaticInitializer = StaticInitializer_20_LandingPage;
+                userType.StaticInitializer = StaticInitializer_21_LandingPage;
                 userType.AddMemberName("ViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 21:   //  Content.ViewModel.LandingViewModel
+            case 22:   //  Content.ViewModel.LandingViewModel
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_21_LandingViewModel;
+                userType.StaticInitializer = StaticInitializer_22_LandingViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 22:   //  Content.ShopItemsPage
+            case 23:   //  Content.ShopItemsPage
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.StaticInitializer = StaticInitializer_22_ShopItemsPage;
+                userType.StaticInitializer = StaticInitializer_23_ShopItemsPage;
                 userType.AddMemberName("ViewModel");
                 userType.AddMemberName("IsAdmin");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 23:   //  Content.ViewModel.ShopItemsViewModel
+            case 24:   //  Content.ViewModel.ShopItemsViewModel
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_23_ShopItemsViewModel;
+                userType.StaticInitializer = StaticInitializer_24_ShopItemsViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 24:   //  Content.ShopPage
+            case 25:   //  Content.ShopPage
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.StaticInitializer = StaticInitializer_24_ShopPage;
+                userType.StaticInitializer = StaticInitializer_25_ShopPage;
                 userType.AddMemberName("ViewModel");
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 25:   //  Content.ViewModel.ShopPageViewModel
+            case 26:   //  Content.ViewModel.ShopPageViewModel
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
-                userType.StaticInitializer = StaticInitializer_25_ShopPageViewModel;
+                userType.StaticInitializer = StaticInitializer_26_ShopPageViewModel;
                 userType.SetIsReturnTypeStub();
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 26:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 27:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_26_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_26_TreeViewNode;
+                userType.Activator = Activate_27_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_27_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -569,19 +581,19 @@ namespace Content.Content_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 27:   //  Microsoft.UI.Xaml.DependencyObject
+            case 28:   //  Microsoft.UI.Xaml.DependencyObject
                 xamlType = new global::Content.Content_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 28:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 29:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::Content.Content_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_28_IList;
-                userType.CollectionAdd = VectorAdd_28_IList;
+                userType.StaticInitializer = StaticInitializer_29_IList;
+                userType.CollectionAdd = VectorAdd_29_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 29:   //  Int32
+            case 30:   //  Int32
                 xamlType = new global::Content.Content_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
