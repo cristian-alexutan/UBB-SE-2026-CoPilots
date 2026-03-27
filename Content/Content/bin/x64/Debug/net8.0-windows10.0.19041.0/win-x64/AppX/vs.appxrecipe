@@ -29,7 +29,7 @@
     <AppXManifest Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2026-03-27T00:18:35.476</Modified>
+      <Modified>2026-03-27T14:25:00.821</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -39,11 +39,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>Content.exe</PackagePath>
-      <Modified>2026-03-27T00:18:35.265</Modified>
+      <Modified>2026-03-27T14:25:00.582</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\Content.dll">
       <PackagePath>Content.dll</PackagePath>
-      <Modified>2026-03-27T00:18:35.261</Modified>
+      <Modified>2026-03-27T14:25:00.578</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\App.config">
       <PackagePath>Content.dll.config</PackagePath>
@@ -1123,7 +1123,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Alexandra\source\repos\UBB-SE-2026-CoPilots\Content\Content\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2026-03-26T23:48:09.161</Modified>
+      <Modified>2026-03-27T14:25:00.649</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

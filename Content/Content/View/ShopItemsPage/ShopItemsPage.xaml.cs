@@ -14,6 +14,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
+using Windows.UI.StartScreen;
 using WinRT.Interop;
 
 namespace Content
@@ -266,6 +267,7 @@ namespace Content
                         Spacing = 15,
                         Children =
                         {
+                            
                             new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             nameBox,
 
