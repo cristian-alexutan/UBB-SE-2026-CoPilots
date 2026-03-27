@@ -47,12 +47,14 @@
                 <Button x:Name="ClientButton"
                         Style="{StaticResource ButtonStyle}"
                         Content="I'm a client"
-                        Command="{Binding SelectClientCommand}"/>
+                        Command="{Binding SelectClientCommand}"
+                        Foreground="White"/>
 
                 <Button x:Name="AdminButton"
                         Style="{StaticResource ButtonStyle}"
                         Content="I'm an admin"
-                        Command="{Binding SelectAdminCommand}" />
+                        Command="{Binding SelectAdminCommand}" 
+                        Foreground="White"/>
             </StackPanel>
         </StackPanel>
     </Grid>

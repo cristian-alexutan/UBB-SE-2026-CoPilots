@@ -168,12 +168,21 @@
                                                 ElementName=RootGrid,
                                                 Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                                        <TextBlock
-                                            Grid.Column="2"
+                                        <Grid Grid.Column="2" ColumnSpacing="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" Text="$" FontWeight="Bold" FontSize="24" Foreground="#2bb8c0"></TextBlock>
+
+                                            <TextBlock
                                             FontWeight="Bold"
                                             FontSize="24"
                                             Foreground="#2bb8c0"
-                                            Text="{Binding Price}" />
+                                            Text="{Binding Price}" 
+                                            Grid.Column="1"/>
+                                        </Grid>
 
                                         <Button
                                             Grid.Column="1"
