@@ -13,5 +13,6 @@ namespace Content.Repository.Interface
         Reservation GetById(int Id);
         void Add(Reservation Reservation);
         void Delete(int Id);
+        void Update(Reservation reservation);
     }
 }

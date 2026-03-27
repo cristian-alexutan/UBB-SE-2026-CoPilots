@@ -38,6 +38,14 @@ namespace Content.Repository
             return Reservation;
         }
 
+        public void Update(Reservation reservation)
+        {
+            if (!Reservations.ContainsKey(reservation.Id))
+                throw new Exception("Reservation not found");
+
+            Reservations[reservation.Id] = reservation;
+        }
+
 
 
     }

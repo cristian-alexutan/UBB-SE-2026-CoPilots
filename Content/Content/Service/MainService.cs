@@ -2,6 +2,9 @@ using Content.Service;
 using System.Configuration;
 using Content.Repository;
 using Content.Repository.Database;
+using Content.Domain;
+using System.Collections.Generic;
+using System.Linq;
 namespace Content.Service
 {
     public class MainService
@@ -21,7 +24,7 @@ namespace Content.Service
             var ticketRepo = new TicketDbRepo(connectionString);
             var managerRepo = new ManagerDbRepo(connectionString);
             var shopRepo = new ShopDbRepo(connectionString, managerRepo);
-            var shopItemRepo = new ShopItemDbRepo(connectionString,shopRepo);
+            var shopItemRepo = new ShopItemDbRepo(connectionString, shopRepo);
             var cartRepo = new CartDbRepo(connectionString, clientRepo, shopItemRepo);
             var reservationRepo = new ReservationDbRepo(connectionString, cartRepo);
 
@@ -34,7 +37,14 @@ namespace Content.Service
             this.reservationService = new ReservationService(reservationRepo);
             this.shopItemService = new ShopItemService(shopRepo, shopItemRepo);
         }
-    }
 
+
+        public IEnumerable<Shop> GetShopsSortedByTickets()
+        {
+            var shops = shopService.GetAllAvailableShops();
+            return shops.OrderBy(s => ticketService.CountTicketsBySubcategory(s.Name));
+        }
+
+    }
 
 }

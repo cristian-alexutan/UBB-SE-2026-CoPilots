@@ -38,13 +38,9 @@ namespace Content.Service
         public void cancelReservation(int id)
         {
             Reservation reservation = _reservationRepo.GetById(id);
-            Reservation updatedReservation = new Reservation
-            (
-                reservation.Id,
-                reservation.ReservationCart,
-                false,
-                reservation.ReservationDate
-            );
+            reservation.Active = false;
+            _reservationRepo.Update(reservation);
+
         }
     }
 }

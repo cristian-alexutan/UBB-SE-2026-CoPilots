@@ -79,7 +79,7 @@ namespace Content.Repository.Database
                 Conn.Open();
                 var Cmd = new SqlCommand(
                     "INSERT INTO Reservation (time_slot, reservation_date, cart_id, active) " +
-                    "VALUES (@TimeSlot, @ReservationDate, @CartId, @Active)",
+                    "VALUES (@TimeSlot, @ReservationDate, @CartId, @Active);"+ "SELECT SCOPE_IDENTITY();",
                     Conn
                 );
 
@@ -88,7 +88,7 @@ namespace Content.Repository.Database
                 Cmd.Parameters.AddWithValue("@CartId", Reservation.ReservationCart.Id);
                 Cmd.Parameters.AddWithValue("@Active", Reservation.Active);
 
-                Cmd.ExecuteNonQuery();
+                Reservation.Id = Convert.ToInt32(Cmd.ExecuteScalar());
             }
         }
 
@@ -103,6 +103,24 @@ namespace Content.Repository.Database
             }
         }
 
-        
+        public void Update(Reservation reservation)
+        {
+            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            {
+                Conn.Open();
+
+                var Cmd = new SqlCommand(
+                    "UPDATE Reservation SET active = @active WHERE reservation_id = @id",
+                    Conn
+                );
+
+                Cmd.Parameters.AddWithValue("@active", reservation.Active);
+                Cmd.Parameters.AddWithValue("@id", reservation.Id);
+
+                Cmd.ExecuteNonQuery();
+            }
+        }
+
+
     }
 }

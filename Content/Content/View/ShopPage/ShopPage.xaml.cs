@@ -6,6 +6,7 @@ using Content.Domain;
 using Content.Service;
 using Content.User;
 using System;
+using System.Linq;
 
 
 namespace Content
@@ -37,7 +38,10 @@ namespace Content
             ShopsGridView.Loaded += ShopsGridView_Loaded;
 
             ProfileButton.Click += ProfileButton_Click;
+
+
         }
+
 
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
@@ -199,6 +203,27 @@ namespace Content
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             ViewModel.Search(sender.Text);
+        }
+
+        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox combo && combo.SelectedItem is ComboBoxItem item)
+            {
+                string selected = item.Content.ToString();
+
+                if (selected == "None")
+                {
+                    ViewModel.LoadItems();
+                }
+                else if (selected == "Shop Name")
+                {
+                    ViewModel.SortAlphabetically();
+                }
+                else if (selected == "Reviews")
+                {
+                    ViewModel.SortByReviews();
+                }
+            }
         }
 
     }

@@ -84,7 +84,32 @@ namespace Content.ViewModel
                 Shops.Add(item);
         }
 
-        
+        public void SortByReviews()
+        {
+            if (_allShops == null) return;
+
+            var sorted = _service.GetShopsSortedByTickets().ToList();
+
+            _allShops = sorted;
+
+            Shops.Clear();
+            foreach (var shop in sorted)
+                Shops.Add(shop);
+        }
+
+        public void SortAlphabetically()
+        {
+            if (_allShops == null) return;
+
+            var sorted = _allShops
+                .OrderBy(s => s.Name)
+                .ToList();
+
+            Shops.Clear();
+            foreach (var shop in sorted)
+                Shops.Add(shop);
+        }
+
 
     }
 }
