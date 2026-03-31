@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\itemdetailspage\\itemdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\itemdetailspage\\itemdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\itemdetailspage\\itemdetailspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\itemdetailspage\\itemdetailspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\shopitemspage\\shopitemspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\shopitemspage\\shopitemspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\domain\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\domain\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -27,16 +39,8 @@
       "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\viewmodel\\cartviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\shopitemspage\\shopitemspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\shopitemspage\\shopitemspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\landingpage\\landingpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\landingpage\\landingpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\itemdetailspage\\itemdetailspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\itemdetailspage\\itemdetailspage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\shopitemspage\\shopitemspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -183,10 +187,6 @@
       "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\view\\itemdetailspage\\itemdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\view\\itemdetailspage\\itemdetailspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|c:\\users\\alexandra\\source\\repos\\ubb-se-2026-copilots\\content\\content\\repository\\memory\\reservationmemoryrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5535DA01-7CD7-49C7-AD0F-F2C1B10485CF}|Content\\Content.csproj|solutionrelative:content\\repository\\memory\\reservationmemoryrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -277,7 +277,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 311,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -297,19 +297,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "CartPage.xaml",
-              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\CartPage\\CartPage.xaml",
-              "RelativeDocumentMoniker": "Content\\View\\CartPage\\CartPage.xaml",
-              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\CartPage\\CartPage.xaml",
-              "RelativeToolTip": "Content\\View\\CartPage\\CartPage.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-25T12:24:08.797Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "ShopItemsPage.xaml",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ShopItemsPage\\ShopItemsPage.xaml",
               "RelativeDocumentMoniker": "Content\\View\\ShopItemsPage\\ShopItemsPage.xaml",
@@ -317,35 +305,25 @@
               "RelativeToolTip": "Content\\View\\ShopItemsPage\\ShopItemsPage.xaml",
               "ViewState": "AgIAABMAAAAAAAAAAAAowBgAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-25T14:51:56.068Z"
+              "WhenOpened": "2026-03-25T14:51:56.068Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 1,
               "Title": "ItemDetailsPage.xaml",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml",
               "RelativeDocumentMoniker": "Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml",
               "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml",
               "RelativeToolTip": "Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMUAAABDAAAAAAAAAA==",
+              "ViewState": "AgIAAKwBAAAAAAAAAAAQwL4BAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-25T14:34:48.779Z"
+              "WhenOpened": "2026-03-25T14:34:48.779Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "CartViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\CartViewModel.cs",
-              "RelativeDocumentMoniker": "Content\\ViewModel\\CartViewModel.cs",
-              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\CartViewModel.cs",
-              "RelativeToolTip": "Content\\ViewModel\\CartViewModel.cs",
-              "ViewState": "AgIAAG8AAAAAAAAAAAAiwIAAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-26T11:10:42.629Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "CartDbRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Database\\CartDbRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Database\\CartDbRepo.cs",
@@ -357,7 +335,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "App.config",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\App.config",
               "RelativeDocumentMoniker": "Content\\App.config",
@@ -369,7 +347,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "Client.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\Client.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\Client.cs",
@@ -377,12 +355,11 @@
               "RelativeToolTip": "Content\\Domain\\Client.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T08:47:06.194Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-20T08:47:06.194Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "ReservationDbRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Database\\ReservationDbRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Database\\ReservationDbRepo.cs",
@@ -390,12 +367,11 @@
               "RelativeToolTip": "Content\\Repository\\Database\\ReservationDbRepo.cs",
               "ViewState": "AgIAACwAAAAAAAAAAAAwwFoAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-27T00:17:44.152Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-27T00:17:44.152Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Cart.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\Cart.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\Cart.cs",
@@ -403,12 +379,48 @@
               "RelativeToolTip": "Content\\Domain\\Cart.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAxwC8AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-20T08:46:50.322Z",
+              "WhenOpened": "2026-03-20T08:46:50.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ItemDetailsPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
+              "RelativeDocumentMoniker": "Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
+              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
+              "RelativeToolTip": "Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAwwP8AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T14:34:59.713Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 8,
+              "Title": "CartViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\CartViewModel.cs",
+              "RelativeDocumentMoniker": "Content\\ViewModel\\CartViewModel.cs",
+              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\CartViewModel.cs",
+              "RelativeToolTip": "Content\\ViewModel\\CartViewModel.cs",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAiwIAAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-26T11:10:42.629Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CartPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\CartPage\\CartPage.xaml",
+              "RelativeDocumentMoniker": "Content\\View\\CartPage\\CartPage.xaml",
+              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\CartPage\\CartPage.xaml",
+              "RelativeToolTip": "Content\\View\\CartPage\\CartPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-25T12:24:08.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "ShopItemViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\ShopItemViewModel.cs",
               "RelativeDocumentMoniker": "Content\\ViewModel\\ShopItemViewModel.cs",
@@ -420,7 +432,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "ShopPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ShopPage\\ShopPage.xaml.cs",
               "RelativeDocumentMoniker": "Content\\View\\ShopPage\\ShopPage.xaml.cs",
@@ -432,7 +444,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "LandingPage.xaml",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\LandingPage\\LandingPage.xaml",
               "RelativeDocumentMoniker": "Content\\View\\LandingPage\\LandingPage.xaml",
@@ -444,7 +456,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "ShopPageViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\ShopPageViewModel.cs",
               "RelativeDocumentMoniker": "Content\\ViewModel\\ShopPageViewModel.cs",
@@ -456,7 +468,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "ItemDetailViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\ItemDetailViewModel.cs",
               "RelativeDocumentMoniker": "Content\\ViewModel\\ItemDetailViewModel.cs",
@@ -468,7 +480,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "ShopItemsPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ShopItemsPage\\ShopItemsPage.xaml.cs",
               "RelativeDocumentMoniker": "Content\\View\\ShopItemsPage\\ShopItemsPage.xaml.cs",
@@ -480,7 +492,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "LandingPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\LandingPage\\LandingPage.xaml.cs",
               "RelativeDocumentMoniker": "Content\\View\\LandingPage\\LandingPage.xaml.cs",
@@ -492,7 +504,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "LandingViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\ViewModel\\LandingViewModel.cs",
               "RelativeDocumentMoniker": "Content\\ViewModel\\LandingViewModel.cs",
@@ -504,7 +516,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "MainService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\MainService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\MainService.cs",
@@ -516,7 +528,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "TicketService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\TicketService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\TicketService.cs",
@@ -528,7 +540,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "ClientService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\ClientService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\ClientService.cs",
@@ -540,7 +552,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "ShopItemService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\ShopItemService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\ShopItemService.cs",
@@ -552,7 +564,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "ReservationService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\ReservationService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\ReservationService.cs",
@@ -564,7 +576,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "CartService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\CartService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\CartService.cs",
@@ -576,7 +588,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "ShopService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\ShopService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\ShopService.cs",
@@ -588,7 +600,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "ManagerService.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Service\\ManagerService.cs",
               "RelativeDocumentMoniker": "Content\\Service\\ManagerService.cs",
@@ -600,7 +612,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "ITicketRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Interface\\ITicketRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Interface\\ITicketRepo.cs",
@@ -612,7 +624,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "IClientRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Interface\\IClientRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Interface\\IClientRepo.cs",
@@ -624,7 +636,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "IReservationRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Interface\\IReservationRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Interface\\IReservationRepo.cs",
@@ -636,7 +648,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "ICartRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Interface\\ICartRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Interface\\ICartRepo.cs",
@@ -648,7 +660,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 30,
               "Title": "ShopItemDbRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Database\\ShopItemDbRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Database\\ShopItemDbRepo.cs",
@@ -660,7 +672,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "ShopDbRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Database\\ShopDbRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Database\\ShopDbRepo.cs",
@@ -672,7 +684,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "IManagerRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Interface\\IManagerRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Interface\\IManagerRepo.cs",
@@ -684,7 +696,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "Ticket.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\Ticket.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\Ticket.cs",
@@ -696,7 +708,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "ManagerDbRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Database\\ManagerDbRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Database\\ManagerDbRepo.cs",
@@ -708,7 +720,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "Reservation.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\Reservation.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\Reservation.cs",
@@ -720,7 +732,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "CartItem.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\CartItem.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\CartItem.cs",
@@ -732,7 +744,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 37,
               "Title": "ShopItem.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\ShopItem.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\ShopItem.cs",
@@ -744,7 +756,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 38,
               "Title": "Shop.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\Shop.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\Shop.cs",
@@ -756,7 +768,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 39,
               "Title": "Manager.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Domain\\Manager.cs",
               "RelativeDocumentMoniker": "Content\\Domain\\Manager.cs",
@@ -768,7 +780,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 40,
               "Title": "TicketDbRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Database\\TicketDbRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Database\\TicketDbRepo.cs",
@@ -780,7 +792,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 41,
               "Title": "IShopItemRepo.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Repository\\Interface\\IShopItemRepo.cs",
               "RelativeDocumentMoniker": "Content\\Repository\\Interface\\IShopItemRepo.cs",
@@ -792,7 +804,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 42,
               "Title": "RelayCommand.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\Helper\\RelayCommand.cs",
               "RelativeDocumentMoniker": "Content\\Helper\\RelayCommand.cs",
@@ -804,7 +816,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 43,
               "Title": "UserSession.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\User\\UserSession.cs",
               "RelativeDocumentMoniker": "Content\\User\\UserSession.cs",
@@ -816,7 +828,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 44,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\App.xaml.cs",
               "RelativeDocumentMoniker": "Content\\App.xaml.cs",
@@ -828,7 +840,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 45,
               "Title": "App.xaml",
               "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\App.xaml",
               "RelativeDocumentMoniker": "Content\\App.xaml",
@@ -837,18 +849,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-03-21T16:42:49.253Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "ItemDetailsPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
-              "RelativeDocumentMoniker": "Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
-              "ToolTip": "C:\\Users\\Alexandra\\source\\repos\\UBB-SE-2026-CoPilots\\Content\\Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
-              "RelativeToolTip": "Content\\View\\ItemDetailsPage\\ItemDetailsPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-25T14:34:59.713Z"
             },
             {
               "$type": "Document",

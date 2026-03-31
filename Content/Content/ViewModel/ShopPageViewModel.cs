@@ -14,18 +14,16 @@ namespace Content.ViewModel
     {
         private readonly MainService _service;
         private readonly UserSession _session;
+        // This is the master list used for sorting
         private List<Shop> _allShops;
 
-        public ObservableCollection<Shop> Shops { get; set; }
-        private int nextId = 1;
-
+        // This is bound to the gridview
+        public ObservableCollection<Shop> Shops { get; } = new ObservableCollection<Shop>();
+        // Added these for clarity
         public bool IsAdmin => _session.IsAdmin;
         public Visibility AddShopVisibility => _session.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
-
         public bool IsCartEnabled => !_session.IsAdmin;
         public double CartOpacity => _session.IsAdmin ? 0.4 : 1.0;
-
-        public ICommand SelectClientCommand { get; }
 
         public ShopPageViewModel(MainService service, UserSession session)
         {
@@ -35,24 +33,28 @@ namespace Content.ViewModel
 
         }
 
+        // Fetches all available shops from the service and refreshes the observable collection.
         public void LoadItems()
         {
             var shops = _service.shopService.GetAllAvailableShops();
             _allShops = shops.ToList();
-            Shops = new ObservableCollection<Shop>(shops);
-            OnPropertyChanged(nameof(Shops));
+            Shops.Clear();
+            foreach (var s in _allShops)
+                Shops.Add(s);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        // Adds a shop and refreshes the list via LoadItems()
         public void AddShop(string name, string type)
         {
+            // Here 0 is a throwaway value, since we use identity on the database shop_id the passed value doesn't matter
             if (string.IsNullOrWhiteSpace(name)) return;
-            _service.shopService.AddShop(new Shop(nextId, name, type, _session.UserId));
+            _service.shopService.AddShop(new Shop(0, name, type, _session.UserId));
             LoadItems();
         }
 
+        // Updates the shop based on user input and refreshes the list
         public void EditShop(Shop shop, string newName, string newType)
         {
             _service.shopService.Update(new Shop(shop.Id, newName, newType, _session.UserId));
@@ -61,12 +63,13 @@ namespace Content.ViewModel
             LoadItems();
         }
 
+        // Deletes the shop and refreshes the list
         public void DeleteShop(Shop shop)
         {
             _service.shopService.DeleteShop(shop.Id);
             LoadItems();
         }
-
+        // Filters the shops based on user input (case insensitive)
         public void Search(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
@@ -84,6 +87,7 @@ namespace Content.ViewModel
                 Shops.Add(item);
         }
 
+        // Sorts the shops based on complaints
         public void SortByReviews()
         {
             if (_allShops == null) return;
@@ -97,13 +101,12 @@ namespace Content.ViewModel
                 Shops.Add(shop);
         }
 
+        // Sorts the shops based on name
         public void SortAlphabetically()
         {
             if (_allShops == null) return;
 
-            var sorted = _allShops
-                .OrderBy(s => s.Name)
-                .ToList();
+            var sorted = _service.shopService.SortAlphabetically(_allShops).ToList();
 
             Shops.Clear();
             foreach (var shop in sorted)

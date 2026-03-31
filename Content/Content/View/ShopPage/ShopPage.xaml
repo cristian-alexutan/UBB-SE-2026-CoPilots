@@ -6,19 +6,31 @@
     xmlns:domain="using:Content.Domain">
 
     <Grid Background="#F9FAFB" Padding="100 0 0 0" RequestedTheme="Light">
+        <!-- BoolToVisibilityConverter is defined in the ShopItemsPage and we use it here
+        to turn isAdmin into visibility -->
+        <Grid.Resources>
+            <local:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <!-- Header -->
             <RowDefinition Height="Auto" />
+            <!-- Toolbar with AddShop and Sorting -->
             <RowDefinition Height="*" />
+            <!-- Shop cards -->
         </Grid.RowDefinitions>
 
         <Grid Padding="20 30 30 30" ColumnSpacing="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
+                <!-- DutyFreeShops -->
                 <ColumnDefinition Width="*" />
+                <!-- Search bar -->
                 <ColumnDefinition Width="Auto" />
+                <!-- Profile button -->
                 <ColumnDefinition Width="Auto" />
+                <!-- Cart button -->
             </Grid.ColumnDefinitions>
 
             <TextBlock
@@ -59,8 +71,11 @@
         <Grid Grid.Row="1" Margin="0,0,30,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
+                <!-- Add Shop button, only visible to admins/ managers -->
                 <ColumnDefinition Width="*" />
+                <!-- White space between add button and sorting combo box-->
                 <ColumnDefinition Width="Auto" />
+                <!-- Sorting combo box -->
             </Grid.ColumnDefinitions>
 
             <Button
@@ -75,72 +90,82 @@
             <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10"
                         VerticalAlignment="Center">
                 <TextBlock Text="Sort by:" VerticalAlignment="Center" Opacity="0.7" />
-                <ComboBox Width="220"  
+                <ComboBox Width="220"
                           SelectionChanged="SortComboBox_SelectionChanged"
                           Padding="5,2">
-                    <ComboBoxItem Content="None"/>
+                    <ComboBoxItem Content="None" />
                     <ComboBoxItem Content="Shop Name" />
                     <ComboBoxItem Content="Reviews" />
                 </ComboBox>
             </StackPanel>
         </Grid>
 
+        <!-- Tag passes isAdmin to the DataTemplate. The converter then maps the boolean to Visibility -->
         <ScrollViewer Grid.Row="2">
-            <GridView x:Name="ShopsGridView" ItemsSource="{x:Bind ViewModel.Shops, Mode=OneWay}" IsItemClickEnabled="True"  Padding="20">
+
+            <GridView x:Name="ShopsGridView"
+                      ItemsSource="{x:Bind ViewModel.Shops, Mode=OneWay}"
+                      IsItemClickEnabled="True"
+                      Padding="20"
+                      Tag="{x:Bind ViewModel.IsAdmin, Mode=OneWay}">
+
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsWrapGrid Orientation="Horizontal"
-                                       MaximumRowsOrColumns="5" />
+                        <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="5" />
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
 
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="domain:Shop">
-                        <Border MinWidth="300"
-                                Height="120"
-                                Margin="10"
-                                CornerRadius="12"
-                                Background="WhiteSmoke"
-                                Padding="15">
-
+                        <Border MinWidth="300" Height="120" Margin="10"
+                                CornerRadius="12" Background="WhiteSmoke" Padding="15">
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
+                                        <!-- Shop Name -->
                                         <ColumnDefinition Width="Auto" />
+                                        <!-- Edit button -->
                                         <ColumnDefinition Width="Auto" />
+                                        <!-- Delete button -->
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Text="{x:Bind Name}"
-                                               FontSize="16"
-                                               FontWeight="SemiBold"
-                                               Foreground="Black"
-                                               Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               />
+                                               FontSize="16" FontWeight="SemiBold"
+                                               Foreground="Black" Grid.Column="0"
+                                               VerticalAlignment="Center" />
 
+                                    <!-- Visible only for admin -->
                                     <Button Width="40" Height="30" Grid.Column="1"
                                             Click="EditShopButton_Click"
                                             DataContext="{Binding}"
                                             Margin="0 0 10 0"
                                             Tag="{Binding}"
-                                            x:Name="EditShopButton">
+                                            x:Name="EditShopButton"
+                                            Visibility="{Binding Tag,
+                                                ElementName=ShopsGridView,
+                                                Converter={StaticResource BoolToVisibility}}">
                                         <TextBlock Text="✎" FontSize="14"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" />
                                     </Button>
 
+                                    <!-- Visible only for admin -->
                                     <Button Width="40" Height="30" Grid.Column="2"
                                             Click="DeleteShopButton_Click"
                                             DataContext="{Binding}"
                                             Tag="{Binding}"
-                                            x:Name="DeleteShopButton">
+                                            x:Name="DeleteShopButton"
+                                            Visibility="{Binding Tag,
+                                                ElementName=ShopsGridView,
+                                                Converter={StaticResource BoolToVisibility}}">
                                         <TextBlock Text="-" FontSize="20"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" />
                                     </Button>
                                 </Grid>
 
+                                <!-- Shop type -->
                                 <TextBlock Text="{x:Bind Type}"
                                            Margin="0,5,0,0"
                                            Opacity="0.6"
@@ -149,7 +174,6 @@
                         </Border>
                     </DataTemplate>
                 </GridView.ItemTemplate>
-
             </GridView>
         </ScrollViewer>
 

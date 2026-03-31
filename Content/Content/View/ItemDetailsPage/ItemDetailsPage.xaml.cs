@@ -10,6 +10,9 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
+using System.IO;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
 
 namespace Content
@@ -191,15 +194,52 @@ namespace Content
             UpdateQuantityUI();
         }
 
-        void SetProductImageFromItem()
+        async void SetProductImageFromItem()
         {
             var photo = (_item.Photo ?? "").Trim();
+            if (string.IsNullOrEmpty(photo))
+            {
+                ProductImage.Source = null;
+                return;
+            }
 
-            Uri uri;
-            uri = new Uri($"ms-appx:///View/ItemDetailsPage/{photo}");
+            // 1) Web URL
+            if (Uri.TryCreate(photo, UriKind.Absolute, out var webUri) &&
+                (webUri.Scheme == "http" || webUri.Scheme == "https"))
+            {
+                ProductImage.Source = new BitmapImage(webUri);
+                return;
+            }
 
-            ProductImage.Source = new BitmapImage(uri);
+            // 2) ms-appx/ms-appdata URI
+            if (Uri.TryCreate(photo, UriKind.Absolute, out var appUri) &&
+                (appUri.Scheme == "ms-appx" || appUri.Scheme == "ms-appdata"))
+            {
+                ProductImage.Source = new BitmapImage(appUri);
+                return;
+            }
 
+            // 3) Local absolute file path like C:\...
+            if (Path.IsPathRooted(photo))
+            {
+                try
+                {
+                    var file = await StorageFile.GetFileFromPathAsync(photo);
+                    using IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read);
+
+                    var bmp = new BitmapImage();
+                    await bmp.SetSourceAsync(stream);
+                    ProductImage.Source = bmp;
+                    return;
+                }
+                catch
+                {
+                    ProductImage.Source = null;
+                    return;
+                }
+            }
+
+            ProductImage.Source = new BitmapImage(new Uri($"ms-appx:///{photo}"));
         }
 
 

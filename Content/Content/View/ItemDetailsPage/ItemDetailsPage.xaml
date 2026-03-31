@@ -219,9 +219,9 @@
                         VerticalAlignment="Top">
                     <Image x:Name="ProductImage"
                            Source="{Binding Photo, Converter={StaticResource PathToImageConverter}}"
-                           Stretch="Uniform"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"/>
                 </Border>
 
                 <Border Grid.Column="1"

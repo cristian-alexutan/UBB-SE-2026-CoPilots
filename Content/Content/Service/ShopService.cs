@@ -21,22 +21,6 @@ public class ShopService
         return _shopRepo.GetAll();
     }
 
-    public Shop SelectShopById(int id)
-    {
-        if (id < 0)
-        {
-            throw new ArgumentException("ID must not be negative");
-        }
-
-        var shop = _shopRepo.GetById(id);
-
-        if (shop == null)
-        {
-            throw new KeyNotFoundException("Shop with given ID not found");
-        }
-
-        return shop;
-    }
 
     public void AddShop(Shop shop)
     {
@@ -59,15 +43,11 @@ public class ShopService
     }
 
     // Sorted by name
-    public IEnumerable<Shop> GetShopsSorted()
+    public IEnumerable<Shop> SortAlphabetically(IEnumerable<Shop> shops)
     {
-        return _shopRepo.GetAll().OrderBy(shop => shop.Name); 
+        return shops.OrderBy(shop => shop.Name);
     }
 
-    public Shop FindByName(string name)
-    {
-        return _shopRepo.GetAll().FirstOrDefault(shop => string.Equals(shop.Name, name, StringComparison.OrdinalIgnoreCase));
-    }
 
     public void Update(Shop shop)
     {
