@@ -1,18 +1,18 @@
-﻿using Content.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Content.Domain;
 
 namespace Content.Repository.Interface
 {
     public interface IShopItemRepo
     {
         IEnumerable<ShopItem> GetAll();
-        ShopItem GetById(int Id);
-        void Add(ShopItem ShopItem);
-        void Delete(int Id);
-        void Update(ShopItem ShopItem);
+
+        ShopItem? GetById(int id);
+
+        void Add(ShopItem shopItem);
+
+        void Delete(int id);
+
+        void Update(ShopItem shopItem);
     }
 }
