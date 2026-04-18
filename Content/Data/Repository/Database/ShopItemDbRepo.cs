@@ -1,130 +1,136 @@
-﻿using Content.Domain;
+﻿using System;
+using System.Collections.Generic;
+using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Content.Repository.Database
 {
     public class ShopItemDbRepo : IShopItemRepo
     {
-        private string ConnectionString;
-        private IShopRepo _shopRepo;
+        private readonly string connectionString;
+        private readonly IShopRepo shopRepo;
 
-        public ShopItemDbRepo(string ConnectionString, IShopRepo shopRepo)
+        public ShopItemDbRepo(string connectionString, IShopRepo shopRepo)
         {
-            this.ConnectionString = ConnectionString;
-            this._shopRepo = shopRepo;
+            this.connectionString = connectionString;
+            this.shopRepo = shopRepo;
         }
 
         public IEnumerable<ShopItem> GetAll()
         {
-            var ShopItems = new List<ShopItem>();
+            var shopItems = new List<ShopItem>();
 
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT * FROM Item", Conn);
-                var Reader = Cmd.ExecuteReader();
+                connection.Open();
+                var command = new SqlCommand("SELECT * FROM Item", connection);
+                var reader = command.ExecuteReader();
 
-                while (Reader.Read())
+                while (reader.Read())
                 {
-                    int ShopId = (int)Reader["shop_id"];
-                    var ShopItem = new ShopItem(
-                        (int)Reader["item_id"],
-                        (int)Reader["stock"],
-                        Convert.ToSingle(Reader["price"]),
-                        _shopRepo.GetById(ShopId),
-                        (string)Reader["img"],
-                        (string)Reader["name"],
-                        (string)Reader["description"]
-                    );
-                    ShopItems.Add(ShopItem);
+                    int shopId = (int)reader["shop_id"];
+                    var shopItem = new ShopItem(
+                        (int)reader["item_id"],
+                        (int)reader["stock"],
+                        Convert.ToSingle(reader["price"]),
+                        this.shopRepo.GetById(shopId),
+                        (string)reader["img"],
+                        (string)reader["name"],
+                        (string)reader["description"]);
+                    shopItems.Add(shopItem);
                 }
             }
 
-            return ShopItems;
+            return shopItems;
         }
 
-        public ShopItem GetById(int Id)
+        public ShopItem? GetById(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT * FROM Item WHERE item_id=@Id", Conn);
-                Cmd.Parameters.AddWithValue("@Id", Id);
+                connection.Open();
+                var command = new SqlCommand("SELECT * FROM Item WHERE item_id = @id", connection);
+                command.Parameters.AddWithValue("@id", id);
 
-                var Reader = Cmd.ExecuteReader();
-                if (Reader.Read())
+                var reader = command.ExecuteReader();
+                if (reader.Read())
                 {
-                    int ShopId = (int)Reader["shop_id"];
+                    int shopId = (int)reader["shop_id"];
                     return new ShopItem(
-                        (int)Reader["item_id"],
-                        (int)Reader["stock"],
-                        Convert.ToSingle(Reader["price"]),
-                        _shopRepo.GetById(ShopId),
-                        (string)Reader["img"],
-                        (string)Reader["name"],
-                        (string)Reader["description"]
-                    );
+                        (int)reader["item_id"],
+                        (int)reader["stock"],
+                        Convert.ToSingle(reader["price"]),
+                        this.shopRepo.GetById(shopId),
+                        (string)reader["img"],
+                        (string)reader["name"],
+                        (string)reader["description"]);
                 }
             }
 
             return null;
         }
 
-        public void Add(ShopItem ShopItem)
+        public void Add(ShopItem shopItem)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            if (shopItem.Shop == null)
             {
-                Conn.Open();
-                var Cmd = new SqlCommand(
-                    "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@ShopId, @Stock, @Price, @Img, @Name, @Description);" +
+                throw new ArgumentException("ShopItem must have a Shop assigned.", nameof(shopItem));
+            }
+
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(
+                    "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@shopId, @stock, @price, @img, @name, @description);" +
                         "SELECT SCOPE_IDENTITY();",
-                    Conn
-                );
-                Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
-                Cmd.Parameters.AddWithValue("@Stock", ShopItem.Quantity);
-                Cmd.Parameters.AddWithValue("@Price", ShopItem.Price);
-                Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
-                Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
-                Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
+                    connection);
 
-                ShopItem.Id = Convert.ToInt32(Cmd.ExecuteScalar());
+                command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
+                command.Parameters.AddWithValue("@stock", shopItem.Quantity);
+                command.Parameters.AddWithValue("@price", shopItem.Price);
+                command.Parameters.AddWithValue("@img", shopItem.Photo);
+                command.Parameters.AddWithValue("@name", shopItem.Name);
+                command.Parameters.AddWithValue("@description", shopItem.Description);
+
+                shopItem.Id = Convert.ToInt32(command.ExecuteScalar());
             }
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("DELETE FROM Item WHERE item_id=@Id", Conn);
-                Cmd.Parameters.AddWithValue("@Id", Id);
-                Cmd.ExecuteNonQuery();
+                connection.Open();
+                var command = new SqlCommand("DELETE FROM Item WHERE item_id = @id", connection);
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
             }
         }
 
-        public void Update(ShopItem ShopItem)
+        public void Update(ShopItem shopItem)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            if (shopItem.Shop == null)
             {
-                Conn.Open();
-                var Cmd = new SqlCommand(
-                    "UPDATE Item SET shop_id=@ShopId, stock=@Stock, price=@Price, img=@Img, name=@Name, description=@Description WHERE item_id=@Id",
-                    Conn
-                );
-                Cmd.Parameters.AddWithValue("@ShopId", ShopItem.Shop.Id);
-                Cmd.Parameters.AddWithValue("@Stock", ShopItem.Quantity);
-                Cmd.Parameters.AddWithValue("@Price", ShopItem.Price);
-                Cmd.Parameters.AddWithValue("@Img", ShopItem.Photo);
-                Cmd.Parameters.AddWithValue("@Name", ShopItem.Name);
-                Cmd.Parameters.AddWithValue("@Description", ShopItem.Description);
-                Cmd.Parameters.AddWithValue("@Id", ShopItem.Id);
-                Cmd.ExecuteNonQuery();
+                throw new ArgumentException("ShopItem must have a Shop assigned.", nameof(shopItem));
+            }
+
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(
+                    "UPDATE Item SET shop_id = @shopId, stock = @stock, price = @price, img = @img, name = @name, description = @description WHERE item_id = @id",
+                    connection);
+
+                command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
+                command.Parameters.AddWithValue("@stock", shopItem.Quantity);
+                command.Parameters.AddWithValue("@price", shopItem.Price);
+                command.Parameters.AddWithValue("@img", shopItem.Photo);
+                command.Parameters.AddWithValue("@name", shopItem.Name);
+                command.Parameters.AddWithValue("@description", shopItem.Description);
+                command.Parameters.AddWithValue("@id", shopItem.Id);
+
+                command.ExecuteNonQuery();
             }
         }
     }
