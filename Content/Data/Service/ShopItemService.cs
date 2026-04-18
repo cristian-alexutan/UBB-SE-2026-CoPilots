@@ -67,7 +67,10 @@ namespace Content.Service
 
         public IEnumerable<ShopItem> SortByPrice(Shop currentShop)
         {
-            ArgumentNullException.ThrowIfNull(currentShop);
+            if (currentShop == null)
+            {
+                throw new ArgumentNullException(nameof(currentShop));
+            }
 
             return this.GetShopItemsByShop(currentShop.Id)
                 .OrderBy(shopItem => shopItem.Price);
@@ -75,7 +78,10 @@ namespace Content.Service
 
         public IEnumerable<ShopItem> SortAlphabetically(Shop currentShop)
         {
-            ArgumentNullException.ThrowIfNull(currentShop);
+            if (currentShop == null)
+            {
+                throw new ArgumentNullException(nameof(currentShop));
+            }
 
             return this.GetShopItemsByShop(currentShop.Id)
                 .OrderBy(shopItem => shopItem.Name);
