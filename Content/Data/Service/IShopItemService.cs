@@ -15,9 +15,9 @@ namespace Content.Service
 
         void RemoveShopItem(int shopItemId);
 
-        void AddShopItem(ShopItem item);
+        void AddShopItem(ShopItem shopItem);
 
-        void UpdateShopItem(ShopItem item);
+        void UpdateShopItem(ShopItem shopItem);
 
         IEnumerable<ShopItem> SortByPrice(Shop currentShop);
 
