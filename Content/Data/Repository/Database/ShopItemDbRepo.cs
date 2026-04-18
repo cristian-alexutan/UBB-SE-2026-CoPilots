@@ -9,12 +9,10 @@ namespace Content.Repository.Database
     public class ShopItemDbRepo : IShopItemRepo
     {
         private readonly string connectionString;
-        private readonly IShopRepo shopRepo;
 
-        public ShopItemDbRepo(string connectionString, IShopRepo shopRepo)
+        public ShopItemDbRepo(string connectionString)
         {
             this.connectionString = connectionString;
-            this.shopRepo = shopRepo;
         }
 
         public IEnumerable<ShopItem> GetAll()
@@ -29,16 +27,7 @@ namespace Content.Repository.Database
 
                 while (reader.Read())
                 {
-                    int shopId = (int)reader["shop_id"];
-                    var shopItem = new ShopItem(
-                        (int)reader["item_id"],
-                        (int)reader["stock"],
-                        Convert.ToSingle(reader["price"]),
-                        this.shopRepo.GetById(shopId),
-                        (string)reader["img"],
-                        (string)reader["name"],
-                        (string)reader["description"]);
-                    shopItems.Add(shopItem);
+                    shopItems.Add(this.MapShopItem(reader));
                 }
             }
 
@@ -56,15 +45,7 @@ namespace Content.Repository.Database
                 var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    int shopId = (int)reader["shop_id"];
-                    return new ShopItem(
-                        (int)reader["item_id"],
-                        (int)reader["stock"],
-                        Convert.ToSingle(reader["price"]),
-                        this.shopRepo.GetById(shopId),
-                        (string)reader["img"],
-                        (string)reader["name"],
-                        (string)reader["description"]);
+                    return this.MapShopItem(reader);
                 }
             }
 
@@ -73,20 +54,15 @@ namespace Content.Repository.Database
 
         public void Add(ShopItem shopItem)
         {
-            if (shopItem.Shop == null)
-            {
-                throw new ArgumentException("ShopItem must have a Shop assigned.", nameof(shopItem));
-            }
-
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 var command = new SqlCommand(
                     "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@shopId, @stock, @price, @img, @name, @description);" +
-                        "SELECT SCOPE_IDENTITY();",
+                    "SELECT SCOPE_IDENTITY();",
                     connection);
 
-                command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
+                command.Parameters.AddWithValue("@shopId", shopItem.ShopId);
                 command.Parameters.AddWithValue("@stock", shopItem.Quantity);
                 command.Parameters.AddWithValue("@price", shopItem.Price);
                 command.Parameters.AddWithValue("@img", shopItem.Photo);
@@ -103,18 +79,15 @@ namespace Content.Repository.Database
             {
                 connection.Open();
                 var command = new SqlCommand("DELETE FROM Item WHERE item_id = @id", connection);
+
                 command.Parameters.AddWithValue("@id", id);
+
                 command.ExecuteNonQuery();
             }
         }
 
         public void Update(ShopItem shopItem)
         {
-            if (shopItem.Shop == null)
-            {
-                throw new ArgumentException("ShopItem must have a Shop assigned.", nameof(shopItem));
-            }
-
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
@@ -122,7 +95,7 @@ namespace Content.Repository.Database
                     "UPDATE Item SET shop_id = @shopId, stock = @stock, price = @price, img = @img, name = @name, description = @description WHERE item_id = @id",
                     connection);
 
-                command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
+                command.Parameters.AddWithValue("@shopId", shopItem.ShopId);
                 command.Parameters.AddWithValue("@stock", shopItem.Quantity);
                 command.Parameters.AddWithValue("@price", shopItem.Price);
                 command.Parameters.AddWithValue("@img", shopItem.Photo);
@@ -132,6 +105,19 @@ namespace Content.Repository.Database
 
                 command.ExecuteNonQuery();
             }
+        }
+
+        private ShopItem MapShopItem(SqlDataReader reader)
+        {
+            int itemId = (int)reader["item_id"];
+            int shopId = (int)reader["shop_id"];
+            int quantity = (int)reader["stock"];
+            float price = Convert.ToSingle(reader["price"]);
+            string photo = reader["img"] == DBNull.Value ? string.Empty : (string)reader["img"];
+            string name = (string)reader["name"];
+            string description = reader["description"] == DBNull.Value ? string.Empty : (string)reader["description"];
+
+            return new ShopItem(itemId, quantity, price, shopId, photo, name, description);
         }
     }
 }

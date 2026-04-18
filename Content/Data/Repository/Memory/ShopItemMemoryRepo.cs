@@ -10,39 +10,39 @@ namespace Content.Repository
 {
     public class ShopItemMemoryRepo : IShopItemRepo
     {
-        private Dictionary<int,Domain.ShopItem> ShopItems;
+        private readonly Dictionary<int, ShopItem> shopItems;
 
         public ShopItemMemoryRepo()
         {
-            ShopItems = new Dictionary<int,Domain.ShopItem>();
+            this.shopItems = new Dictionary<int, ShopItem>();
         }
 
-        public void Add(ShopItem ShopItem)
+        public void Add(ShopItem shopItem)
         {
-            ShopItems[ShopItem.Id]=ShopItem;
+            this.shopItems[shopItem.Id] = shopItem;
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            ShopItems.Remove(Id);
+            this.shopItems.Remove(id);
         }
 
         public IEnumerable<ShopItem> GetAll()
         {
-            return ShopItems.Values;
+            return this.shopItems.Values;
         }
 
-        public ShopItem GetById(int Id)
+        public ShopItem? GetById(int id)
         {
-            ShopItems.TryGetValue(Id, out ShopItem ShopItem);
-            return ShopItem;
+            this.shopItems.TryGetValue(id, out ShopItem? shopItem);
+            return shopItem;
         }
 
-        public void Update(ShopItem ShopItem)
+        public void Update(ShopItem shopItem)
         {
-            if (ShopItems.ContainsKey(ShopItem.Id))
+            if (this.shopItems.ContainsKey(shopItem.Id))
             {
-                ShopItems[ShopItem.Id] = ShopItem;
+                this.shopItems[shopItem.Id] = shopItem;
             }
         }
     }
