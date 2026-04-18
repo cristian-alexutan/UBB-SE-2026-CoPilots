@@ -57,7 +57,7 @@ namespace Content.ViewModel
         // Updates the shop based on user input and refreshes the list
         public void EditShop(Shop shop, string newName, string newType)
         {
-            _service.shopService.Update(new Shop(shop.Id, newName, newType, _session.UserId));
+            _service.shopService.UpdateShop(new Shop(shop.Id, newName, newType, _session.UserId));
             shop.Name = newName;
             shop.Type = newType;
             LoadItems();
