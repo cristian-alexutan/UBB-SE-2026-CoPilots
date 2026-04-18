@@ -31,7 +31,7 @@ namespace Content.Service
             return shopItem;
         }
 
-        public IEnumerable<ShopItem> GetShopItemsByShop(int shopId)
+        public IEnumerable<ShopItem> GetItemsByShopId(int shopId)
         {
             return this.shopItemRepo.GetAll()
                 .Where(shopItem => shopItem.ShopId == shopId);
@@ -44,7 +44,7 @@ namespace Content.Service
                 searchText = string.Empty;
             }
 
-            return this.GetShopItemsByShop(shopId)
+            return this.GetItemsByShopId(shopId)
                 .Where(shopItem => shopItem.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase));
         }
 
@@ -65,25 +65,25 @@ namespace Content.Service
             this.shopItemRepo.Update(shopItem);
         }
 
-        public IEnumerable<ShopItem> SortByPrice(Shop currentShop)
+        public IEnumerable<ShopItem> GetItemsSortedByPrice(Shop currentShop)
         {
             if (currentShop == null)
             {
                 throw new ArgumentNullException(nameof(currentShop));
             }
 
-            return this.GetShopItemsByShop(currentShop.Id)
+            return this.GetItemsByShopId(currentShop.Id)
                 .OrderBy(shopItem => shopItem.Price);
         }
 
-        public IEnumerable<ShopItem> SortAlphabetically(Shop currentShop)
+        public IEnumerable<ShopItem> GetItemsSortedAlphabetically(Shop currentShop)
         {
             if (currentShop == null)
             {
                 throw new ArgumentNullException(nameof(currentShop));
             }
 
-            return this.GetShopItemsByShop(currentShop.Id)
+            return this.GetItemsByShopId(currentShop.Id)
                 .OrderBy(shopItem => shopItem.Name);
         }
 
