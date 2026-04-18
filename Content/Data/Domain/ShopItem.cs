@@ -2,10 +2,6 @@
 {
     public class ShopItem
     {
-        public ShopItem()
-        {
-        }
-
         public ShopItem(int id, int quantity, float price, Shop shop, string photo, string name, string description)
         {
             this.Id = id;
@@ -23,7 +19,7 @@
 
         public float Price { get; set; }
 
-        public Shop? Shop { get; set; }
+        public Shop Shop { get; set; }
 
         public string Photo { get; set; } = string.Empty;
 

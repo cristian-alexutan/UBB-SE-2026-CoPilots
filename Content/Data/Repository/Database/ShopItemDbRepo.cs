@@ -17,6 +17,21 @@ namespace Content.Repository.Database
             this.shopRepo = shopRepo;
         }
 
+        private ShopItem MapShopItem(SqlDataReader reader)
+        {
+            int itemId = (int)reader["item_id"];
+            int shopId = (int)reader["shop_id"];
+            int quantity = (int)reader["stock"];
+            float price = Convert.ToSingle(reader["price"]);
+            string photo = reader["img"] == DBNull.Value ? string.Empty : (string)reader["img"];
+            string name = (string)reader["name"];
+            string description = reader["description"] == DBNull.Value ? string.Empty : (string)reader["description"];
+
+            Shop shop = this.shopRepo.GetById(shopId);
+
+            return new ShopItem(itemId, quantity, price, shop, photo, name, description);
+        }
+
         public IEnumerable<ShopItem> GetAll()
         {
             var shopItems = new List<ShopItem>();
@@ -24,21 +39,13 @@ namespace Content.Repository.Database
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var command = new SqlCommand("SELECT * FROM Item", connection);
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
+                using (var command = new SqlCommand("SELECT * FROM Item", connection))
+                using (var reader = command.ExecuteReader())
                 {
-                    int shopId = (int)reader["shop_id"];
-                    var shopItem = new ShopItem(
-                        (int)reader["item_id"],
-                        (int)reader["stock"],
-                        Convert.ToSingle(reader["price"]),
-                        this.shopRepo.GetById(shopId),
-                        (string)reader["img"],
-                        (string)reader["name"],
-                        (string)reader["description"]);
-                    shopItems.Add(shopItem);
+                    while (reader.Read())
+                    {
+                        shopItems.Add(this.MapShopItem(reader));
+                    }
                 }
             }
 
@@ -50,21 +57,17 @@ namespace Content.Repository.Database
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var command = new SqlCommand("SELECT * FROM Item WHERE item_id = @id", connection);
-                command.Parameters.AddWithValue("@id", id);
-
-                var reader = command.ExecuteReader();
-                if (reader.Read())
+                using (var command = new SqlCommand("SELECT * FROM Item WHERE item_id = @id", connection))
                 {
-                    int shopId = (int)reader["shop_id"];
-                    return new ShopItem(
-                        (int)reader["item_id"],
-                        (int)reader["stock"],
-                        Convert.ToSingle(reader["price"]),
-                        this.shopRepo.GetById(shopId),
-                        (string)reader["img"],
-                        (string)reader["name"],
-                        (string)reader["description"]);
+                    command.Parameters.AddWithValue("@id", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return this.MapShopItem(reader);
+                        }
+                    }
                 }
             }
 
@@ -73,27 +76,23 @@ namespace Content.Repository.Database
 
         public void Add(ShopItem shopItem)
         {
-            if (shopItem.Shop == null)
-            {
-                throw new ArgumentException("ShopItem must have a Shop assigned.", nameof(shopItem));
-            }
-
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var command = new SqlCommand(
+                using (var command = new SqlCommand(
                     "INSERT INTO Item (shop_id, stock, price, img, name, description) VALUES (@shopId, @stock, @price, @img, @name, @description);" +
                         "SELECT SCOPE_IDENTITY();",
-                    connection);
+                    connection))
+                {
+                    command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
+                    command.Parameters.AddWithValue("@stock", shopItem.Quantity);
+                    command.Parameters.AddWithValue("@price", shopItem.Price);
+                    command.Parameters.AddWithValue("@img", shopItem.Photo);
+                    command.Parameters.AddWithValue("@name", shopItem.Name);
+                    command.Parameters.AddWithValue("@description", shopItem.Description);
 
-                command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
-                command.Parameters.AddWithValue("@stock", shopItem.Quantity);
-                command.Parameters.AddWithValue("@price", shopItem.Price);
-                command.Parameters.AddWithValue("@img", shopItem.Photo);
-                command.Parameters.AddWithValue("@name", shopItem.Name);
-                command.Parameters.AddWithValue("@description", shopItem.Description);
-
-                shopItem.Id = Convert.ToInt32(command.ExecuteScalar());
+                    shopItem.Id = Convert.ToInt32(command.ExecuteScalar());
+                }
             }
         }
 
@@ -102,35 +101,33 @@ namespace Content.Repository.Database
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var command = new SqlCommand("DELETE FROM Item WHERE item_id = @id", connection);
-                command.Parameters.AddWithValue("@id", id);
-                command.ExecuteNonQuery();
+                using (var command = new SqlCommand("DELETE FROM Item WHERE item_id = @id", connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                }
             }
         }
 
         public void Update(ShopItem shopItem)
         {
-            if (shopItem.Shop == null)
-            {
-                throw new ArgumentException("ShopItem must have a Shop assigned.", nameof(shopItem));
-            }
-
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var command = new SqlCommand(
+                using (var command = new SqlCommand(
                     "UPDATE Item SET shop_id = @shopId, stock = @stock, price = @price, img = @img, name = @name, description = @description WHERE item_id = @id",
-                    connection);
+                    connection))
+                {
+                    command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
+                    command.Parameters.AddWithValue("@stock", shopItem.Quantity);
+                    command.Parameters.AddWithValue("@price", shopItem.Price);
+                    command.Parameters.AddWithValue("@img", shopItem.Photo);
+                    command.Parameters.AddWithValue("@name", shopItem.Name);
+                    command.Parameters.AddWithValue("@description", shopItem.Description);
+                    command.Parameters.AddWithValue("@id", shopItem.Id);
 
-                command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
-                command.Parameters.AddWithValue("@stock", shopItem.Quantity);
-                command.Parameters.AddWithValue("@price", shopItem.Price);
-                command.Parameters.AddWithValue("@img", shopItem.Photo);
-                command.Parameters.AddWithValue("@name", shopItem.Name);
-                command.Parameters.AddWithValue("@description", shopItem.Description);
-                command.Parameters.AddWithValue("@id", shopItem.Id);
-
-                command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
