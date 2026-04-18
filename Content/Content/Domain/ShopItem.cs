@@ -1,38 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Content.Domain
+﻿namespace Content.Domain
 {
     public class ShopItem
     {
-        public int Id { get; set; }
-        public int Quantity { get; set; }
-        public float Price { get; set; }
-        public Shop Shop { get; set; }
-        public string Photo { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-
         public ShopItem()
         {
         }
 
-
-        public ShopItem(int Id, int Quantity, float Price, Shop Shop, string Photo, string Name, string Description)
+        public ShopItem(int id, int quantity, float price, Shop shop, string photo, string name, string description)
         {
-            this.Id = Id;
-            this.Quantity = Quantity;
-            this.Price = Price;
-            this.Shop = Shop;
-            this.Photo = Photo;
-            this.Name = Name;
-            this.Description = Description;
+            this.Id = id;
+            this.Quantity = quantity;
+            this.Price = price;
+            this.Shop = shop;
+            this.Photo = photo;
+            this.Name = name;
+            this.Description = description;
         }
 
-       
+        public int Id { get; set; }
 
+        public int Quantity { get; set; }
+
+        public float Price { get; set; }
+
+        public Shop? Shop { get; set; }
+
+        public string Photo { get; set; } = string.Empty;
+
+        public string Name { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
     }
 }

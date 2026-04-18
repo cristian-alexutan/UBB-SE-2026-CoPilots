@@ -1,83 +1,103 @@
-using Content.Domain;
-using Content.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Content.Domain;
+using Content.Repository.Interface;
 
 namespace Content.Service
 {
-    public class ShopItemService
+    public class ShopItemService : IShopItemService
     {
-        private readonly IShopRepo _shopRepo;
-        private readonly IShopItemRepo _shopItemRepo;
+        private readonly IShopItemRepo shopItemRepo;
 
-        public ShopItemService(IShopRepo shopRepo, IShopItemRepo shopItemRepo)
+        public ShopItemService(IShopItemRepo shopItemRepo)
         {
-            this._shopRepo = shopRepo;
-            this._shopItemRepo = shopItemRepo;
+            this.shopItemRepo = shopItemRepo;
         }
 
         public IEnumerable<ShopItem> GetAll()
         {
-            return _shopItemRepo.GetAll();
+            return this.shopItemRepo.GetAll();
         }
 
-        public IEnumerable<ShopItem> GetShopItemsByShop(int shopID)
+        public ShopItem GetById(int shopItemId)
         {
-            List<ShopItem> result = new List<ShopItem>();
-
-            foreach (var item in _shopItemRepo.GetAll())
+            ShopItem? item = this.shopItemRepo.GetById(shopItemId);
+            if (item == null)
             {
-                if (item.Shop.Id == shopID)
-                {
-                    result.Add(item);
-                }
+                throw new InvalidOperationException($"Shop item with id {shopItemId} does not exist.");
             }
 
-            return result;
-
+            return item;
         }
 
-        public void RemoveShopItem(int shopItemID)
+        public IEnumerable<ShopItem> GetShopItemsByShop(int shopId)
         {
-            _shopItemRepo.Delete(shopItemID);
+            return this.shopItemRepo.GetAll()
+                .Where(item => item.Shop != null && item.Shop.Id == shopId);
+        }
+
+        public IEnumerable<ShopItem> SearchItemsByName(int shopId, string searchText)
+        {
+            if (searchText == null)
+            {
+                searchText = string.Empty;
+            }
+
+            return this.GetShopItemsByShop(shopId)
+                .Where(item => item.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void RemoveShopItem(int shopItemId)
+        {
+            this.shopItemRepo.Delete(shopItemId);
         }
 
         public void AddShopItem(ShopItem item)
         {
-            if (item.Quantity > 0 && item.Price > 0 && item.Shop != null && !string.IsNullOrEmpty(item.Name))
-            {
-                _shopItemRepo.Add(item);
-            }
-            else throw new Exception("One of your fields is wrong loser");
+            ValidateShopItem(item);
+            this.shopItemRepo.Add(item);
         }
 
         public void UpdateShopItem(ShopItem item)
         {
-            if (item.Quantity > 0 && item.Price > 0 && !string.IsNullOrEmpty(item.Name))
-            {
-                _shopItemRepo.Update(item);
-            }
-            else throw new Exception("One of your fields is wrong loser");
+            ValidateShopItem(item);
+            this.shopItemRepo.Update(item);
         }
 
         public IEnumerable<ShopItem> SortByPrice(Shop currentShop)
         {
-            IEnumerable<ShopItem> sorted = this.GetShopItemsByShop(currentShop.Id)
+            return this.GetShopItemsByShop(currentShop.Id)
                 .OrderBy(item => item.Price);
-
-            return sorted;
-
         }
 
         public IEnumerable<ShopItem> SortAlphabetically(Shop currentShop)
         {
-            IEnumerable<ShopItem> sorted = this.GetShopItemsByShop(currentShop.Id)
+            return this.GetShopItemsByShop(currentShop.Id)
                 .OrderBy(item => item.Name);
+        }
 
-            return sorted;
+        private static void ValidateShopItem(ShopItem item)
+        {
+            if (item.Shop == null)
+            {
+                throw new ArgumentException("Shop item must have a Shop assigned.", nameof(item));
+            }
+
+            if (item.Quantity < 0)
+            {
+                throw new ArgumentException("Quantity cannot be negative.", nameof(item));
+            }
+
+            if (item.Price <= 0)
+            {
+                throw new ArgumentException("Price must be greater than zero.", nameof(item));
+            }
+
+            if (string.IsNullOrWhiteSpace(item.Name))
+            {
+                throw new ArgumentException("Shop item name cannot be empty.", nameof(item));
+            }
         }
     }
-
 }
