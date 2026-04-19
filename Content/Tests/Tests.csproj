@@ -24,8 +24,8 @@
   <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)|(Platform)'=='Debug|AnyCPU'">
-		<CodeAnalysisRuleSet>SE.rulset</CodeAnalysisRuleSet>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 </Project>

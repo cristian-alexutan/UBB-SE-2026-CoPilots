@@ -24,7 +24,7 @@ namespace Content.Service
             var ticketRepo = new TicketDbRepo(connectionString);
             var managerRepo = new ManagerDbRepo(connectionString);
             var shopRepo = new ShopDbRepo(connectionString);
-            var shopItemRepo = new ShopItemDbRepo(connectionString, shopRepo);
+            var shopItemRepo = new ShopItemDbRepo(connectionString);
             var cartRepo = new CartDbRepo(connectionString, clientRepo, shopItemRepo);
             var reservationRepo = new ReservationDbRepo(connectionString, cartRepo);
 

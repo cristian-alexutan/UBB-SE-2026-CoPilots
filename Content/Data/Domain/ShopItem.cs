@@ -13,6 +13,17 @@
             this.Description = description;
         }
 
+        public ShopItem(int quantity, float price, int shopId, string photo, string name, string description)
+        {
+            this.Id = 0;
+            this.Quantity = quantity;
+            this.Price = price;
+            this.ShopId = shopId;
+            this.Photo = photo;
+            this.Name = name;
+            this.Description = description;
+        }
+
         public int Id { get; set; }
 
         public int Quantity { get; set; }
