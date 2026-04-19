@@ -1,24 +1,22 @@
 ﻿using Content.Domain;
 using Content.Repository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Content.Repository
 {
     public class ShopItemMemoryRepo : IShopItemRepo
     {
         private readonly Dictionary<int, ShopItem> shopItems;
+        private int nextId;
 
         public ShopItemMemoryRepo()
         {
             this.shopItems = new Dictionary<int, ShopItem>();
+            this.nextId = 1;
         }
 
         public void Add(ShopItem shopItem)
         {
+            shopItem.Id = this.nextId++;
             this.shopItems[shopItem.Id] = shopItem;
         }
 
