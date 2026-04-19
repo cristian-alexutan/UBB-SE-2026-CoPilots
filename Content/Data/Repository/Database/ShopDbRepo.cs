@@ -9,12 +9,10 @@
     public class ShopDbRepo : IShopRepo
     {
         private readonly string connectionString;
-        private readonly IManagerRepo managerRepo;
 
-        public ShopDbRepo(string connectionString, IManagerRepo managerRepo)
+        public ShopDbRepo(string connectionString)
         {
             this.connectionString = connectionString;
-            this.managerRepo = managerRepo;
         }
 
         private Shop mapShop(SqlDataReader reader) {
