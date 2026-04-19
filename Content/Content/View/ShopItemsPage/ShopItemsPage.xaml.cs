@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Content.Domain;
 using Content.Service;
 using Content.User;
@@ -7,37 +9,37 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Xml.Linq;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
-using Windows.UI.StartScreen;
 using WinRT.Interop;
 
 namespace Content
 {
-
     public class PathToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value == null) return null;
+            if (value == null)
+            {
+                return DependencyProperty.UnsetValue;
+            }
 
-            string path = value.ToString();
+            string path = value.ToString() ?? string.Empty;
 
             try
             {
                 if (path.StartsWith("Assets/"))
+                {
                     return new BitmapImage(new Uri($"ms-appx:///{path}"));
+                }
                 else
+                {
                     return new BitmapImage(new Uri(path));
+                }
             }
             catch
             {
-                return null;
+                return DependencyProperty.UnsetValue;
             }
         }
 
@@ -46,6 +48,7 @@ namespace Content
             throw new NotImplementedException();
         }
     }
+
     public class InverseBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -58,6 +61,7 @@ namespace Content
             throw new NotImplementedException();
         }
     }
+
     public class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -70,6 +74,7 @@ namespace Content
             throw new NotImplementedException();
         }
     }
+
     public class InverseBoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -82,38 +87,37 @@ namespace Content
             throw new NotImplementedException();
         }
     }
+
     public sealed partial class ShopItemsPage : Window
     {
+        private Button? selectedSortButton;
+        private readonly UserSession userSession;
+        private Shop selectedShop;
+        private readonly MainService mainService;
+        private Cart currentCart;
 
-        private Button _activeSortButton;
         public ShopItemsViewModel ViewModel { get; }
-        private readonly UserSession _session;
-        private Shop _currentShop;
-        private readonly MainService _service;
-        private Cart _cart;
 
-        public ShopItemsPage(MainService service, UserSession session, Shop currentShop)
+        public ShopItemsPage(MainService mainService, UserSession userSession, Shop selectedShop)
         {
             this.InitializeComponent();
-            _service = service;
-            _session = session;
-            _currentShop = currentShop;
-            _cart = _service.cartService.GetCartById(_session.UserId);
+            this.mainService = mainService;
+            this.userSession = userSession;
+            this.selectedShop = selectedShop;
+            this.currentCart = this.mainService.cartService.GetCartById(this.userSession.UserId);
 
-            ViewModel = new ShopItemsViewModel(_service.ShopItemService, _service.cartService, session, currentShop);
-            RootGrid.DataContext = ViewModel;
+            this.ViewModel = new ShopItemsViewModel(this.mainService.ShopItemService, this.mainService.cartService, this.userSession, this.selectedShop);
+            this.RootGrid.DataContext = this.ViewModel;
 
-            // Set default active sort button
-            SetActiveSortButton(SortAlphabeticButton);
+            this.SetActiveSortButton(this.SortAlphabeticButton);
 
-            if (_session.IsAdmin)
+            if (this.userSession.IsAdmin)
             {
-                AddButton.Visibility = Visibility.Visible;
+                this.AddButton.Visibility = Visibility.Visible;
             }
         }
 
-
-        public bool IsAdmin => _session.IsAdmin;
+        public bool IsAdmin => this.userSession.IsAdmin;
 
         private void ShowError(string message)
         {
@@ -122,7 +126,7 @@ namespace Content
                 Title = "Error",
                 Content = message,
                 CloseButtonText = "OK",
-                XamlRoot = RootGrid.XamlRoot
+                XamlRoot = this.RootGrid.XamlRoot
             };
 
             _ = dialog.ShowAsync();
@@ -130,74 +134,87 @@ namespace Content
 
         private void SetActiveSortButton(Button activeButton)
         {
-            // Reset all buttons to default style
-            ResetButtonStyle(SortAlphabeticButton);
-            ResetButtonStyle(SortPriceButton);
+            this.ResetButtonStyle(this.SortAlphabeticButton);
+            this.ResetButtonStyle(this.SortPriceButton);
 
-            // Set the active button style
-            activeButton.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 43, 184, 192)); // #2bb8c0
+            activeButton.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 43, 184, 192));
             activeButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 255, 255));
 
-            _activeSortButton = activeButton;
+            this.selectedSortButton = activeButton;
         }
 
         private void ResetButtonStyle(Button button)
         {
             if (button != null)
             {
-                button.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 211, 211, 211)); // LightGray
-                button.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0)); // Black
+                button.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 211, 211, 211));
+                button.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0));
             }
         }
 
-        // Sort button click handlers
         private void SortAlphabetic_Click(object sender, RoutedEventArgs e)
         {
-
-            SetActiveSortButton(SortAlphabeticButton);
-            ViewModel.SortByName();
+            this.SetActiveSortButton(this.SortAlphabeticButton);
+            this.ViewModel.SortByName();
         }
 
         private void SortPrice_Click(object sender, RoutedEventArgs e)
         {
-            SetActiveSortButton(SortPriceButton);
-            ViewModel.SortByPrice();
+            this.SetActiveSortButton(this.SortPriceButton);
+            this.ViewModel.SortByPrice();
+        }
+
+        private void ReapplyCurrentSort()
+        {
+            if (this.selectedSortButton == this.SortAlphabeticButton)
+            {
+                this.ViewModel.SortByName();
+            }
+            else if (this.selectedSortButton == this.SortPriceButton)
+            {
+                this.ViewModel.SortByPrice();
+            }
         }
 
         private async void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_session.IsAdmin) return;
+            if (!this.userSession.IsAdmin)
+            {
+                return;
+            }
 
-            string selectedImagePath = null;
-            var button = sender as Button;
+            string? selectedImagePath = null;
+            var sourceButton = sender as Button;
+            if (sourceButton == null)
+            {
+                return;
+            }
 
             var imagePreview = new Image
             {
                 Width = 120,
                 Height = 120,
-                Stretch = Microsoft.UI.Xaml.Media.Stretch.UniformToFill,
-                Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(
-        new Uri("ms-appx:///Assets/placeholder.png"))
+                Stretch = Stretch.UniformToFill,
+                Source = new BitmapImage(new Uri("ms-appx:///Assets/placeholder.png")),
             };
 
             var nameBox = new TextBox { PlaceholderText = "Enter item name" };
             var descBox = new TextBox { PlaceholderText = "Enter description" };
+            var priceBox = new TextBox { PlaceholderText = "Enter price" };
+            var quantityBox = new TextBox { PlaceholderText = "Enter quantity" };
+
             var dropZone = new Border
             {
                 Height = 140,
-                Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(
-                    Windows.UI.Color.FromArgb(30, 0, 0, 0)),
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(30, 0, 0, 0)),
                 Child = new TextBlock
                 {
                     Text = "Drag image here or click to select",
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
-                }
+                    VerticalAlignment = VerticalAlignment.Center,
+                },
+                AllowDrop = true,
             };
-            var priceBox = new TextBox { PlaceholderText = "Enter price" };
-            var quantityBox = new TextBox { PlaceholderText = "Enter quantity" };
-
-            dropZone.AllowDrop = true;
 
             dropZone.Drop += async (s, e) =>
             {
@@ -208,14 +225,13 @@ namespace Content
 
                     if (file != null)
                     {
-                        using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                        using (var stream = await file.OpenAsync(FileAccessMode.Read))
                         {
-                            var bitmap = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+                            var bitmap = new BitmapImage();
                             await bitmap.SetSourceAsync(stream);
                             imagePreview.Source = bitmap;
                         }
 
-                        // store REAL path
                         selectedImagePath = file.Path;
                     }
                 }
@@ -224,20 +240,18 @@ namespace Content
             dropZone.Tapped += async (s, e) =>
             {
                 var picker = new Windows.Storage.Pickers.FileOpenPicker();
-
-                var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-                WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+                var hwnd = WindowNative.GetWindowHandle(this);
+                InitializeWithWindow.Initialize(picker, hwnd);
 
                 picker.FileTypeFilter.Add(".png");
                 picker.FileTypeFilter.Add(".jpg");
 
                 var file = await picker.PickSingleFileAsync();
-
                 if (file != null)
                 {
-                    using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                    using (var stream = await file.OpenAsync(FileAccessMode.Read))
                     {
-                        var bitmap = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+                        var bitmap = new BitmapImage();
                         await bitmap.SetSourceAsync(stream);
                         imagePreview.Source = bitmap;
                     }
@@ -252,40 +266,33 @@ namespace Content
                 CloseButtonText = "Cancel",
                 PrimaryButtonText = "Save",
                 RequestedTheme = ElementTheme.Light,
-                XamlRoot = button.XamlRoot,
+                XamlRoot = sourceButton.XamlRoot,
                 Content = new ScrollViewer
                 {
                     MaxHeight = 500,
                     VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                     VerticalScrollMode = ScrollMode.Auto,
-
                     Content = new StackPanel
                     {
                         Spacing = 15,
                         Children =
                         {
-                            
                             new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             nameBox,
-
                             new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             descBox,
-
                             dropZone,
                             imagePreview,
-
                             new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             priceBox,
-
                             new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            quantityBox
-                        }
-                    }
-                }
+                            quantityBox,
+                        },
+                    },
+                },
             };
 
             var result = await dialog.ShowAsync();
-
             if (result != ContentDialogResult.Primary)
             {
                 return;
@@ -295,125 +302,96 @@ namespace Content
                 string.IsNullOrWhiteSpace(priceBox.Text) ||
                 string.IsNullOrWhiteSpace(quantityBox.Text))
             {
-                ShowError("All fields must be filled!");
+                this.ShowError("All fields must be filled!");
                 return;
             }
-            if (result == ContentDialogResult.Primary)
+
+            if (!float.TryParse(priceBox.Text, out float price) || !int.TryParse(quantityBox.Text, out int quantity))
             {
-                if (!string.IsNullOrWhiteSpace(nameBox.Text) &&
-                    float.TryParse(priceBox.Text, out float price) &&
-                    int.TryParse(quantityBox.Text, out int quantity))
-                {
-                    var newItem = new ShopItem(
-                        0,
-                        quantity,
-                        price,
-                        _currentShop.Id,
-                        selectedImagePath ?? "Assets/PlaceHolder.png",
-                        nameBox.Text,
-                        descBox.Text
-                    );
-
-                    try { ViewModel.AddItem(newItem); }
-                    catch (Exception ex)
-                    {
-                        ShowError(ex.Message);
-                    }
-
-
-                    // Reapply current sort
-                    if (_activeSortButton == SortAlphabeticButton)
-                        SortAlphabetic_Click(null, null);
-                    else if (_activeSortButton == SortPriceButton)
-                        SortPrice_Click(null, null);
-                }
+                this.ShowError("Price or quantity is invalid.");
+                return;
             }
+
+            var newItem = new ShopItem(0, quantity, price, this.selectedShop.Id, selectedImagePath ?? "Assets/PlaceHolder.png", nameBox.Text, descBox.Text);
+
+            try
+            {
+                this.ViewModel.AddItem(newItem);
+            }
+            catch (Exception ex)
+            {
+                this.ShowError(ex.Message);
+            }
+
+            this.ReapplyCurrentSort();
         }
 
-        // Edit button click handler
         private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_session.IsAdmin) return;
-
-            var button = sender as Button;
-            var item = button?.Tag as ShopItem;
-
-            if (item != null)
+            if (!this.userSession.IsAdmin)
             {
-                var nameBox = new TextBox { Text = item.Name };
-                var descBox = new TextBox { Text = item.Description };
-                var priceBox = new TextBox { Text = item.Price.ToString() };
-                var quantityBox = new TextBox { Text = item.Quantity.ToString() };
-                string selectedImagePath = item.Photo;
+                return;
+            }
 
-                var imagePreview = new Image
-                {
-                    Width = 120,
-                    Height = 120,
-                    Stretch = Stretch.UniformToFill
-                };
+            var sourceButton = sender as Button;
+            var item = sourceButton?.Tag as ShopItem;
+            if (sourceButton == null || item == null)
+            {
+                return;
+            }
 
-                // load existing image
-                try
+            var nameBox = new TextBox { Text = item.Name };
+            var descBox = new TextBox { Text = item.Description };
+            var priceBox = new TextBox { Text = item.Price.ToString() };
+            var quantityBox = new TextBox { Text = item.Quantity.ToString() };
+            string selectedImagePath = item.Photo;
+
+            var imagePreview = new Image
+            {
+                Width = 120,
+                Height = 120,
+                Stretch = Stretch.UniformToFill,
+            };
+
+            try
+            {
+                if (!string.IsNullOrEmpty(item.Photo) && item.Photo.StartsWith("Assets/"))
                 {
-                    if (!string.IsNullOrEmpty(item.Photo) && item.Photo.StartsWith("Assets/"))
-                        imagePreview.Source = new BitmapImage(new Uri($"ms-appx:///{item.Photo}"));
-                    else if (!string.IsNullOrEmpty(item.Photo))
-                        imagePreview.Source = new BitmapImage(new Uri(item.Photo));
+                    imagePreview.Source = new BitmapImage(new Uri($"ms-appx:///{item.Photo}"));
                 }
-                catch
+                else if (!string.IsNullOrEmpty(item.Photo))
                 {
-                    imagePreview.Source = null;
+                    imagePreview.Source = new BitmapImage(new Uri(item.Photo));
                 }
+            }
+            catch
+            {
+                imagePreview.Source = null;
+            }
 
-                var dropZone = new Border
+            var dropZone = new Border
+            {
+                Height = 140,
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(30, 0, 0, 0)),
+                Child = new TextBlock
                 {
-                    Height = 140,
-                    Background = new SolidColorBrush(Windows.UI.Color.FromArgb(30, 0, 0, 0)),
-                    Child = new TextBlock
-                    {
-                        Text = "Drag image here or click to change",
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center
-                    }
-                };
+                    Text = "Drag image here or click to change",
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                },
+                AllowDrop = true,
+            };
 
-                dropZone.Drop += async (s, e) =>
+            dropZone.Drop += async (s, e) =>
+            {
+                if (e.DataView.Contains(StandardDataFormats.StorageItems))
                 {
-                    if (e.DataView.Contains(StandardDataFormats.StorageItems))
-                    {
-                        var items = await e.DataView.GetStorageItemsAsync();
-                        var file = items.FirstOrDefault() as Windows.Storage.StorageFile;
-
-                        if (file != null)
-                        {
-                            using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
-                            {
-                                var bitmap = new BitmapImage();
-                                await bitmap.SetSourceAsync(stream);
-                                imagePreview.Source = bitmap;
-                            }
-
-                            selectedImagePath = file.Path;
-                        }
-                    }
-                };
-
-                dropZone.Tapped += async (s, e) =>
-                {
-                    var picker = new Windows.Storage.Pickers.FileOpenPicker();
-
-                    var hwnd = WindowNative.GetWindowHandle(this);
-                    InitializeWithWindow.Initialize(picker, hwnd);
-
-                    picker.FileTypeFilter.Add(".png");
-                    picker.FileTypeFilter.Add(".jpg");
-
-                    var file = await picker.PickSingleFileAsync();
+                    var items = await e.DataView.GetStorageItemsAsync();
+                    var file = items.FirstOrDefault() as StorageFile;
 
                     if (file != null)
                     {
-                        using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                        using (var stream = await file.OpenAsync(FileAccessMode.Read))
                         {
                             var bitmap = new BitmapImage();
                             await bitmap.SetSourceAsync(stream);
@@ -422,159 +400,165 @@ namespace Content
 
                         selectedImagePath = file.Path;
                     }
-                };
+                }
+            };
 
-                dropZone.AllowDrop = true;
+            dropZone.Tapped += async (s, e) =>
+            {
+                var picker = new Windows.Storage.Pickers.FileOpenPicker();
+                var hwnd = WindowNative.GetWindowHandle(this);
+                InitializeWithWindow.Initialize(picker, hwnd);
 
-                var dialog = new ContentDialog
+                picker.FileTypeFilter.Add(".png");
+                picker.FileTypeFilter.Add(".jpg");
+
+                var file = await picker.PickSingleFileAsync();
+                if (file != null)
                 {
-                    Title = "Edit Shop Item",
-                    CloseButtonText = "Cancel",
-                    PrimaryButtonText = "Save",
-                    RequestedTheme = ElementTheme.Light,
-                    XamlRoot = button.XamlRoot,
-                    Content = new ScrollViewer
+                    using (var stream = await file.OpenAsync(FileAccessMode.Read))
                     {
-                        MaxHeight = 500,
-                        Content = new StackPanel
-                        {
-                            Spacing = 15,
-                            Children =
+                        var bitmap = new BitmapImage();
+                        await bitmap.SetSourceAsync(stream);
+                        imagePreview.Source = bitmap;
+                    }
+
+                    selectedImagePath = file.Path;
+                }
+            };
+
+            var dialog = new ContentDialog
+            {
+                Title = "Edit Shop Item",
+                CloseButtonText = "Cancel",
+                PrimaryButtonText = "Save",
+                RequestedTheme = ElementTheme.Light,
+                XamlRoot = sourceButton.XamlRoot,
+                Content = new ScrollViewer
+                {
+                    MaxHeight = 500,
+                    Content = new StackPanel
+                    {
+                        Spacing = 15,
+                        Children =
                         {
                             new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             nameBox,
                             new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             descBox,
-
                             dropZone,
                             imagePreview,
-
                             new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                             priceBox,
                             new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            quantityBox
-                        }
-                        }
-                    }
-                };
+                            quantityBox,
+                        },
+                    },
+                },
+            };
 
-                var result = await dialog.ShowAsync();
+            var result = await dialog.ShowAsync();
+            if (result != ContentDialogResult.Primary)
+            {
+                return;
+            }
 
-                if (result != ContentDialogResult.Primary)
-                {
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(nameBox.Text) ||
+            if (string.IsNullOrWhiteSpace(nameBox.Text) ||
                 string.IsNullOrWhiteSpace(priceBox.Text) ||
                 string.IsNullOrWhiteSpace(quantityBox.Text))
-                {
-                    ShowError("All fields must be filled!");
-                    return;
-                }
-                if (result == ContentDialogResult.Primary)
-                {
-                    if (float.TryParse(priceBox.Text, out float price) &&
-                        int.TryParse(quantityBox.Text, out int quantity))
-                    {
-                        var updatedItem = new ShopItem(
-                            item.Id,
-                            quantity,
-                            price,
-                            item.ShopId,
-                            selectedImagePath ?? item.Photo,
-                            nameBox.Text,
-                            descBox.Text
-                        );
-
-                        try { ViewModel.UpdateItem(updatedItem); }
-                        catch (Exception ex)
-                        {
-                            ShowError(ex.Message);
-                        }
-
-                        // Reapply current sort
-                        if (_activeSortButton == SortAlphabeticButton)
-                            SortAlphabetic_Click(null, null);
-                        else if (_activeSortButton == SortPriceButton)
-                            SortPrice_Click(null, null);
-                    }
-                }
+            {
+                this.ShowError("All fields must be filled!");
+                return;
             }
+
+            if (!float.TryParse(priceBox.Text, out float price) || !int.TryParse(quantityBox.Text, out int quantity))
+            {
+                this.ShowError("Price or quantity is invalid.");
+                return;
+            }
+
+            var updatedItem = new ShopItem(item.Id, quantity, price, item.ShopId, selectedImagePath ?? item.Photo, nameBox.Text, descBox.Text);
+
+            try
+            {
+                this.ViewModel.UpdateItem(updatedItem);
+            }
+            catch (Exception ex)
+            {
+                this.ShowError(ex.Message);
+            }
+
+            this.ReapplyCurrentSort();
         }
 
-        // Delete button click handler
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_session.IsAdmin) return;
-
-            var button = sender as Button;
-            var item = button?.Tag as ShopItem;
-
-            if (item != null)
+            if (!this.userSession.IsAdmin)
             {
-                var dialog = new ContentDialog
-                {
-                    Title = "Delete Item",
-                    Content = $"Are you sure you want to delete \"{item.Name}\"?",
-                    PrimaryButtonText = "Yes",
-                    CloseButtonText = "Cancel",
-                    RequestedTheme = ElementTheme.Light,
-                    XamlRoot = button.XamlRoot
-                };
+                return;
+            }
 
-                var result = await dialog.ShowAsync();
+            var sourceButton = sender as Button;
+            var item = sourceButton?.Tag as ShopItem;
+            if (sourceButton == null || item == null)
+            {
+                return;
+            }
 
-                if (result == ContentDialogResult.Primary)
-                {
-                    ViewModel.DeleteItem(item);
+            var dialog = new ContentDialog
+            {
+                Title = "Delete Item",
+                Content = $"Are you sure you want to delete \"{item.Name}\"?",
+                PrimaryButtonText = "Yes",
+                CloseButtonText = "Cancel",
+                RequestedTheme = ElementTheme.Light,
+                XamlRoot = sourceButton.XamlRoot,
+            };
 
-                    // Reapply current sort
-                    if (_activeSortButton == SortAlphabeticButton)
-                        SortAlphabetic_Click(null, null);
-                    else if (_activeSortButton == SortPriceButton)
-                        SortPrice_Click(null, null);
-                }
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                this.ViewModel.DeleteItem(item);
+                this.ReapplyCurrentSort();
             }
         }
 
         private void OpenCartButton_Click(object sender, RoutedEventArgs e)
         {
-            var cartPage = new CartPage(_service, _session);
+            var cartPage = new CartPage(this.mainService, this.userSession);
             cartPage.Activate();
-
             this.Close();
         }
 
         private void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var item = button?.Tag as ShopItem;
-
-            if (item == null) return;
-            var cart = _service.cartService.GetCartById(_session.UserId);
-            if (cart == null)
+            var sourceButton = sender as Button;
+            var item = sourceButton?.Tag as ShopItem;
+            if (item == null)
             {
-                cart = new Cart(_session.UserId, new Client(_session.UserId, "Current Client"), new System.Collections.Generic.Dictionary<int, CartItem>());
-                _service.cartService.AddCart(cart);
+                return;
             }
-            ViewModel.AddToCart(item, 1);
 
+            var currentCart = this.mainService.cartService.GetCartById(this.userSession.UserId);
+            if (currentCart == null)
+            {
+                currentCart = new Cart(this.userSession.UserId, new Client(this.userSession.UserId, "Current Client"), new System.Collections.Generic.Dictionary<int, CartItem>());
+                this.mainService.cartService.AddCart(currentCart);
+            }
+
+            this.ViewModel.AddToCart(item, 1);
         }
 
         private void BackToShops_Click(object sender, RoutedEventArgs e)
         {
-            var shopPage = new ShopPage(_service, _session);
+            var shopPage = new ShopPage(this.mainService, this.userSession);
             shopPage.Activate();
-
             this.Close();
         }
 
         private void BackToLandingPage_Click(object sender, RoutedEventArgs e)
         {
-            var landingPage = new LandingPage(_service, _session);
+            var landingPage = new LandingPage(this.mainService, this.userSession);
             landingPage.Activate();
-
             this.Close();
         }
 
@@ -583,18 +567,20 @@ namespace Content
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 var query = ((TextBox)sender).Text;
-                ViewModel.Search(query);
+                this.ViewModel.Search(query);
             }
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as ShopItem;
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
 
-            var detailPage = new ItemDetailsPage(_service, _session, item, _cart);
+            var detailPage = new ItemDetailsPage(this.mainService, this.userSession, item, this.currentCart);
             detailPage.Activate();
-
             this.Close();
         }
     }

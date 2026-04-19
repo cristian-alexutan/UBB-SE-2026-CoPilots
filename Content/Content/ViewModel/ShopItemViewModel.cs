@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using Content.Domain;
 using Content.Service;
 using Content.User;
@@ -16,8 +13,8 @@ namespace Content.ViewModel
         private readonly UserSession session;
         private readonly Shop currentShop;
 
-        public bool IsAdmin => session.IsAdmin;
-        public ObservableCollection<ShopItem> Items { get; set; }
+        public bool IsAdmin => this.session.IsAdmin;
+        public ObservableCollection<ShopItem> Items { get; set; } = new ObservableCollection<ShopItem>();
 
         public ShopItemsViewModel(IShopItemService shopItemService, CartService cartService, UserSession session, Shop currentShop)
         {
@@ -69,7 +66,7 @@ namespace Content.ViewModel
 
         public void AddToCart(ShopItem item, int quantity)
         {
-            this.cartService.AddItemToCart(session.UserId, new CartItem(item.Id, item, quantity));
+            this.cartService.AddItemToCart(this.session.UserId, new CartItem(item.Id, item, quantity));
         }
 
         public void Search(string query)
