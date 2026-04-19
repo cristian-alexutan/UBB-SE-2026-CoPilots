@@ -11,6 +11,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.IO;
+using System.Linq;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
@@ -127,11 +128,14 @@ namespace Content
 
             _ = dlg.ShowAsync();
 
-            var prevPage = new ShopItemsPage(_service, _session, _item.Shop);
-            prevPage.Activate();
+            var shop = _service.shopService.GetAllAvailableShops().FirstOrDefault(s => s.Id == _item.ShopId);
+            if (shop != null)
+            {
+                var prevPage = new ShopItemsPage(_service, _session, shop);
+                prevPage.Activate();
+            }
 
-            this.Close(); // will force user to re-open details page to change quantity, which will refresh stock display based on model
-
+            this.Close();
         }
 
         private void ViewCart_Click(object sender, RoutedEventArgs e)
@@ -144,8 +148,12 @@ namespace Content
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            var prevPage = new ShopItemsPage(_service, _session, _item.Shop);
-            prevPage.Activate();
+            var shop = _service.shopService.GetAllAvailableShops().FirstOrDefault(s => s.Id == _item.ShopId);
+            if (shop != null)
+            {
+                var prevPage = new ShopItemsPage(_service, _session, shop);
+                prevPage.Activate();
+            }
             this.Close();
         }
 
@@ -257,7 +265,18 @@ namespace Content
 
             _stock = parsedStock;
 
-            ShopItem updatedItem = new ShopItem(_item.Id, _stock, float.TryParse(_productPrice, System.Globalization.NumberStyles.Currency, null, out var price) ? price : _item.Price, _item.Shop, _item.Photo, _productName, _productDesc);
+            if (!float.TryParse(_productPrice, System.Globalization.NumberStyles.Currency, null, out var price))
+                price = _item.Price;
+
+            var updatedItem = new ShopItem(
+                _item.Id,
+                _stock,
+                price,
+                _item.ShopId,
+                _item.Photo,
+                _productName,
+                _productDesc
+            );
 
             ViewModel.UpdateItemCommand.Execute(updatedItem);
 

@@ -100,19 +100,16 @@ namespace Content
             _currentShop = currentShop;
             _cart = _service.cartService.GetCartById(_session.UserId);
 
-
-            ViewModel = new ShopItemsViewModel(service, session, currentShop);
+            ViewModel = new ShopItemsViewModel(_service.ShopItemService, _service.cartService, session, currentShop);
             RootGrid.DataContext = ViewModel;
 
             // Set default active sort button
             SetActiveSortButton(SortAlphabeticButton);
-            _currentShop = currentShop;
 
             if (_session.IsAdmin)
             {
                 AddButton.Visibility = Visibility.Visible;
             }
-            RootGrid.DataContext = ViewModel;
         }
 
 
@@ -307,15 +304,15 @@ namespace Content
                     float.TryParse(priceBox.Text, out float price) &&
                     int.TryParse(quantityBox.Text, out int quantity))
                 {
-                    var newItem = new ShopItem
-                    {
-                        Price = price,
-                        Quantity = quantity,
-                        Shop = _currentShop,
-                        Photo = selectedImagePath ?? "Assets/PlaceHolder.png",
-                        Name = nameBox.Text,
-                        Description = descBox.Text
-                    };
+                    var newItem = new ShopItem(
+                        0,
+                        quantity,
+                        price,
+                        _currentShop.Id,
+                        selectedImagePath ?? "Assets/PlaceHolder.png",
+                        nameBox.Text,
+                        descBox.Text
+                    );
 
                     try { ViewModel.AddItem(newItem); }
                     catch (Exception ex)
@@ -477,27 +474,31 @@ namespace Content
                 }
                 if (result == ContentDialogResult.Primary)
                 {
-                    item.Photo = selectedImagePath ?? item.Photo;
-                    item.Name = nameBox.Text;
-                    item.Description = descBox.Text;
-
-                    if (float.TryParse(priceBox.Text, out float price))
-                        item.Price = price;
-
-                    if (int.TryParse(quantityBox.Text, out int quantity))
-                        item.Quantity = quantity;
-
-                    try { ViewModel.UpdateItem(item); }
-                    catch (Exception ex)
+                    if (float.TryParse(priceBox.Text, out float price) &&
+                        int.TryParse(quantityBox.Text, out int quantity))
                     {
-                        ShowError(ex.Message);
-                    }
+                        var updatedItem = new ShopItem(
+                            item.Id,
+                            quantity,
+                            price,
+                            item.ShopId,
+                            selectedImagePath ?? item.Photo,
+                            nameBox.Text,
+                            descBox.Text
+                        );
 
-                    // Reapply current sort
-                    if (_activeSortButton == SortAlphabeticButton)
-                        SortAlphabetic_Click(null, null);
-                    else if (_activeSortButton == SortPriceButton)
-                        SortPrice_Click(null, null);
+                        try { ViewModel.UpdateItem(updatedItem); }
+                        catch (Exception ex)
+                        {
+                            ShowError(ex.Message);
+                        }
+
+                        // Reapply current sort
+                        if (_activeSortButton == SortAlphabeticButton)
+                            SortAlphabetic_Click(null, null);
+                        else if (_activeSortButton == SortPriceButton)
+                            SortPrice_Click(null, null);
+                    }
                 }
             }
         }

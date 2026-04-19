@@ -42,7 +42,7 @@ public class ShopServiceTests
         var ex = Assert.Throws<Exception>(() => service.AddShop(new Shop(2, "Existing", "Type", 2)));
 
         Assert.That(ex!.Message, Is.EqualTo("Shop name already exists"));
-        Assert.That(service.GetAllAvailableShops(), Has.Count.EqualTo(1));
+        Assert.That(service.GetAllAvailableShops().Count(), Is.EqualTo(1));
     }
 
     [Test]

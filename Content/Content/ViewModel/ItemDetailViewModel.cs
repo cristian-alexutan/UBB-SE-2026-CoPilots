@@ -36,7 +36,6 @@ namespace Content.ViewModel
         }
 
         private void AddToCart(int quantity)
-
         {
             var cartItems = _cart.CartItems;
             CartItem? existingCartItem = null;
@@ -59,23 +58,32 @@ namespace Content.ViewModel
                 _service.cartService.AddItemToCart(_cart.Id, new CartItem(0, _item, quantity));
             }
 
-            _service.shopItemService.UpdateShopItem(
+            _service.ShopItemService.UpdateShopItem(
                 new ShopItem(
-                _item.Id,
-                newStockQuantity,
-                _item.Price,
-                _item.Shop,
-                _item.Photo,
-                _item.Name,
-                _item.Description
-                
+                    _item.Id,
+                    newStockQuantity,
+                    _item.Price,
+                    _item.ShopId,
+                    _item.Photo,
+                    _item.Name,
+                    _item.Description
                 )
             );
         }
 
         private void UpdateItem(ShopItem updatedItem)
         {
-            _service.shopItemService.UpdateShopItem(new ShopItem(updatedItem.Id, updatedItem.Quantity, updatedItem.Price, updatedItem.Shop, updatedItem.Photo, updatedItem.Name, updatedItem.Description));
+            _service.ShopItemService.UpdateShopItem(
+                new ShopItem(
+                    updatedItem.Id,
+                    updatedItem.Quantity,
+                    updatedItem.Price,
+                    updatedItem.ShopId,
+                    updatedItem.Photo,
+                    updatedItem.Name,
+                    updatedItem.Description
+                )
+            );
         }
 
 
