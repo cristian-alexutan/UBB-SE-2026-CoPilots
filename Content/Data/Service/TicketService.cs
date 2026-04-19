@@ -1,25 +1,25 @@
-﻿using Content.Domain;
+using Content.Domain;
 using Content.Repository.Interface;
 
 namespace Content.Service
 {
-    public class TicketService
+    public class TicketService : ITicketService
     {
-        private readonly ITicketRepo _ticketRepo;
+        private readonly ITicketRepo ticketRepo;
 
         public TicketService(ITicketRepo ticketRepo)
         {
-            _ticketRepo = ticketRepo;
+            this.ticketRepo = ticketRepo;
         }
 
         public int CountTicketsBySubcategory(string subcategory)
         {
-            return _ticketRepo.CountBySubcategory(subcategory);
+            return this.ticketRepo.CountBySubcategory(subcategory);
         }
 
         public void AddTicket(Ticket ticket)
         {
-            _ticketRepo.Add(ticket);
+            this.ticketRepo.Add(ticket);
         }
     }
 }
