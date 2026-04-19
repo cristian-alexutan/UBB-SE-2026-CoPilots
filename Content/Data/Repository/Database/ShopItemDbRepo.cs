@@ -65,9 +65,9 @@ namespace Content.Repository.Database
                 command.Parameters.AddWithValue("@shopId", shopItem.ShopId);
                 command.Parameters.AddWithValue("@stock", shopItem.Quantity);
                 command.Parameters.AddWithValue("@price", shopItem.Price);
-                command.Parameters.AddWithValue("@img", shopItem.Photo);
+                command.Parameters.AddWithValue("@img", string.IsNullOrEmpty(shopItem.Photo) ? (object)DBNull.Value : shopItem.Photo);
                 command.Parameters.AddWithValue("@name", shopItem.Name);
-                command.Parameters.AddWithValue("@description", shopItem.Description);
+                command.Parameters.AddWithValue("@description", string.IsNullOrEmpty(shopItem.Description) ? (object)DBNull.Value : shopItem.Description);
 
                 shopItem.Id = Convert.ToInt32(command.ExecuteScalar());
             }
@@ -98,9 +98,9 @@ namespace Content.Repository.Database
                 command.Parameters.AddWithValue("@shopId", shopItem.ShopId);
                 command.Parameters.AddWithValue("@stock", shopItem.Quantity);
                 command.Parameters.AddWithValue("@price", shopItem.Price);
-                command.Parameters.AddWithValue("@img", shopItem.Photo);
+                command.Parameters.AddWithValue("@img", string.IsNullOrEmpty(shopItem.Photo) ? (object)DBNull.Value : shopItem.Photo);
                 command.Parameters.AddWithValue("@name", shopItem.Name);
-                command.Parameters.AddWithValue("@description", shopItem.Description);
+                command.Parameters.AddWithValue("@description", string.IsNullOrEmpty(shopItem.Description) ? (object)DBNull.Value : shopItem.Description);
                 command.Parameters.AddWithValue("@id", shopItem.Id);
 
                 command.ExecuteNonQuery();
