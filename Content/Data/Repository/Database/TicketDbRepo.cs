@@ -1,102 +1,96 @@
-﻿using Content.Domain;
-using Microsoft.Data.SqlClient;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Content.Domain;
 using Content.Repository.Interface;
+using Microsoft.Data.SqlClient;
+
 namespace Content.Repository.Database
 {
     public class TicketDbRepo : ITicketRepo
     {
-        private string ConnectionString;
+        private string connectionString;
 
-        public TicketDbRepo(string ConnectionString)
+        public TicketDbRepo(string connectionString)
         {
-            this.ConnectionString = ConnectionString;
+            this.connectionString = connectionString;
         }
 
         public IEnumerable<Ticket> GetAll()
         {
-            var Tickets = new List<Ticket>();
+            var tickets = new List<Ticket>();
 
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT * FROM Ticket", Conn);
-                var Reader = Cmd.ExecuteReader();
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Ticket", conn);
+                var reader = cmd.ExecuteReader();
 
-                while (Reader.Read())
+                while (reader.Read())
                 {
-                    var Ticket = new Ticket(
-                        (int)Reader["ticket_id"],
-                        (string)Reader["category"],
-                        (string)Reader["subcategory"]
-                    );
-                    Tickets.Add(Ticket);
+                    var ticket = new Ticket(
+                        (int)reader["ticket_id"],
+                        (string)reader["category"],
+                        (string)reader["subcategory"]);
+                    tickets.Add(ticket);
                 }
             }
 
-            return Tickets;
+            return tickets;
         }
 
-        public Ticket GetById(int Id)
+        public Ticket GetById(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT * FROM Ticket WHERE ticket_id=@Id", Conn);
-                Cmd.Parameters.AddWithValue("@Id", Id);
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Ticket WHERE ticket_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
 
-                var Reader = Cmd.ExecuteReader();
-                if (Reader.Read())
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
                     return new Ticket(
-                        (int)Reader["ticket_id"],
-                        (string)Reader["category"],
-                        (string)Reader["subcategory"]
-                    );
+                        (int)reader["ticket_id"],
+                        (string)reader["category"],
+                        (string)reader["subcategory"]);
                 }
             }
 
             return null;
         }
 
-        public void Add(Ticket Ticket)
+        public void Add(Ticket ticket)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand(
+                conn.Open();
+                var cmd = new SqlCommand(
                     "INSERT INTO Ticket (category, subcategory) VALUES (@Category, @Subcategory)",
-                    Conn
-                );
-                Cmd.Parameters.AddWithValue("@Category", Ticket.Category);
-                Cmd.Parameters.AddWithValue("@Subcategory", Ticket.Subcategory);
-                Cmd.ExecuteNonQuery();
+                    conn);
+                cmd.Parameters.AddWithValue("@Category", ticket.Category);
+                cmd.Parameters.AddWithValue("@Subcategory", ticket.Subcategory);
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("DELETE FROM Ticket WHERE ticket_id=@Id", Conn);
-                Cmd.Parameters.AddWithValue("@Id", Id);
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM Ticket WHERE ticket_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public int CountBySubcategory(string Subcategory)
+        public int CountBySubcategory(string subcategory)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE category='Duty Free Shops' AND subcategory=@Subcategory", Conn);
-                Cmd.Parameters.AddWithValue("@Subcategory", Subcategory);
-                return (int)Cmd.ExecuteScalar();
+                conn.Open();
+                var cmd = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE category='Duty Free Shops' AND subcategory=@Subcategory", conn);
+                cmd.Parameters.AddWithValue("@Subcategory", subcategory);
+                return (int)cmd.ExecuteScalar();
             }
         }
     }

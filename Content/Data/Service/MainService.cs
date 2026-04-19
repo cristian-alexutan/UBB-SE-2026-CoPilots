@@ -11,7 +11,7 @@ namespace Content.Service
     {
         public CartService cartService { get; }
         public ShopService shopService { get; }
-        public TicketService ticketService { get; }
+        public ITicketService ticketService { get; }
         public ClientService clientService { get; }
         public ManagerService managerService { get; }
         public ReservationService reservationService { get; }

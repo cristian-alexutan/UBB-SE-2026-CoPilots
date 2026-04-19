@@ -1,45 +1,43 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Content.Domain;
 using Content.Repository.Interface;
+
 namespace Content.Repository.Memory
 {
     public class TicketMemoryRepo : ITicketRepo
     {
-        private Dictionary<int, Ticket> Tickets;
+        private Dictionary<int, Ticket> tickets;
 
         public TicketMemoryRepo()
         {
-            Tickets = new Dictionary<int, Ticket>();
+            this.tickets = new Dictionary<int, Ticket>();
         }
 
         public IEnumerable<Ticket> GetAll()
         {
-            return Tickets.Values;
+            return this.tickets.Values;
         }
 
-        public Ticket GetById(int Id)
+        public Ticket GetById(int id)
         {
-            Tickets.TryGetValue(Id, out Ticket Ticket);
-            return Ticket;
+            this.tickets.TryGetValue(id, out Ticket ticket);
+            return ticket;
         }
 
-        public void Add(Ticket Ticket)
+        public void Add(Ticket ticket)
         {
-            Tickets[Ticket.Id] = Ticket;
+            this.tickets[ticket.Id] = ticket;
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            Tickets.Remove(Id);
+            this.tickets.Remove(id);
         }
 
-        public int CountBySubcategory(string Subcategory)
+        public int CountBySubcategory(string subcategory)
         {
-            return Tickets.Values.Count(t =>t.Category=="Duty Free Shops" && t.Subcategory == Subcategory);
+            return this.tickets.Values.Count(t => t.Category == "Duty Free Shops" && t.Subcategory == subcategory);
         }
     }
 }
