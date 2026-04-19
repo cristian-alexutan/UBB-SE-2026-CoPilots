@@ -83,6 +83,7 @@ namespace Content
         private async void EmptyCart_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.CartShopItems.Count == 0) return;
+            
 
             ContentDialog emptyDialog = new ContentDialog
             {
@@ -102,17 +103,45 @@ namespace Content
             }
         }
 
+        private async Task ShowErrorDialogAsync(string title, string message)
+        {
+            ContentDialog errorDialog = new ContentDialog
+            {
+                Title = title,
+                Content = message,
+                CloseButtonText = "OK",
+                DefaultButton = ContentDialogButton.Close,
+                XamlRoot = this.Content.XamlRoot
+            };
+
+            await errorDialog.ShowAsync();
+        }
         private void Reserve_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.CartShopItems.Count > 0)
             {
-                ViewModel.ReserveCart();
+                try
+                {
+                    ViewModel.ReserveCart();
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorDialogAsync("Reservation Error", ex.Message);
+                }
             }
         }
 
         private void CancelReservation_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.CancelReservation();
+            try
+            {
+                ViewModel.CancelReservation();
+                ViewModel.Reload();
+            }
+            catch (Exception ex)
+            {
+                ShowErrorDialogAsync("Cancellation Error", ex.Message);
+            }
         }
 
         private async void BackButton_Click(object sender, RoutedEventArgs e)

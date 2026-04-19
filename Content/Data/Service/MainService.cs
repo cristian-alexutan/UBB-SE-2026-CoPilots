@@ -34,8 +34,8 @@ namespace Content.Service
             this.ticketService = new TicketService(ticketRepo);
             this.clientService = new ClientService(clientRepo);
             this.managerService = new ManagerService(managerRepo);
-            this.reservationService = new ReservationService(reservationRepo);
             this.shopItemService = new ShopItemService(shopItemRepo);
+            this.reservationService = new ReservationService(reservationRepo, shopItemService, cartService);
         }
 
 
