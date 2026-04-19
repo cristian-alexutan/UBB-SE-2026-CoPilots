@@ -15,7 +15,7 @@ namespace Content.Service
         public ClientService clientService { get; }
         public ManagerService managerService { get; }
         public ReservationService reservationService { get; }
-        public ShopItemService shopItemService { get; }
+        public IShopItemService ShopItemService { get; }
 
         public MainService(string connectionString)
         {
