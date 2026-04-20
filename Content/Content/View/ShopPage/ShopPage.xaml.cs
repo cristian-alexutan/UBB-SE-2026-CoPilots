@@ -1,76 +1,63 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Content.ViewModel;
-using Microsoft.UI.Xaml.Media;
+using System;
 using Content.Domain;
 using Content.Service;
 using Content.User;
-using System;
-using System.Linq;
-
+using Content.ViewModel;
+using Content.ViewModel.Interface;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Data;
-using System;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Content
 {
     public sealed partial class ShopPage : Window
     {
-        public ShopPageViewModel ViewModel { get; }
-        private readonly MainService _service;
-        private readonly UserSession _session;
+        public IShopPageViewModel ViewModel { get; }
+        private readonly MainService service;
+        private readonly UserSession session;
 
-        public ShopPage(MainService Service, UserSession Session)
+        public ShopPage(MainService service, UserSession session)
         {
             this.InitializeComponent();
-            this._service = Service;
-            // Note: Managers are the ones who have admin privileges 
-            this._session = Session;
+            this.service = service;
+            this.session = session;
 
-            ViewModel = new ShopPageViewModel(Service, Session);
-
-            // This binds the list of shops to the grid view
+            ViewModel = new ShopPageViewModel(service, session);
             ShopsGridView.ItemsSource = ViewModel.Shops;
 
-            // Add Shop button is only visible to admins
             AddShopButton.Visibility = ViewModel.AddShopVisibility;
             AddShopButton.Click += AddShopButton_Click;
 
-            // Cart is only enabled for regular clients, admins cannot access the cart (it's greyed out)
             CartButton.IsEnabled = ViewModel.IsCartEnabled;
             CartButton.Opacity = ViewModel.CartOpacity;
             CartButton.Click += CartButton_Click;
 
             ShopsGridView.ItemClick += ShopsGridView_ItemClick;
             ProfileButton.Click += ProfileButton_Click;
+
+            SortComboBox.SelectedIndex = 0;
         }
 
-        // Profile button (next to cart) sends you back to the landing page 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            var landingPage = new LandingPage(_service, _session);
+            var landingPage = new LandingPage(service, session);
             landingPage.Activate();
             this.Close();
         }
 
-        // Navigation to the ShopItems window
         private void ShopsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-
-            var shopItemPage = new ShopItemsPage(_service, _session, ((Shop)e.ClickedItem));
+            var shopItemPage = new ShopItemsPage(service, session, ((Shop)e.ClickedItem));
             shopItemPage.Activate();
             this.Close();
         }
 
-        // Navigation to the Cart window
         private void CartButton_Click(object sender, RoutedEventArgs e)
         {
-            var cart = new CartPage(_service, _session);
+            var cart = new CartPage(service, session);
             cart.Activate();
             this.Close();
         }
 
-        // Opens a dialog box that lets you add the shop details and adds it via the ViewModel 
         private async void AddShopButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -105,10 +92,12 @@ namespace Content
             }
         }
 
-        // Opens a dialog box where you can edit the shop's current details
         private async void EditShopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!ViewModel.IsAdmin) return;
+            if (!ViewModel.IsAdmin)
+            {
+                return;
+            }
 
             if (sender is Button btn && btn.DataContext is Shop shop)
             {
@@ -143,10 +132,12 @@ namespace Content
             }
         }
 
-        // Opens a confirmation dialog box and deletes the shop based on user answer
         private async void DeleteShopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!ViewModel.IsAdmin) return;
+            if (!ViewModel.IsAdmin)
+            {
+                return;
+            }
 
             if (sender is Button btn && btn.DataContext is Shop shop)
             {
@@ -168,13 +159,11 @@ namespace Content
             }
         }
 
-        // Returns matching results (doesn't update the result list in real time, you need to press enter)
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             ViewModel.Search(sender.Text);
         }
 
-        // Sorts the shops based on choice. Initially there is no sorting. 
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox combo && combo.SelectedItem is ComboBoxItem item)
@@ -184,7 +173,6 @@ namespace Content
                 if (selected == "None")
                 {
                     ViewModel.LoadItems();
-
                 }
                 else if (selected == "Shop Name")
                 {
@@ -194,9 +182,7 @@ namespace Content
                 {
                     ViewModel.SortByReviews();
                 }
-
             }
         }
-
     }
 }

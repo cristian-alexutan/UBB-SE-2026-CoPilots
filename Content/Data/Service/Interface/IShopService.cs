@@ -19,5 +19,6 @@ namespace Content.Data.Service.Interface
         void UpdateShop(Shop shop);
 
         IEnumerable<Shop> SortAlphabetically(IEnumerable<Shop> shops);
+        public IEnumerable<Shop> SearchByName(string input);
     }
 }

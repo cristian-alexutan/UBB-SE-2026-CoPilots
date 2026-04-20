@@ -3,6 +3,7 @@
     using Content.Data.Service.Interface;
     using Content.Domain;
     using Content.Repository.Interface;
+    using System.Collections;
 
     public class ShopService: IShopService
     {
@@ -54,7 +55,15 @@
                 throw new Exception("Shop with given name already exists");
             }
 
-            shopRepo.Update(shop);
+            this.shopRepo.Update(shop);
+        }
+
+        public IEnumerable<Shop> SearchByName(string input)
+        {
+            var filtered = this.GetAllAvailableShops()
+                .Where(i => i.Name.Contains(input, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            return filtered;
         }
     }
 }
