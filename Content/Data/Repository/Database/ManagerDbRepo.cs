@@ -1,11 +1,7 @@
 ﻿using Content.Domain;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Content.Repository.Interface;
+using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace Content.Repository.Database
 {
@@ -22,23 +18,30 @@ namespace Content.Repository.Database
         {
             var managers = new List<Manager>();
 
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            try
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Manager", conn);
-                var reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    var manager = new Manager(
-                        (int)reader["manager_id"],
-                        (string)reader["name"],
-                        (string)reader["email"],
-                        (string)reader["phone"]
-                    );
+                    conn.Open();
+                    var cmd = new SqlCommand("SELECT * FROM Manager", conn);
+                    var reader = cmd.ExecuteReader();
 
-                    managers.Add(manager);
+                    while (reader.Read())
+                    {
+                        var manager = new Manager(
+                            (int)reader["manager_id"],
+                            (string)reader["name"],
+                            (string)reader["email"],
+                            (string)reader["phone"]
+                        );
+
+                        managers.Add(manager);
+                    }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Failed to retrieve managers.", ex);
             }
 
             return managers;
@@ -46,22 +49,29 @@ namespace Content.Repository.Database
 
         public Manager GetById(int id)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            try
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Manager WHERE manager_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-
-                var reader = cmd.ExecuteReader();
-                if (reader.Read())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    return new Manager(
-                        (int)reader["manager_id"],
-                        (string)reader["name"],
-                        (string)reader["email"],
-                        (string)reader["phone"]
-                    );
+                    conn.Open();
+                    var cmd = new SqlCommand("SELECT * FROM Manager WHERE manager_id=@Id", conn);
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        return new Manager(
+                            (int)reader["manager_id"],
+                            (string)reader["name"],
+                            (string)reader["email"],
+                            (string)reader["phone"]
+                        );
+                    }
                 }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"Failed to retrieve manager with ID {id}.", ex);
             }
 
             return null;
@@ -69,46 +79,69 @@ namespace Content.Repository.Database
 
         public void Add(Manager manager)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            try
             {
-                conn.Open();
-                var cmd = new SqlCommand(
-                    "INSERT INTO Manager (name, email, phone) VALUES (@Name, @Email, @Phone)",
-                    conn
-                );
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    var cmd = new SqlCommand(
+                        "INSERT INTO Manager (name, email, phone) VALUES (@Name, @Email, @Phone)",
+                        conn
+                    );
 
-                cmd.Parameters.AddWithValue("@Name", manager.Name);
-                cmd.Parameters.AddWithValue("@Email", manager.Email);
-                cmd.Parameters.AddWithValue("@Phone", manager.Phone);
+                    cmd.Parameters.AddWithValue("@Name", manager.Name);
+                    cmd.Parameters.AddWithValue("@Email", manager.Email);
+                    cmd.Parameters.AddWithValue("@Phone", manager.Phone);
 
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Failed to add manager.", ex);
             }
         }
 
         public void Delete(int id)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            try
             {
-                conn.Open();
-                var cmd = new SqlCommand("DELETE FROM Manager WHERE manager_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                cmd.ExecuteNonQuery();
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    var cmd = new SqlCommand("DELETE FROM Manager WHERE manager_id=@Id", conn);
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"Failed to delete manager with ID {id}.", ex);
             }
         }
 
         public void Update(Manager manager)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            try
             {
-                conn.Open();
-                var cmd = new SqlCommand("UPDATE Manager SET name=@Name, email=@Email, phone=@Phone WHERE manager_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Name", manager.Name);
-                cmd.Parameters.AddWithValue("@Email", manager.Email);
-                cmd.Parameters.AddWithValue("@Phone", manager.Phone);
-                cmd.Parameters.AddWithValue("@Id", manager.Id);
-                cmd.ExecuteNonQuery();
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    var cmd = new SqlCommand(
+                        "UPDATE Manager SET name=@Name, email=@Email, phone=@Phone WHERE manager_id=@Id",
+                        conn
+                    );
+                    cmd.Parameters.AddWithValue("@Name", manager.Name);
+                    cmd.Parameters.AddWithValue("@Email", manager.Email);
+                    cmd.Parameters.AddWithValue("@Phone", manager.Phone);
+                    cmd.Parameters.AddWithValue("@Id", manager.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception($"Failed to update manager with ID {manager.Id}.", ex);
             }
         }
-
     }
 }
