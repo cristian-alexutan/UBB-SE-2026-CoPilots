@@ -34,6 +34,11 @@ namespace Content.Service
             _clientRepo.Delete(id);
         }
 
+        public void UpdateClient(Client client)
+        {
+            _clientRepo.Update(client);
+        }
+
         public Client GetAnyClient()
         {
             return _clientRepo.GetAll().First();

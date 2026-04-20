@@ -1,44 +1,47 @@
-﻿using Content.Repository.Interface;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Content.Domain;
+using Content.Repository.Interface;
+using System.Collections.Generic;
 
 namespace Content.Repository
 {
     public class ManagerMemoryRepo : IManagerRepo
     {
-        private Dictionary<int,Domain.Manager> Managers;
+        private Dictionary<int, Manager> managers;
 
         public ManagerMemoryRepo()
         {
-            Managers = new Dictionary<int,Domain.Manager>();
+            managers = new Dictionary<int,Manager>();
         }
 
-        public void Add(Domain.Manager Manager)
+        public void Add(Manager manager)
         {
-            Managers[Manager.Id]=Manager;
+            managers[manager.Id]=manager;
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            Managers.Remove(Id);
+            managers.Remove(id);
+        }
+
+        public void Update(Manager manager)
+        {
+            managers[manager.Id] = manager;
         }
 
         public IEnumerable<Manager> GetAll()
         {
-            return Managers.Values;
+            return managers.Values;
         }
 
-        public Domain.Manager GetById(int Id)
+        public Manager GetById(int id)
         {
-            Managers.TryGetValue(Id, out Manager Manager);
-            return Manager;
+            managers.TryGetValue(id, out Manager manager);
+            return manager;
         }
-
-    
 
     }
 }

@@ -3,45 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using Content.Domain;
+using Content.Repository.Interface;
 
 namespace Content.Repository
 {
-    using Domain;
-    using Interface;
-
     public class ClientMemoryRepo : IClientRepo
     {
-        private Dictionary<int,Client> Clients;
+        private Dictionary<int,Client> clients;
 
         public ClientMemoryRepo()
         {
-            Clients = new Dictionary<int, Domain.Client>();
+            clients = new Dictionary<int, Client>();
         }
 
-        public void Add(Client Client)
+        public void Add(Client client)
         {
-            Clients[Client.Id] = Client;
+            clients[client.Id] = client;
         }
 
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            Clients.Remove(Id);
+            clients.Remove(id);
         }
 
+        public void Update(Client client)
+        {
+            clients[client.Id] = client;
+        }
 
         public IEnumerable<Client> GetAll()
         {
-            return Clients.Values;
+            return clients.Values;
         }
 
-        public Client GetById(int Id)
+        public Client GetById(int id)
         {
-            return Clients.ContainsKey(Id) ? Clients[Id] : null;
-        }
+            if (clients.ContainsKey(id))
+                return clients[id];
 
+            return null;
+
+        }
 
     }
 }
