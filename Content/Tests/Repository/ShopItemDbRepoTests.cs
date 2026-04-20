@@ -10,7 +10,7 @@ namespace Tests.Repository
     public class ShopItemDbRepoTests
     {
         private ShopItemDbRepo shopItemRepo = null!;
-        private const string ConnectionString = ".\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;TrustServerCertificate=True;";
+        private const string ConnectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         private const int ShopId = 1;
 

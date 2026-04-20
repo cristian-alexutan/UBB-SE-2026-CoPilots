@@ -36,7 +36,7 @@ namespace Content.Repository.Database
 
                     var Reservation = new Reservation(
                         (int)Reader["reservation_id"],
-                        _cartRepo.GetById(CartId),   
+                        _cartRepo.GetById(CartId),
                         (bool)Reader["active"],
                         (DateTime)Reader["reservation_date"]
                     );
@@ -79,7 +79,7 @@ namespace Content.Repository.Database
                 Conn.Open();
                 var Cmd = new SqlCommand(
                     "INSERT INTO Reservation (time_slot, reservation_date, cart_id, active) " +
-                    "VALUES (@TimeSlot, @ReservationDate, @CartId, @Active);"+ "SELECT SCOPE_IDENTITY();",
+                    "VALUES (@TimeSlot, @ReservationDate, @CartId, @Active);" + "SELECT SCOPE_IDENTITY();",
                     Conn
                 );
 
