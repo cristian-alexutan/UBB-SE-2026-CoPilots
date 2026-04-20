@@ -22,6 +22,12 @@ namespace Content.Domain
             this.ReservationDate = ReservationDate;
         }
 
+        public Reservation(Cart ReservationCart, bool Active, DateTime ReservationDate)
+        {
+            this.ReservationCart= ReservationCart;
+            this.Active= Active;
+            this.ReservationDate= ReservationDate;
+        }
         
     }
 }

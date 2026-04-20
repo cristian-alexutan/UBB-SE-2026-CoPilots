@@ -1,52 +1,47 @@
-﻿using Content.Domain;
-using Content.Repository.Interface;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Content.Domain;
+using Content.Repository.Interface;
 
 namespace Content.Repository
 {
     public class ReservationMemoryRepo : IReservationRepo
     {
-        private Dictionary<int,Domain.Reservation> Reservations;
+        private readonly Dictionary<int, Reservation> reservations;
+        private int nextId;
 
         public ReservationMemoryRepo()
         {
-            Reservations = new Dictionary<int,Domain.Reservation>();
+            this.reservations = new Dictionary<int, Reservation>();
+            this.nextId = 1;
         }
 
-        public void Add(Domain.Reservation Reservation)
+        public void Add(Reservation Reservation)
         {
-            Reservations[Reservation.Id]=Reservation;
+            Reservation.Id = this.nextId++;
+            this.reservations[Reservation.Id] = Reservation;
         }
 
         public void Delete(int Id)
         {
-            Reservations.Remove(Id);
+            this.reservations.Remove(Id);
         }
 
         public IEnumerable<Reservation> GetAll()
         {
-            return Reservations.Values;
+            return this.reservations.Values;
         }
 
         public Reservation GetById(int Id)
         {
-            Reservations.TryGetValue(Id, out Reservation Reservation);
-            return Reservation;
+            return this.reservations.ContainsKey(Id) ? this.reservations[Id] : null!;
         }
 
         public void Update(Reservation reservation)
         {
-            if (!Reservations.ContainsKey(reservation.Id))
-                throw new Exception("Reservation not found");
-
-            Reservations[reservation.Id] = reservation;
+            if (this.reservations.ContainsKey(reservation.Id))
+            {
+                this.reservations[reservation.Id] = reservation;
+            }
         }
-
-
-
     }
 }

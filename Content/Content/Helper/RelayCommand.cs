@@ -15,7 +15,7 @@ namespace Content.Helper
     Example:
     IncreaseQuantityCommand = new RelayCommand<CartItem>(IncreaseQuantity);
      */
-    public class RelayCommand<T> :ICommand
+    public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
 

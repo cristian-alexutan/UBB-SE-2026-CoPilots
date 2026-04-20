@@ -48,6 +48,26 @@ namespace Content.ViewModel
             CartShopItems = new ObservableCollection<CartShopItem>();
 
             LoadCartItems();
+            CheckExistingReservation();
+        }
+
+        private void CheckExistingReservation()
+        {
+            var cart = _service.cartService.GetCartById(_session.UserId);
+            if (cart == null)
+            {
+                return;
+            }
+
+            var allReservations = _service.reservationService.GetAllReservations();
+            var activeReservation = allReservations.FirstOrDefault(r =>
+                r.ReservationCart.Id == cart.Id && r.Active);
+
+            if (activeReservation != null)
+            {
+                _currentReservationId = activeReservation.Id;
+                IsReserved = true;
+            }
         }
 
         private void LoadCartItems()
@@ -115,9 +135,9 @@ namespace Content.ViewModel
 
             // Creating a new Reservation based on the commented constructor in ReservationService.cs
             // Passing 0 for ID assuming the database auto-increments it upon Add
-            var newReservation = new Reservation(0, cart, true, DateTime.Now);
+            var newReservation = new Reservation(cart, true, DateTime.Now);
 
-            _service.reservationService.reserveCart(newReservation);
+            _service.reservationService.ReserveCart(newReservation);
 
             // Storing the ID locally so we can cancel it during this session if needed
             _currentReservationId = newReservation.Id;
@@ -134,7 +154,6 @@ namespace Content.ViewModel
 
         private void CalculateOverallTotal()
         {
-
             if (CartShopItems == null || !CartShopItems.Any())
             {
                 _overallTotal = 0;
