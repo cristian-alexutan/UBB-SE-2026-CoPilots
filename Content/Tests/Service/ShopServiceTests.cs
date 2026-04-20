@@ -113,4 +113,17 @@ public class ShopServiceTests
 
         Assert.That(service.GetAllAvailableShops().Single(s => s.Id == 1).Name, Is.EqualTo("Updated"));
     }
+
+    [Test]
+    public void SearchByNameTest()
+    {
+        var repo = new ShopMemoryRepo();
+        repo.Add(new Shop(1, "Alpha", "Type", 1));
+        repo.Add(new Shop(2, "Bet", "Type", 2));
+        repo.Add(new Shop(3, "Gamma", "Type", 3));
+        var service = new ShopService(repo);
+        var result = service.SearchByName("a").ToList();
+        Assert.That(result, Has.Count.EqualTo(2));
+        Assert.That(result.Select(s => s.Name), Is.EquivalentTo(new[] { "Alpha", "Gamma" }));
+    }
 }
