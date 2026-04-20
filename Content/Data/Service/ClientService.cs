@@ -1,5 +1,6 @@
 using Content.Domain;
 using Content.Repository.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,6 +27,16 @@ namespace Content.Service
 
         public void AddClient(Client client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            if (string.IsNullOrWhiteSpace(client.Name))
+            {
+                throw new ArgumentException("Name is required", nameof(client.Name));
+            }
+
             _clientRepo.Add(client);
         }
 
@@ -34,9 +45,14 @@ namespace Content.Service
             _clientRepo.Delete(id);
         }
 
+        public void UpdateClient(Client client)
+        {
+            _clientRepo.Update(client);
+        }
+
         public Client GetAnyClient()
         {
-            return _clientRepo.GetAll().First();
+            return _clientRepo.GetAll().FirstOrDefault();
         }
 
     }

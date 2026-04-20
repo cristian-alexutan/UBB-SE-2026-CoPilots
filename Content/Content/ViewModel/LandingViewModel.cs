@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using Content.Helper;
 using Content.Service;
 using Content.User;
-using Content.Helper;
 
 namespace Content.ViewModel
 {
     public class LandingViewModel
     {
-        private readonly MainService _service;
-        private readonly UserSession _session;
+        private readonly MainService service;
+        private readonly UserSession session;
+
         public bool IsRoleSelected { get; private set; }
+
+        public string ErrorMessage { get; private set; }
 
         public ICommand SelectAdminCommand { get; }
         public ICommand SelectClientCommand { get; }
 
         public LandingViewModel(MainService service, UserSession session)
         {
-            _service = service;
-            _session = session;
+            this.service = service;
+            this.session = session;
 
             SelectAdminCommand = new RelayCommand(SetAdmin);
             SelectClientCommand = new RelayCommand(SetClient);
@@ -30,23 +28,26 @@ namespace Content.ViewModel
 
         private void SetAdmin()
         {
-            var manager = _service.managerService.GetAnyManager();
-            _session.SetAdmin(manager.Id);
+            var manager = service.managerService.GetAnyManager();
+            if (manager == null)
+            {
+                ErrorMessage = "No admin found.";
+                return;
+            }
+            session.SetAdmin(manager.Id);
             IsRoleSelected = true;
         }
 
         private void SetClient()
         {
-            var client = _service.clientService.GetAnyClient();
-            _session.SetClient(client.Id);
+            var client = service.clientService.GetAnyClient();
+            if (client == null)
+            {
+                ErrorMessage = "No client found.";
+                return;
+            }
+            session.SetClient(client.Id);
             IsRoleSelected = true;
         }
-
-
-      
-
     }
-
-    
-    
 }
