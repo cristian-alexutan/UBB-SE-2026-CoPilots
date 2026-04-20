@@ -1,38 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Content.Helper;
+using Content.Service;
+using Content.User;
+using Content.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Content.ViewModel;
-using Content.User;
-using Content.Service;
-using Content;
-using Content.Helper;
-
 
 namespace Content
 {
     public sealed partial class LandingPage : Window
     {
-        private readonly MainService _service;
-        private readonly UserSession _session;
+        private readonly MainService service;
+        private readonly UserSession session;
         public LandingViewModel ViewModel { get; }
         public LandingPage(MainService service, UserSession session)
         {
             this.InitializeComponent();
 
-            _service = service;
-            _session = session;
-
+            this.service = service;
+            this.session = session;
 
             ViewModel = new LandingViewModel(service, session);
 
@@ -42,7 +27,7 @@ namespace Content
 
         private void ClientButton_Click(object sender, RoutedEventArgs e)
         {
-            var client = _service.clientService.GetAnyClient();
+            var client = service.clientService.GetAnyClient();
             if (client == null)
             {
                 ErrorText.Text = "No client found in database.";
@@ -58,7 +43,7 @@ namespace Content
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
-            var admin = _service.clientService.GetAnyClient();
+            var admin = service.managerService.GetAnyManager();
             if (admin == null)
             {
                 ErrorText.Text = "No admin found in database.";
@@ -74,10 +59,9 @@ namespace Content
 
         private void OpenShop()
         {
-            var shopPage = new ShopPage(_service, _session);
+            var shopPage = new ShopPage(service, session);
             shopPage.Activate();
             this.Close();
         }
-
     }
 }

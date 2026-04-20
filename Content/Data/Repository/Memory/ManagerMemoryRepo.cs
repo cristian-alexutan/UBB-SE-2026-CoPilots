@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Content.Domain;
+﻿using Content.Domain;
 using Content.Repository.Interface;
 using System.Collections.Generic;
 

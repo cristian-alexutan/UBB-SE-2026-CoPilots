@@ -1,20 +1,14 @@
-﻿using Content.Domain;
+﻿using System.Windows.Input;
 using Content.Helper;
 using Content.Service;
 using Content.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Content.ViewModel
 {
     public class LandingViewModel
     {
-        private readonly MainService _service;
-        private readonly UserSession _session;
+        private readonly MainService service;
+        private readonly UserSession session;
 
         public bool IsRoleSelected { get; private set; }
 
@@ -25,8 +19,8 @@ namespace Content.ViewModel
 
         public LandingViewModel(MainService service, UserSession session)
         {
-            _service = service;
-            _session = session;
+            this.service = service;
+            this.session = session;
 
             SelectAdminCommand = new RelayCommand(SetAdmin);
             SelectClientCommand = new RelayCommand(SetClient);
@@ -34,25 +28,25 @@ namespace Content.ViewModel
 
         private void SetAdmin()
         {
-            var manager = _service.managerService.GetAnyManager();
+            var manager = service.managerService.GetAnyManager();
             if (manager == null)
             {
                 ErrorMessage = "No admin found.";
                 return;
             }
-            _session.SetAdmin(manager.Id);
+            session.SetAdmin(manager.Id);
             IsRoleSelected = true;
         }
 
         private void SetClient()
         {
-            var client = _service.clientService.GetAnyClient();
+            var client = service.clientService.GetAnyClient();
             if (client == null)
             {
                 ErrorMessage = "No client found.";
                 return;
             }
-            _session.SetClient(client.Id);
+            session.SetClient(client.Id);
             IsRoleSelected = true;
         }
     }

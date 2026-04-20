@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Content.Domain;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Content.Domain;
 
 namespace Content.Repository.Interface
 {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Content.Domain;
+﻿using Content.Domain;
 using Content.Repository.Interface;
+using System.Collections.Generic;
 
 namespace Content.Repository
 {
