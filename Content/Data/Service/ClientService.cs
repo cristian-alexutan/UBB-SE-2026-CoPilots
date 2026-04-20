@@ -26,6 +26,16 @@ namespace Content.Service
 
         public void AddClient(Client client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+
+            if (string.IsNullOrWhiteSpace(client.Name))
+            {
+                throw new ArgumentException("Name is required", nameof(client.Name));
+            }
+
             _clientRepo.Add(client);
         }
 

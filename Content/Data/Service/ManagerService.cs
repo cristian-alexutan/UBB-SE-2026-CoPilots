@@ -29,6 +29,26 @@ namespace Content.Service
 
         public void AddManager(Manager manager)
         {
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (string.IsNullOrWhiteSpace(manager.Name))
+            {
+                throw new ArgumentException("Name is required", nameof(manager.Name));
+            }
+
+            if (string.IsNullOrWhiteSpace(manager.Email))
+            {
+                throw new ArgumentException("Email is required", nameof(manager.Email)); 
+            }
+
+            if (string.IsNullOrWhiteSpace(manager.Phone))
+            {
+                throw new ArgumentException("Phone is required", nameof(manager.Phone)); 
+            }
+
             _managerRepo.Add(manager);
         }
 
