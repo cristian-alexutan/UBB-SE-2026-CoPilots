@@ -55,6 +55,13 @@
                         Content="I'm an admin"
                         Command="{Binding SelectAdminCommand}" 
                         Foreground="White"/>
+
+                <TextBlock x:Name="ErrorText"
+                           Foreground="Red"
+                           FontSize="14"
+                           HorizontalAlignment="Center"
+                           Margin="0,10,0,0"
+                           Visibility="Collapsed"/>
             </StackPanel>
         </StackPanel>
     </Grid>

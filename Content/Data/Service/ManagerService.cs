@@ -44,7 +44,7 @@ namespace Content.Service
 
         public Manager GetAnyManager()
         {
-            return _managerRepo.GetAll().First();
+            return _managerRepo.GetAll().FirstOrDefault();
         }
     }
 }

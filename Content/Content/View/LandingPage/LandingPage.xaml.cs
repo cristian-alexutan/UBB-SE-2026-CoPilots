@@ -42,6 +42,13 @@ namespace Content
 
         private void ClientButton_Click(object sender, RoutedEventArgs e)
         {
+            var client = _service.clientService.GetAnyClient();
+            if (client == null)
+            {
+                ErrorText.Text = "No client found in database.";
+                ErrorText.Visibility = Visibility.Visible;
+                return;
+            }
             if (ViewModel.SelectClientCommand.CanExecute(null))
             {
                 ViewModel.SelectClientCommand.Execute(null);
@@ -51,6 +58,13 @@ namespace Content
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
+            var admin = _service.clientService.GetAnyClient();
+            if (admin == null)
+            {
+                ErrorText.Text = "No admin found in database.";
+                ErrorText.Visibility = Visibility.Visible;
+                return;
+            }
             if (ViewModel.SelectAdminCommand.CanExecute(null))
             {
                 ViewModel.SelectAdminCommand.Execute(null);

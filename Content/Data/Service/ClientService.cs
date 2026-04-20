@@ -41,7 +41,7 @@ namespace Content.Service
 
         public Client GetAnyClient()
         {
-            return _clientRepo.GetAll().First();
+            return _clientRepo.GetAll().FirstOrDefault();
         }
 
     }
