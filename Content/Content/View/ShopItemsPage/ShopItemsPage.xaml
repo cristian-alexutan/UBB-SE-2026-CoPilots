@@ -11,6 +11,18 @@
     mc:Ignorable="d">
 
     <Grid x:Name="RootGrid">
+        <Grid.Resources>
+            <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
+            <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+            <SolidColorBrush x:Key="ButtonForegroundPressed" Color="White"/>
+            <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="#FF9CA3AF"/>
+
+            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF249EA5"/>
+            <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FF1F8A90"/>
+
+            <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#FF249EA5"/>
+            <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#FF1F8A90"/>
+        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -58,7 +70,7 @@
                         Padding="0"
                         MinWidth="0"
                         MinHeight="0">
-                        <SymbolIcon Symbol="Contact"/>
+                        <SymbolIcon Symbol="Contact" Foreground="#2bb8c0"/>
                     </Button>
 
                     <Button Width="100"
@@ -88,7 +100,7 @@
                 <Button x:Name="AddButton" 
                         Click="AddButton_Click" 
                         FontSize="16" 
-                        Foreground="Black" 
+                        Foreground="White" 
                         Content="+ Add Item" 
                         CornerRadius="15" 
                         Background="#2bb8c0" 
