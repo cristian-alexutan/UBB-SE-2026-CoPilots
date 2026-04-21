@@ -28,7 +28,7 @@ namespace Tests.Service
             _cartRepo = new CartMemoryRepo();
 
             _shopItemService = new ShopItemService(_shopItemRepo);
-            _cartService = new CartService(_cartRepo);
+            _cartService = new CartService(_cartRepo, _shopItemService);
             _service = new ReservationService(_reservationRepo, _shopItemService, _cartService);
 
             _client = new Client(1, "Test Client");
