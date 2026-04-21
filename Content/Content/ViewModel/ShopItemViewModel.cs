@@ -28,7 +28,7 @@ namespace Content.ViewModel
         public void LoadItems()
         {
             Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.GetItemsByShopId(currentShop.Id));
+                this.shopItemService.GetItemsByShopId(this.currentShop.Id));
             OnPropertyChanged(nameof(Items));
         }
 
@@ -53,14 +53,14 @@ namespace Content.ViewModel
         public void SortByName()
         {
             Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.GetItemsSortedAlphabetically(currentShop));
+                this.shopItemService.GetItemsSortedAlphabetically(this.currentShop));
             OnPropertyChanged(nameof(Items));
         }
 
         public void SortByPrice()
         {
             Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.GetItemsSortedByPrice(currentShop));
+                this.shopItemService.GetItemsSortedByPrice(this.currentShop));
             OnPropertyChanged(nameof(Items));
         }
 
@@ -72,7 +72,7 @@ namespace Content.ViewModel
         public void Search(string query)
         {
             Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.SearchItemsByName(currentShop.Id, query));
+                this.shopItemService.SearchItemsByName(this.currentShop.Id, query));
             OnPropertyChanged(nameof(Items));
         }
 
