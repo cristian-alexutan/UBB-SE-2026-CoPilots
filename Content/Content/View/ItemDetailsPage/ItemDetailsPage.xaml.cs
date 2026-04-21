@@ -91,7 +91,7 @@ namespace Content
             UpdateQuantityUI();
         }
 
-        private void AddToCart_Click(object sender, RoutedEventArgs e)
+        private async void AddToCart_Click(object sender, RoutedEventArgs e)
         {
             SyncQuantityFromTextBox();
 
@@ -102,31 +102,45 @@ namespace Content
                     Title = "Not enough stock",
                     Content = $"You requested {_qty} item(s), but only {_stock} are available.",
                     CloseButtonText = "OK",
-                    XamlRoot = Root.XamlRoot
+                    XamlRoot = Root.XamlRoot,
                 };
-
-                _ = err.ShowAsync();
+                await err.ShowAsync();
                 return;
             }
 
             var cart = _service.cartService.GetCartById(_session.UserId);
             if (cart == null)
             {
-                cart = new Cart(_session.UserId, new Client(_session.UserId, "Current Client"), new System.Collections.Generic.Dictionary<int, CartItem>());
+                cart = new Cart(_session.UserId, new Client(_session.UserId, "Current Client"),
+                    new System.Collections.Generic.Dictionary<int, CartItem>());
                 _service.cartService.AddCart(cart);
             }
 
-            ViewModel.AddToCartCommand.Execute(_qty);
+            try
+            {
+                ViewModel.AddToCartCommand.Execute(_qty);
+            }
+            catch (InvalidOperationException ex)
+            {
+                var err = new ContentDialog
+                {
+                    Title = "Cannot add to cart",
+                    Content = ex.Message,
+                    CloseButtonText = "OK",
+                    XamlRoot = Root.XamlRoot,
+                };
+                await err.ShowAsync();
+                return;
+            }
 
             var dlg = new ContentDialog
             {
                 Title = "Added to cart",
                 Content = $"Quantity: {_qty}",
                 CloseButtonText = "OK",
-                XamlRoot = Root.XamlRoot
+                XamlRoot = Root.XamlRoot,
             };
-
-            _ = dlg.ShowAsync();
+            await dlg.ShowAsync();
 
             var shop = _service.shopService.GetAllAvailableShops().FirstOrDefault(s => s.Id == _item.ShopId);
             if (shop != null)

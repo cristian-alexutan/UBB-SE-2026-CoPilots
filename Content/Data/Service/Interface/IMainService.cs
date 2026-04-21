@@ -5,7 +5,7 @@ namespace Content.Data.Service.Interface
 {
     public interface IMainService
     {
-        CartService cartService { get; }
+        ICartService cartService { get; }
         ClientService clientService { get; }
         ManagerService managerService { get; }
         ReservationService reservationService { get; }

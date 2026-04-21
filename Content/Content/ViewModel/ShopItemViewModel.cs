@@ -9,14 +9,14 @@ namespace Content.ViewModel
     public class ShopItemsViewModel : INotifyPropertyChanged
     {
         private readonly IShopItemService shopItemService;
-        private readonly CartService cartService;
+        private readonly ICartService cartService;
         private readonly UserSession session;
         private readonly Shop currentShop;
 
         public bool IsAdmin => this.session.IsAdmin;
         public ObservableCollection<ShopItem> Items { get; set; } = new ObservableCollection<ShopItem>();
 
-        public ShopItemsViewModel(IShopItemService shopItemService, CartService cartService, UserSession session, Shop currentShop)
+        public ShopItemsViewModel(IShopItemService shopItemService, ICartService cartService, UserSession session, Shop currentShop)
         {
             this.shopItemService = shopItemService;
             this.cartService = cartService;

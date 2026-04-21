@@ -9,9 +9,9 @@ namespace Content.Service
     {
         private readonly IReservationRepo _reservationRepo;
         private readonly IShopItemService _shopItemService;
-        private readonly CartService _cartService;
+        private readonly ICartService _cartService;
 
-        public ReservationService(IReservationRepo reservationRepo, IShopItemService shopItemService, CartService cartService)
+        public ReservationService(IReservationRepo reservationRepo, IShopItemService shopItemService, ICartService cartService)
         {
             _reservationRepo = reservationRepo;
             _shopItemService = shopItemService;
