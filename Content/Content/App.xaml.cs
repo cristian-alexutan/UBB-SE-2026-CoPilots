@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using Content.Repository.Database;
 using Content.Repository;
 using Content.Domain;
-using Content.Service; 
+using Content.Service;
 using Content.User;
 namespace Content
 {
@@ -27,6 +27,6 @@ namespace Content
             landingWindow.Activate();
         }
 
-        private Window? m_window;
+        private Window? window;
     }
 }
