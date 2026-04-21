@@ -1,13 +1,13 @@
-using Content.Service;
 using System.Configuration;
 using Content.Repository;
 using Content.Repository.Database;
 using Content.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Data.Service.Interface;
 namespace Content.Service
 {
-    public class MainService
+    public class MainService : IMainService
     {
         public CartService cartService { get; }
         public ShopService shopService { get; }
