@@ -1,3 +1,4 @@
+using Content.Data.Service.Interface;
 using Content.Helper;
 using Content.Service;
 using Content.User;
@@ -27,33 +28,29 @@ namespace Content
 
         private void ClientButton_Click(object sender, RoutedEventArgs e)
         {
-            var client = service.ClientService.GetAnyClient();
-            if (client == null)
+            ViewModel.SelectClientCommand.Execute(null);
+            if (ViewModel.IsRoleSelected)
             {
-                ErrorText.Text = "No client found in database.";
-                ErrorText.Visibility = Visibility.Visible;
-                return;
-            }
-            if (ViewModel.SelectClientCommand.CanExecute(null))
-            {
-                ViewModel.SelectClientCommand.Execute(null);
                 OpenShop();
+            }
+            else
+            {
+                ErrorText.Text = ViewModel.ErrorMessage;
+                ErrorText.Visibility = Visibility.Visible;
             }
         }
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
-            var admin = service.ManagerService.GetAnyManager();
-            if (admin == null)
+            ViewModel.SelectAdminCommand.Execute(null);
+            if (ViewModel.IsRoleSelected)
             {
-                ErrorText.Text = "No admin found in database.";
-                ErrorText.Visibility = Visibility.Visible;
-                return;
-            }
-            if (ViewModel.SelectAdminCommand.CanExecute(null))
-            {
-                ViewModel.SelectAdminCommand.Execute(null);
                 OpenShop();
+            }
+            else
+            {
+                ErrorText.Text = ViewModel.ErrorMessage;
+                ErrorText.Visibility = Visibility.Visible;
             }
         }
 

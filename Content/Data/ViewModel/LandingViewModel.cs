@@ -8,8 +8,7 @@ namespace Content.ViewModel
 {
     public class LandingViewModel
     {
-        private readonly IManagerService managerService;
-        private readonly IClientService clientService;
+        private readonly IMainService service;
         private readonly UserSession session;
 
         public bool IsRoleSelected { get; private set; }
@@ -19,10 +18,9 @@ namespace Content.ViewModel
         public ICommand SelectAdminCommand { get; }
         public ICommand SelectClientCommand { get; }
 
-        public LandingViewModel(IManagerService managerService, IClientService clientService, UserSession session)
+        public LandingViewModel(IMainService service, UserSession session)
         {
-            this.managerService = managerService;
-            this.clientService = clientService;
+            this.service = service;
             this.session = session;
 
             SelectAdminCommand = new RelayCommand(SetAdmin);
@@ -31,7 +29,7 @@ namespace Content.ViewModel
 
         private void SetAdmin()
         {
-            var manager = managerService.GetAnyManager();
+            var manager = service.ManagerService.GetAnyManager();
             if (manager == null)
             {
                 ErrorMessage = "No admin found.";
@@ -43,7 +41,7 @@ namespace Content.ViewModel
 
         private void SetClient()
         {
-            var client = clientService.GetAnyClient();
+            var client = service.ClientService.GetAnyClient();
             if (client == null)
             {
                 ErrorMessage = "No client found.";

@@ -4,7 +4,6 @@ using System.Linq;
 using Content.Data.Service.Interface;
 using Content.Domain;
 using Content.Repository.Interface;
-using Windows.Media.Protection.PlayReady;
 
 namespace Content.Service
 {
