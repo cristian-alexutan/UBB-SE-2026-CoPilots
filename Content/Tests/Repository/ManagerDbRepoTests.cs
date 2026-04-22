@@ -12,27 +12,29 @@ namespace TestProject.Repository
         public void AddTest()
         {
             var repo = new ManagerDbRepo(ConnectionString);
-            repo.Add(new Manager(0, "Test Manager", "test@mail.com", "0700000001"));
-            var inserted = repo.GetAll().FirstOrDefault(m => m.Name == "Test Manager");
-            Assert.That(inserted, Is.Not.Null);
+            Manager manager = new Manager(0, "Test Manager", "test@mail.com", "0700000001");
+            repo.Add(manager);
+            Manager? result = repo.GetById(manager.Id);
+            Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(inserted.Name, Is.EqualTo("Test Manager"));
-                Assert.That(inserted.Email, Is.EqualTo("test@mail.com"));
-                Assert.That(inserted.Phone, Is.EqualTo("0700000001"));
+                Assert.That(result.Name, Is.EqualTo("Test Manager"));
+                Assert.That(result.Email, Is.EqualTo("test@mail.com"));
+                Assert.That(result.Phone, Is.EqualTo("0700000001"));
             });
-            repo.Delete(inserted.Id);
+            repo.Delete(manager.Id);
         }
 
         [Test]
         public void DeleteTestSuccessful()
         {
             var repo = new ManagerDbRepo(ConnectionString);
-            repo.Add(new Manager(0, "Test Manager", "test@mail.com", "0700000001"));
-            var inserted = repo.GetAll().FirstOrDefault(m => m.Name == "Test Manager");
-            Assert.That(inserted, Is.Not.Null);
-            repo.Delete(inserted.Id);
-            var result = repo.GetById(inserted.Id);
+            Manager manager = new Manager(0, "Test Manager", "test@mail.com", "0700000001");
+            repo.Add(manager);
+            Manager? result = repo.GetById(manager.Id);
+            Assert.That(result, Is.Not.Null);
+            repo.Delete(manager.Id);
+            result = repo.GetById(manager.Id);
             Assert.That(result, Is.Null);
         }
 
@@ -40,18 +42,18 @@ namespace TestProject.Repository
         public void DeleteTestUnsuccessful()
         {
             var repo = new ManagerDbRepo(ConnectionString);
-            Assert.DoesNotThrow(() => repo.Delete(-2));
+            Manager? result = repo.Delete(-2);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
         public void UpdateTestSuccessful()
         {
             var repo = new ManagerDbRepo(ConnectionString);
-            repo.Add(new Manager(0, "Test Manager", "test@mail.com", "0700000001"));
-            var inserted = repo.GetAll().FirstOrDefault(m => m.Name == "Test Manager");
-            Assert.That(inserted, Is.Not.Null);
-            repo.Update(new Manager(inserted.Id, "Updated Manager", "updated@mail.com", "0700000099"));
-            var result = repo.GetById(inserted.Id);
+            Manager manager = new Manager(0, "Test Manager", "test@mail.com", "0700000001");
+            repo.Add(manager);
+            repo.Update(new Manager(manager.Id, "Updated Manager", "updated@mail.com", "0700000099"));
+            Manager? result = repo.GetById(manager.Id);
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
@@ -59,14 +61,15 @@ namespace TestProject.Repository
                 Assert.That(result.Email, Is.EqualTo("updated@mail.com"));
                 Assert.That(result.Phone, Is.EqualTo("0700000099"));
             });
-            repo.Delete(inserted.Id);
+            repo.Delete(manager.Id);
         }
 
         [Test]
         public void UpdateTestUnsuccessful()
         {
             var repo = new ManagerDbRepo(ConnectionString);
-            Assert.DoesNotThrow(() => repo.Update(new Manager(-1, "Updated Manager", "updated@mail.com", "0700000099")));
+            Manager? result = repo.Update(new Manager(-1, "Updated Manager", "updated@mail.com", "0700000099"));
+            Assert.That(result, Is.Null);
         }
     }
 }

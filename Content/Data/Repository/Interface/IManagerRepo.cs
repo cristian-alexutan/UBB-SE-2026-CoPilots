@@ -11,8 +11,8 @@ namespace Content.Repository.Interface
 
         void Add(Manager manager);
 
-        void Delete(int id);
+        Manager? Delete(int id);
 
-        void Update(Manager manager);
+        Manager? Update(Manager manager);
     }
 }
