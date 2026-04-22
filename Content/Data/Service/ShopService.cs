@@ -21,6 +21,11 @@
 
         public void AddShop(Shop shop)
         {
+            if (string.IsNullOrWhiteSpace(shop.Name))
+            {
+                throw new Exception("Name field must not be empty");
+            }
+
             var nameExists = this.shopRepo.GetAll().Any(s => string.Equals(s.Name, shop.Name));
             if (nameExists)
             {

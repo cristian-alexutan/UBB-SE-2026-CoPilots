@@ -10,15 +10,15 @@ namespace TestProject.Repository
         [Test]
         public void AddTest()
         {
-            var repo = new ShopDbRepo(connectionString);
-            var shop = new Shop("Test Shop", "Retail", 1);
+            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            Shop shop = new Shop("Test Shop", "Type", 1);
             repo.Add(shop);
-            var result = repo.GetById(shop.Id);
+            Shop? result = repo.GetById(shop.Id);
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(result.Name, Is.EqualTo("Test Shop"));
-                Assert.That(result.Type, Is.EqualTo("Retail"));
+                Assert.That(result.Type, Is.EqualTo("Type"));
                 Assert.That(result.ManagerId, Is.EqualTo(1));
             });
             repo.Delete(shop.Id);
@@ -27,10 +27,10 @@ namespace TestProject.Repository
         [Test]
         public void DeleteTestSuccesfull()
         {
-            var repo = new ShopDbRepo(connectionString);
-            var shop = new Shop(0, "Test Shop", "Retail", 1);
+            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            Shop shop = new Shop(0, "Test Shop", "Type", 1);
             repo.Add(shop);
-            var result = repo.GetById(shop.Id);
+            Shop? result = repo.GetById(shop.Id);
             Assert.That(result, Is.Not.Null);
             repo.Delete(shop.Id);
             result = repo.GetById(shop.Id);
@@ -40,24 +40,24 @@ namespace TestProject.Repository
         [Test]
         public void DeleteTestUnsuccesfull()
         {
-            var repo = new ShopDbRepo(connectionString);
-            var result = repo.Delete(-2);
+            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            Shop? result = repo.Delete(-2);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void UpdateTestSuccesfull()
         {
-            var repo = new ShopDbRepo(connectionString);
-            var shop = new Shop(0, "Test Shop", "Retail", 1);
+            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            Shop shop = new Shop(0, "Test Shop", "Type", 1);
             repo.Add(shop);
-            repo.Update(new Shop(shop.Id, "Updated Shop", "Retail", 1));
-            var result = repo.GetById(shop.Id);
+            repo.Update(new Shop(shop.Id, "Updated Shop", "Type", 1));
+            Shop? result = repo.GetById(shop.Id);
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(result.Name, Is.EqualTo("Updated Shop"));
-                Assert.That(result.Type, Is.EqualTo("Retail"));
+                Assert.That(result.Type, Is.EqualTo("Type"));
                 Assert.That(result.ManagerId, Is.EqualTo(1));
             });
             repo.Delete(shop.Id);
@@ -66,8 +66,8 @@ namespace TestProject.Repository
         [Test]
         public void UpdateTestUnsuccesfull()
         {
-            var repo = new ShopDbRepo(connectionString);
-            var result = repo.Update(new Shop(-1, "Updated Shop", "Retail", 1));
+            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            Shop? result = repo.Update(new Shop(-1, "Updated Shop", "Type", 1));
             Assert.That(result, Is.Null);
         }
     }
