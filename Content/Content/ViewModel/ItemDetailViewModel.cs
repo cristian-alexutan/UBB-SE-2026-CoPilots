@@ -9,8 +9,6 @@ using Content.User;
 using Content.Domain;
 using Content.Helper;
 
-
-
 namespace Content.ViewModel
 {
     public class ItemDetailsViewModel
@@ -66,9 +64,7 @@ namespace Content.ViewModel
                     _item.ShopId,
                     _item.Photo,
                     _item.Name,
-                    _item.Description
-                )
-            );
+                    _item.Description));
         }
 
         private void UpdateItem(ShopItem updatedItem)
@@ -81,13 +77,7 @@ namespace Content.ViewModel
                     updatedItem.ShopId,
                     updatedItem.Photo,
                     updatedItem.Name,
-                    updatedItem.Description
-                )
-            );
+                    updatedItem.Description));
         }
-
-
     }
-
-
 }

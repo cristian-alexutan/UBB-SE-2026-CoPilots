@@ -21,7 +21,7 @@ namespace Content
             this.service = service;
             this.session = session;
 
-            ViewModel = new ShopPageViewModel(service, session);
+            ViewModel = new ShopPageViewModel(service.shopService, service.ticketService, session);
             ShopsGridView.ItemsSource = ViewModel.Shops;
 
             AddShopButton.Visibility = ViewModel.AddShopVisibility;

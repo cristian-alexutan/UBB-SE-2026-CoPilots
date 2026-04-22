@@ -4,12 +4,12 @@ using Content.Repository.Interface;
 
 namespace Content.Repository
 {
-    public class ReservationMemoryRepo : IReservationRepo
+    public class ReservationMockRepo : IReservationRepo
     {
         private readonly Dictionary<int, Reservation> reservations;
         private int nextId;
 
-        public ReservationMemoryRepo()
+        public ReservationMockRepo()
         {
             this.reservations = new Dictionary<int, Reservation>();
             this.nextId = 1;
