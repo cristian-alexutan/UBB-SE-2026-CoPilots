@@ -4,11 +4,11 @@ using Content.Repository.Interface;
 
 namespace Content.Repository
 {
-    public class ClientMemoryRepo : IClientRepo
+    public class ClientMockRepo : IClientRepo
     {
         private Dictionary<int, Client> clients;
 
-        public ClientMemoryRepo()
+        public ClientMockRepo()
         {
             clients = new Dictionary<int, Client>();
         }

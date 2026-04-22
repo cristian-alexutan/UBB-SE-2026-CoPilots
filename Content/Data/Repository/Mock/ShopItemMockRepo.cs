@@ -3,12 +3,12 @@ using Content.Repository.Interface;
 
 namespace Content.Repository
 {
-    public class ShopItemMemoryRepo : IShopItemRepo
+    public class ShopItemMockRepo : IShopItemRepo
     {
         private readonly Dictionary<int, ShopItem> shopItems;
         private int nextId;
 
-        public ShopItemMemoryRepo()
+        public ShopItemMockRepo()
         {
             this.shopItems = new Dictionary<int, ShopItem>();
             this.nextId = 1;

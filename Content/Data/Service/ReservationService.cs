@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Content.Data.Service.Interface;
 using Content.Domain;
 using Content.Repository.Interface;
 
 namespace Content.Service
 {
-    public class ReservationService
+    public class ReservationService : IReservationService
     {
         private readonly IReservationRepo reservationRepo;
         private readonly IShopItemService shopItemService;

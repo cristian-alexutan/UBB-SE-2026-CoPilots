@@ -9,7 +9,7 @@ public class ShopServiceTests
     [Test]
     public void AddShopSuccessfulTest()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         ShopService service = new ShopService(repo);
         Shop shop = new Shop(1, "New Shop", "Type", 1);
         service.AddShop(shop);
@@ -21,7 +21,7 @@ public class ShopServiceTests
     [Test]
     public void AddShopUnsuccessfulTest_DuplicateName()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         repo.Add(new Shop(1, "Existing", "Type", 1));
         ShopService service = new ShopService(repo);
         var ex = Assert.Catch<Exception>(() => service.AddShop(new Shop(2, "Existing", "Type", 2)));
@@ -32,7 +32,7 @@ public class ShopServiceTests
     [Test]
     public void AddShopUnsuccessfulTest_EmptyName()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         ShopService service = new ShopService(repo);
         var ex = Assert.Catch<Exception>(() => service.AddShop(new Shop(1, "   ", "Type", 1)));
         Assert.That(ex!.Message, Is.EqualTo("Name field must not be empty"));
@@ -42,7 +42,7 @@ public class ShopServiceTests
     [Test]
     public void DeleteShopTest()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         repo.Add(new Shop(7, "ToDelete", "Type", 1));
         ShopService service = new ShopService(repo);
         service.DeleteShop(7);
@@ -52,7 +52,7 @@ public class ShopServiceTests
     [Test]
     public void SortAlphabeticallyTest()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         ShopService service = new ShopService(repo);
         List<Shop> shops = new List<Shop>
         {
@@ -67,7 +67,7 @@ public class ShopServiceTests
     [Test]
     public void UpdateShopUnsuccessfulTest_EmptyName()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         repo.Add(new Shop(1, "Original", "Type", 1));
         ShopService service = new ShopService(repo);
         var ex = Assert.Catch<Exception>(() => service.UpdateShop(new Shop(1, "   ", "Type", 1)));
@@ -78,7 +78,7 @@ public class ShopServiceTests
     [Test]
     public void UpdateShopUnsuccessfulTest_DuplicateName()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         repo.Add(new Shop(1, "A", "Type", 1));
         repo.Add(new Shop(2, "B", "Type", 2));
         ShopService service = new ShopService(repo);
@@ -90,7 +90,7 @@ public class ShopServiceTests
     [Test]
     public void UpdateShopSuccessfulTest()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         repo.Add(new Shop(1, "Original", "Type", 1));
         ShopService service = new ShopService(repo);
         Shop updated = new Shop(1, "Updated", "Type", 1);
@@ -101,7 +101,7 @@ public class ShopServiceTests
     [Test]
     public void SearchByNameTest()
     {
-        ShopMemoryRepo repo = new ShopMemoryRepo();
+        ShopMockRepo repo = new ShopMockRepo();
         repo.Add(new Shop(1, "Alpha", "Type", 1));
         repo.Add(new Shop(2, "Bet", "Type", 2));
         repo.Add(new Shop(3, "Gamma", "Type", 3));

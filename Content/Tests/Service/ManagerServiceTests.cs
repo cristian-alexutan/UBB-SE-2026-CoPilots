@@ -11,7 +11,7 @@ public class ManagerServiceTests
     [Test]
     public void GetAllManagersTest()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         repo.Add(new Manager(1, "Alice", "alice@mail.com", "0700000001"));
         repo.Add(new Manager(2, "Bob", "bob@mail.com", "0700000002"));
         var service = new ManagerService(repo);
@@ -25,7 +25,7 @@ public class ManagerServiceTests
     [Test]
     public void GetManagerByIdTest()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         repo.Add(new Manager(1, "Alice", "alice@mail.com", "0700000001"));
         var service = new ManagerService(repo);
 
@@ -39,7 +39,7 @@ public class ManagerServiceTests
     [Test]
     public void GetManagerById_NonExistentId_ReturnsNull()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var result = service.GetManagerById(999);
@@ -50,7 +50,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerSuccessfulTest()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
         var manager = new Manager(1, "Alice", "alice@mail.com", "0700000001");
 
@@ -64,7 +64,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_NullManager()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         Assert.Throws<ArgumentNullException>(() => service.AddManager(null!));
@@ -75,7 +75,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_EmptyName()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
@@ -88,7 +88,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_WhiteSpaceName()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
@@ -101,7 +101,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_EmptyEmail()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
@@ -114,7 +114,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_WhiteSpaceEmail()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
@@ -127,7 +127,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_EmptyPhone()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
@@ -140,7 +140,7 @@ public class ManagerServiceTests
     [Test]
     public void AddManagerUnsuccessfulTest_WhiteSpacePhone()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
@@ -153,7 +153,7 @@ public class ManagerServiceTests
     [Test]
     public void DeleteManagerTest()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         repo.Add(new Manager(1, "Alice", "alice@mail.com", "0700000001"));
         var service = new ManagerService(repo);
 
@@ -165,7 +165,7 @@ public class ManagerServiceTests
     [Test]
     public void DeleteManager_OnlyRemovesTargetManager()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         repo.Add(new Manager(1, "Alice", "alice@mail.com", "0700000001"));
         repo.Add(new Manager(2, "Bob", "bob@mail.com", "0700000002"));
         var service = new ManagerService(repo);
@@ -180,7 +180,7 @@ public class ManagerServiceTests
     [Test]
     public void UpdateManagerSuccessfulTest()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         repo.Add(new Manager(1, "Alice", "alice@mail.com", "0700000001"));
         var service = new ManagerService(repo);
 
@@ -195,7 +195,7 @@ public class ManagerServiceTests
     [Test]
     public void GetAnyManager_WhenEmpty_ReturnsNull()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
 
         var result = service.GetAnyManager();
@@ -206,7 +206,7 @@ public class ManagerServiceTests
     [Test]
     public void GetAnyManager_WhenManagersExist_ReturnsAManager()
     {
-        var repo = new ManagerMemoryRepo();
+        var repo = new ManagerMockRepo();
         repo.Add(new Manager(1, "Alice", "alice@mail.com", "0700000001"));
         repo.Add(new Manager(2, "Bob", "bob@mail.com", "0700000002"));
         var service = new ManagerService(repo);

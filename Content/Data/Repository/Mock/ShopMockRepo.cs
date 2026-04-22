@@ -3,11 +3,11 @@
     using Content.Domain;
     using Content.Repository.Interface;
 
-    public class ShopMemoryRepo : IShopRepo
+    public class ShopMockRepo : IShopRepo
     {
         private readonly Dictionary<int, Domain.Shop> shops;
 
-        public ShopMemoryRepo()
+        public ShopMockRepo()
         {
             this.shops = new Dictionary<int, Domain.Shop>();
         }

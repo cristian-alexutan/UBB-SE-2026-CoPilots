@@ -11,7 +11,7 @@ public class ClientServiceTests
     [Test]
     public void GetAllClientsTest()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         repo.Add(new Client(1, "Alice"));
         repo.Add(new Client(2, "Bob"));
         var service = new ClientService(repo);
@@ -25,7 +25,7 @@ public class ClientServiceTests
     [Test]
     public void GetClientByIdTest()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         repo.Add(new Client(1, "Alice"));
         var service = new ClientService(repo);
 
@@ -39,7 +39,7 @@ public class ClientServiceTests
     [Test]
     public void GetClientById_NonExistentId_ReturnsNull()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         var service = new ClientService(repo);
 
         var result = service.GetClientById(999);
@@ -50,7 +50,7 @@ public class ClientServiceTests
     [Test]
     public void AddClientSuccessfulTest()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         var service = new ClientService(repo);
         var client = new Client(1, "Alice");
 
@@ -64,7 +64,7 @@ public class ClientServiceTests
     [Test]
     public void AddClientUnsuccessfulTest_NullClient()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         var service = new ClientService(repo);
 
         Assert.Throws<ArgumentNullException>(() => service.AddClient(null!));
@@ -75,7 +75,7 @@ public class ClientServiceTests
     [Test]
     public void AddClientUnsuccessfulTest_EmptyName()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         var service = new ClientService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() => service.AddClient(new Client(1, string.Empty)));
@@ -87,7 +87,7 @@ public class ClientServiceTests
     [Test]
     public void AddClientUnsuccessfulTest_WhiteSpaceName()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         var service = new ClientService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() => service.AddClient(new Client(1, "   ")));
@@ -99,7 +99,7 @@ public class ClientServiceTests
     [Test]
     public void DeleteClientTest()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         repo.Add(new Client(1, "Alice"));
         var service = new ClientService(repo);
 
@@ -111,7 +111,7 @@ public class ClientServiceTests
     [Test]
     public void DeleteClient_OnlyRemovesTargetClient()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         repo.Add(new Client(1, "Alice"));
         repo.Add(new Client(2, "Bob"));
         var service = new ClientService(repo);
@@ -126,7 +126,7 @@ public class ClientServiceTests
     [Test]
     public void UpdateClientSuccessfulTest()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         repo.Add(new Client(1, "Alice"));
         var service = new ClientService(repo);
 
@@ -138,7 +138,7 @@ public class ClientServiceTests
     [Test]
     public void GetAnyClient_WhenEmpty_ReturnsNull()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         var service = new ClientService(repo);
 
         var result = service.GetAnyClient();
@@ -149,7 +149,7 @@ public class ClientServiceTests
     [Test]
     public void GetAnyClient_WhenClientsExist_ReturnsAClient()
     {
-        var repo = new ClientMemoryRepo();
+        var repo = new ClientMockRepo();
         repo.Add(new Client(1, "Alice"));
         repo.Add(new Client(2, "Bob"));
         var service = new ClientService(repo);

@@ -7,8 +7,8 @@ namespace Tests.Service
     [TestFixture]
     public class CartServiceTests
     {
-        private CartMemoryRepo cartRepo;
-        private ShopItemMemoryRepo shopItemRepo;
+        private CartMockRepo cartRepo;
+        private ShopItemMockRepo shopItemRepo;
         private ShopItemService shopItemService;
         private CartService service;
         private Client client;
@@ -16,8 +16,8 @@ namespace Tests.Service
         [SetUp]
         public void Setup()
         {
-            this.cartRepo = new CartMemoryRepo();
-            this.shopItemRepo = new ShopItemMemoryRepo();
+            this.cartRepo = new CartMockRepo();
+            this.shopItemRepo = new ShopItemMockRepo();
             this.shopItemService = new ShopItemService(this.shopItemRepo);
             this.service = new CartService(this.cartRepo, this.shopItemService);
             this.client = new Client(1, "Test Client");
