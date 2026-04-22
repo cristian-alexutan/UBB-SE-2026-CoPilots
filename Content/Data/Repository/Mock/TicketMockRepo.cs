@@ -3,7 +3,7 @@ using System.Linq;
 using Content.Domain;
 using Content.Repository.Interface;
 
-namespace Content.Repository.Memory
+namespace Content.Repository
 {
     public class TicketMockRepo : ITicketRepo
     {
