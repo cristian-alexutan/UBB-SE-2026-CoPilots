@@ -10,7 +10,7 @@ namespace Tests.Service
     [TestFixture]
     public class ReservationServiceTests
     {
-        private ReservationMemoryRepo _reservationRepo = null!;
+        private ReservationMockRepo _reservationRepo = null!;
         private ShopItemMemoryRepo _shopItemRepo = null!;
         private CartMemoryRepo _cartRepo = null!;
 
@@ -23,7 +23,7 @@ namespace Tests.Service
         [SetUp]
         public void Setup()
         {
-            _reservationRepo = new ReservationMemoryRepo();
+            _reservationRepo = new ReservationMockRepo();
             _shopItemRepo = new ShopItemMemoryRepo();
             _cartRepo = new CartMemoryRepo();
 

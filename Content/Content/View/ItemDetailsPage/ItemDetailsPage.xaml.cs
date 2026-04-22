@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Linq;
 using Content;
 using Content.Domain;
 using Content.Helper;
@@ -9,12 +12,9 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
-using System;
-using System.IO;
-using System.Linq;
+
 using Windows.Storage;
 using Windows.Storage.Streams;
-
 
 namespace Content
 {
@@ -33,11 +33,8 @@ namespace Content
         private string _productDesc;
         private string _productPrice;
         private int _stock;
-
-
         public ItemDetailsPage(MainService service, UserSession session, ShopItem item, Cart cart)
         {
-
             InitializeComponent();
 
             _service = service;
@@ -50,9 +47,6 @@ namespace Content
             _productPrice = $"{_item.Price:C}";
             _stock = _item.Quantity;
 
-
-
-
             ApplyProductModelToUI();
             LoadAdminFieldsFromModel();
             UpdateQuantityUI();
@@ -63,8 +57,14 @@ namespace Content
 
         private void UpdateQuantityUI()
         {
-            if (_qty < 1) _qty = 1;
-            if (_qty > 99) _qty = 99;
+            if (_qty < 1)
+            {
+                _qty = 1;
+            }
+            if (_qty > 99)
+            {
+                _qty = 99;
+            }
 
             QuantityBox.Text = _qty.ToString();
         }
@@ -72,8 +72,9 @@ namespace Content
         private void SyncQuantityFromTextBox()
         {
             if (int.TryParse(QuantityBox.Text, out var typed))
+            {
                 _qty = typed;
-
+            }
             UpdateQuantityUI();
         }
 
@@ -154,7 +155,7 @@ namespace Content
 
         private void ViewCart_Click(object sender, RoutedEventArgs e)
         {
-            //modify once CartPage is implemented
+            // modify once CartPage is implemented
             var cartPage = new CartPage(_service, _session);
             cartPage.Activate();
             this.Close();
@@ -211,7 +212,10 @@ namespace Content
 
             SetProductImageFromItem();
 
-            if (_qty > _stock) _qty = _stock;
+            if (_qty > _stock)
+            {
+                _qty = _stock;
+            }
             if (_qty < 1) _qty = 1;
             UpdateQuantityUI();
         }
@@ -280,8 +284,9 @@ namespace Content
             _stock = parsedStock;
 
             if (!float.TryParse(_productPrice, System.Globalization.NumberStyles.Currency, null, out var price))
+            {
                 price = _item.Price;
-
+            }
             var updatedItem = new ShopItem(
                 _item.Id,
                 _stock,
@@ -289,14 +294,12 @@ namespace Content
                 _item.ShopId,
                 _item.Photo,
                 _productName,
-                _productDesc
-            );
+                _productDesc);
 
             ViewModel.UpdateItemCommand.Execute(updatedItem);
 
             ApplyProductModelToUI();
             AdminStatusText.Text = "Saved";
         }
-
     }
 }

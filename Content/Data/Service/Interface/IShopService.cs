@@ -6,9 +6,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Content.Data.Service.Interface
+namespace Content.Service
 {
-    internal interface IShopService
+    public interface IShopService
     {
         IEnumerable<Shop> GetAllAvailableShops();
 

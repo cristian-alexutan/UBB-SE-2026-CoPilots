@@ -1,7 +1,6 @@
-﻿using Microsoft.UI.Xaml;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-
+using Microsoft.UI.Xaml;
 namespace Content.ViewModel.Interface
 {
     public interface ICartViewModel

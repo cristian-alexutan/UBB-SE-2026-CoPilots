@@ -13,8 +13,6 @@ namespace Content.ViewModel.Interface
         bool IsCartEnabled { get; }
         ObservableCollection<Shop> Shops { get; }
 
-        event PropertyChangedEventHandler PropertyChanged;
-
         void AddShop(string name, string type);
         void DeleteShop(Shop shop);
         void EditShop(Shop shop, string newName, string newType);

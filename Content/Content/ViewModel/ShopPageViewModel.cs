@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using Content.Domain;
 using Content.Service;
 using Content.User;
 using Content.ViewModel.Interface;
 using Microsoft.UI.Xaml;
+
 namespace Content.ViewModel
 {
     public class ShopPageViewModel : IShopPageViewModel
     {
-        private readonly MainService service;
+        private readonly IShopService shopService;
+        private readonly ITicketService ticketService;
         private readonly UserSession session;
-        private List<Shop> allShops;
+        private List<Shop> allShops = new ();
 
         public ObservableCollection<Shop> Shops { get; } = new ObservableCollection<Shop>();
 
@@ -24,50 +25,69 @@ namespace Content.ViewModel
         public bool IsCartEnabled => !session.IsAdmin;
         public double CartOpacity => session.IsAdmin ? 0.4 : 1.0;
 
-        public ShopPageViewModel(MainService service, UserSession session)
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public ShopPageViewModel(IShopService shopService, ITicketService ticketService, UserSession session)
         {
-            this.service = service;
-            this.session = session;
+            this.shopService = shopService ?? throw new ArgumentNullException(nameof(shopService));
+            this.ticketService = ticketService ?? throw new ArgumentNullException(nameof(ticketService));
+            this.session = session ?? throw new ArgumentNullException(nameof(session));
             LoadItems();
         }
 
         public void LoadItems()
         {
-            var shops = service.shopService.GetAllAvailableShops();
-            allShops = shops.ToList();
-            Shops.Clear();
-            foreach (var s in allShops)
-            {
-                Shops.Add(s);
-            }
+            ReplaceShops(shopService.GetAllAvailableShops());
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void AddShop(string name, string type)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return;
+                throw new ArgumentException("Shop name cannot be empty");
             }
 
-            service.shopService.AddShop(new Shop(name, type, session.UserId));
+            if (string.IsNullOrWhiteSpace(type))
+            {
+                throw new ArgumentException("Shop type cannot be empty");
+            }
+
+            shopService.AddShop(new Shop(name, type, session.UserId));
             LoadItems();
         }
 
         public void EditShop(Shop shop, string newName, string newType)
         {
-            service.shopService.UpdateShop(new Shop(shop.Id, newName, newType, session.UserId));
-            shop.Name = newName;
-            shop.Type = newType;
+            if (shop == null)
+            {
+                throw new ArgumentNullException(nameof(shop));
+            }
+
+            if (string.IsNullOrWhiteSpace(newName))
+            {
+                throw new ArgumentException("Shop name cannot be empty.", nameof(newName));
+            }
+
+            if (string.IsNullOrWhiteSpace(newType))
+            {
+                throw new ArgumentException("Shop type cannot be empty.", nameof(newType));
+            }
+
+            shopService.UpdateShop(new Shop(shop.Id, newName, newType, session.UserId));
             LoadItems();
         }
 
         public void DeleteShop(Shop shop)
         {
-            service.shopService.DeleteShop(shop.Id);
+            if (shop == null)
+            {
+                throw new ArgumentNullException(nameof(shop));
+            }
+
+            shopService.DeleteShop(shop.Id);
             LoadItems();
         }
+
         public void Search(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
@@ -76,44 +96,27 @@ namespace Content.ViewModel
                 return;
             }
 
-            var filtered = service.shopService.SearchByName(query).ToList();
-            allShops = filtered;
-            Shops.Clear();
-            foreach (var item in filtered)
-            {
-                Shops.Add(item);
-            }
+            ReplaceShops(shopService.SearchByName(query));
         }
 
         public void SortByReviews()
         {
-            if (allShops == null)
-            {
-                return;
-            }
-
-            var sorted = service.GetShopsSortedByTickets().ToList();
-
-            allShops = sorted;
-
-            Shops.Clear();
-            foreach (var shop in sorted)
-            {
-                Shops.Add(shop);
-            }
+            var sorted = shopService
+                .GetAllAvailableShops()
+                .OrderBy(s => ticketService.CountTicketsBySubcategory(s.Name));
+            ReplaceShops(sorted);
         }
 
         public void SortAlphabetically()
         {
-            if (allShops == null)
-            {
-                return;
-            }
+            ReplaceShops(shopService.SortAlphabetically(allShops));
+        }
 
-            var sorted = service.shopService.SortAlphabetically(allShops).ToList();
-            allShops = sorted;
+        private void ReplaceShops(IEnumerable<Shop> shops)
+        {
+            allShops = shops.ToList();
             Shops.Clear();
-            foreach (var shop in sorted)
+            foreach (var shop in allShops)
             {
                 Shops.Add(shop);
             }
