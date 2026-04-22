@@ -1,12 +1,15 @@
-﻿using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Content.Domain;
 using Content.Service;
 using Content.User;
+using Content.ViewModel.Interface;
 
 namespace Content.ViewModel
 {
-    public class ShopItemsViewModel : INotifyPropertyChanged
+    public class ShopItemsViewModel : IShopItemsViewModel
     {
         private readonly IShopItemService shopItemService;
         private readonly ICartService cartService;
@@ -14,71 +17,121 @@ namespace Content.ViewModel
         private readonly Shop currentShop;
 
         public bool IsAdmin => this.session.IsAdmin;
-        public ObservableCollection<ShopItem> Items { get; set; } = new ObservableCollection<ShopItem>();
+
+        public bool CanAddItem => this.session.IsAdmin;
+
+        public bool IsCartEnabled => !this.session.IsAdmin;
+
+        public ObservableCollection<ShopItem> Items { get; } = new ObservableCollection<ShopItem>();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ShopItemsViewModel(IShopItemService shopItemService, ICartService cartService, UserSession session, Shop currentShop)
         {
-            this.shopItemService = shopItemService;
-            this.cartService = cartService;
-            this.session = session;
-            this.currentShop = currentShop;
-            LoadItems();
+            this.shopItemService = shopItemService ?? throw new ArgumentNullException(nameof(shopItemService));
+            this.cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            this.session = session ?? throw new ArgumentNullException(nameof(session));
+            this.currentShop = currentShop ?? throw new ArgumentNullException(nameof(currentShop));
+            this.LoadItems();
         }
 
         public void LoadItems()
         {
-            Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.GetItemsByShopId(this.currentShop.Id));
-            OnPropertyChanged(nameof(Items));
+            this.ReplaceItems(this.shopItemService.GetItemsByShopId(this.currentShop.Id));
         }
 
-        public void AddItem(ShopItem item)
+        public void AddItem(string name, string description, string priceText, string quantityText, string imagePath)
         {
-            this.shopItemService.AddShopItem(item);
-            LoadItems();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Item name cannot be empty.");
+            }
+
+            if (!float.TryParse(priceText, out float price))
+            {
+                throw new ArgumentException("Price is not a valid number.");
+            }
+
+            if (!int.TryParse(quantityText, out int quantity))
+            {
+                throw new ArgumentException("Quantity is not a valid number.");
+            }
+
+            this.shopItemService.AddShopItem(new ShopItem(0, quantity, price, this.currentShop.Id, imagePath, name, description));
+            this.LoadItems();
+        }
+
+        public void UpdateItem(ShopItem item, string name, string description, string priceText, string quantityText, string imagePath)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Item name cannot be empty.");
+            }
+
+            if (!float.TryParse(priceText, out float price))
+            {
+                throw new ArgumentException("Price is not a valid number.");
+            }
+
+            if (!int.TryParse(quantityText, out int quantity))
+            {
+                throw new ArgumentException("Quantity is not a valid number.");
+            }
+
+            this.shopItemService.UpdateShopItem(new ShopItem(item.Id, quantity, price, item.ShopId, imagePath, name, description));
+            this.LoadItems();
         }
 
         public void DeleteItem(ShopItem item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             this.shopItemService.RemoveShopItem(item.Id);
-            LoadItems();
-        }
-
-        public void UpdateItem(ShopItem item)
-        {
-            this.shopItemService.UpdateShopItem(item);
-            LoadItems();
-        }
-
-        public void SortByName()
-        {
-            Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.GetItemsSortedAlphabetically(this.currentShop));
-            OnPropertyChanged(nameof(Items));
-        }
-
-        public void SortByPrice()
-        {
-            Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.GetItemsSortedByPrice(this.currentShop));
-            OnPropertyChanged(nameof(Items));
+            this.LoadItems();
         }
 
         public void AddToCart(ShopItem item, int quantity)
         {
+            this.cartService.GetOrCreateCart(this.session.UserId);
             this.cartService.AddItemToCart(this.session.UserId, new CartItem(item.Id, item, quantity));
+        }
+
+        public void SortByName()
+        {
+            this.ReplaceItems(this.shopItemService.GetItemsSortedAlphabetically(this.currentShop));
+        }
+
+        public void SortByPrice()
+        {
+            this.ReplaceItems(this.shopItemService.GetItemsSortedByPrice(this.currentShop));
         }
 
         public void Search(string query)
         {
-            Items = new ObservableCollection<ShopItem>(
-                this.shopItemService.SearchItemsByName(this.currentShop.Id, query));
-            OnPropertyChanged(nameof(Items));
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                this.LoadItems();
+                return;
+            }
+
+            this.ReplaceItems(this.shopItemService.SearchItemsByName(this.currentShop.Id, query));
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        private void ReplaceItems(IEnumerable<ShopItem> items)
+        {
+            this.Items.Clear();
+            foreach (var item in items)
+            {
+                this.Items.Add(item);
+            }
+        }
     }
 }

@@ -27,6 +27,18 @@ namespace Content.Service
             return this.cartRepo.GetById(id);
         }
 
+        public Cart GetOrCreateCart(int userId)
+        {
+            var cart = this.cartRepo.GetById(userId);
+            if (cart == null)
+            {
+                cart = new Cart(userId, new Client(userId, "Current Client"), new Dictionary<int, CartItem>());
+                this.cartRepo.Add(cart);
+            }
+
+            return cart;
+        }
+
         public void AddCart(Cart cart)
         {
             this.cartRepo.Add(cart);

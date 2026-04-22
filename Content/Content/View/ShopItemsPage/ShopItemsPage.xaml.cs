@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Content.Domain;
 using Content.Service;
 using Content.User;
 using Content.ViewModel;
+using Content.ViewModel.Interface;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.ApplicationModel.DataTransfer;
@@ -15,180 +16,64 @@ using WinRT.Interop;
 
 namespace Content
 {
-    public class PathToImageConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (value == null)
-            {
-                return DependencyProperty.UnsetValue;
-            }
-
-            string path = value.ToString() ?? string.Empty;
-
-            try
-            {
-                if (path.StartsWith("Assets/"))
-                {
-                    return new BitmapImage(new Uri($"ms-appx:///{path}"));
-                }
-                else
-                {
-                    return new BitmapImage(new Uri(path));
-                }
-            }
-            catch
-            {
-                return DependencyProperty.UnsetValue;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class InverseBooleanConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return !(bool)value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class BoolToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class InverseBoolToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return (bool)value ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     public sealed partial class ShopItemsPage : Window
     {
-        private Button? selectedSortButton;
-        private readonly UserSession userSession;
-        private Shop selectedShop;
-        private readonly MainService mainService;
-        private Cart currentCart;
+        private readonly MainService service;
+        private readonly UserSession session;
 
-        public ShopItemsViewModel ViewModel { get; }
+        public IShopItemsViewModel ViewModel { get; }
 
-        public ShopItemsPage(MainService mainService, UserSession userSession, Shop selectedShop)
+        public ShopItemsPage(MainService service, UserSession session, Shop selectedShop)
         {
             this.InitializeComponent();
-            this.mainService = mainService;
-            this.userSession = userSession;
-            this.selectedShop = selectedShop;
-            this.currentCart = this.mainService.CartService.GetCartById(this.userSession.UserId);
+            this.service = service;
+            this.session = session;
+            this.ShopNameTextBlock.Text = selectedShop.Name;
 
-            this.ViewModel = new ShopItemsViewModel(this.mainService.ShopItemService, this.mainService.CartService, this.userSession, this.selectedShop);
-            this.RootGrid.DataContext = this.ViewModel;
+            this.ViewModel = new ShopItemsViewModel(service.ShopItemService, service.CartService, session, selectedShop);
+            this.ItemsGridView.ItemsSource = this.ViewModel.Items;
 
-            this.SetActiveSortButton(this.SortAlphabeticButton);
+            this.AddButton.Visibility = this.ViewModel.CanAddItem ? Visibility.Visible : Visibility.Collapsed;
+            this.CartButton.IsEnabled = this.ViewModel.IsCartEnabled;
 
-            if (this.userSession.IsAdmin)
+            this.SortComboBox.SelectedIndex = 0;
+        }
+
+        private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox combo && combo.SelectedItem is ComboBoxItem item)
             {
-                this.AddButton.Visibility = Visibility.Visible;
+                switch (item.Content.ToString())
+                {
+                    case "Name":
+                        this.ViewModel.SortByName();
+                        break;
+                    case "Price":
+                        this.ViewModel.SortByPrice();
+                        break;
+                    default:
+                        this.ViewModel.LoadItems();
+                        break;
+                }
             }
         }
 
-        public bool IsAdmin => this.userSession.IsAdmin;
-
-        private void ShowError(string message)
+        private void SearchBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            var dialog = new ContentDialog
+            if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                Title = "Error",
-                Content = message,
-                CloseButtonText = "OK",
-                XamlRoot = this.RootGrid.XamlRoot
-            };
-
-            _ = dialog.ShowAsync();
-        }
-
-        private void SetActiveSortButton(Button activeButton)
-        {
-            this.ResetButtonStyle(this.SortAlphabeticButton);
-            this.ResetButtonStyle(this.SortPriceButton);
-
-            activeButton.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 43, 184, 192));
-            activeButton.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 255, 255));
-
-            this.selectedSortButton = activeButton;
-        }
-
-        private void ResetButtonStyle(Button button)
-        {
-            if (button != null)
-            {
-                button.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 211, 211, 211));
-                button.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 0, 0));
-            }
-        }
-
-        private void SortAlphabetic_Click(object sender, RoutedEventArgs e)
-        {
-            this.SetActiveSortButton(this.SortAlphabeticButton);
-            this.ViewModel.SortByName();
-        }
-
-        private void SortPrice_Click(object sender, RoutedEventArgs e)
-        {
-            this.SetActiveSortButton(this.SortPriceButton);
-            this.ViewModel.SortByPrice();
-        }
-
-        private void ReapplyCurrentSort()
-        {
-            if (this.selectedSortButton == this.SortAlphabeticButton)
-            {
-                this.ViewModel.SortByName();
-            }
-            else if (this.selectedSortButton == this.SortPriceButton)
-            {
-                this.ViewModel.SortByPrice();
+                this.ViewModel.Search(((TextBox)sender).Text);
             }
         }
 
         private async void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!this.userSession.IsAdmin)
-            {
-                return;
-            }
+            var button = sender as Button;
 
-            string? selectedImagePath = null;
-            var sourceButton = sender as Button;
-            if (sourceButton == null)
-            {
-                return;
-            }
+            var nameBox = new TextBox { PlaceholderText = "Enter item name" };
+            var descBox = new TextBox { PlaceholderText = "Enter description" };
+            var priceBox = new TextBox { PlaceholderText = "Enter price" };
+            var quantityBox = new TextBox { PlaceholderText = "Enter quantity" };
 
             var imagePreview = new Image
             {
@@ -198,144 +83,45 @@ namespace Content
                 Source = new BitmapImage(new Uri("ms-appx:///Assets/placeholder.png")),
             };
 
-            var nameBox = new TextBox { PlaceholderText = "Enter item name" };
-            var descBox = new TextBox { PlaceholderText = "Enter description" };
-            var priceBox = new TextBox { PlaceholderText = "Enter price" };
-            var quantityBox = new TextBox { PlaceholderText = "Enter quantity" };
+            var imagePath = new string?[] { null };
+            var dropZone = this.BuildDropZone("Drag image here or click to select", imagePreview, imagePath);
 
-            var dropZone = new Border
+            var result = await BuildItemDialog("Add Shop Item", button, new StackPanel
             {
-                Height = 140,
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(30, 0, 0, 0)),
-                Child = new TextBlock
+                Spacing = 15,
+                Children =
                 {
-                    Text = "Drag image here or click to select",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
+                    new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    nameBox,
+                    new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    descBox,
+                    dropZone,
+                    imagePreview,
+                    new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    priceBox,
+                    new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    quantityBox,
                 },
-                AllowDrop = true,
-            };
+            }).ShowAsync();
 
-            dropZone.Drop += async (s, e) =>
-            {
-                if (e.DataView.Contains(StandardDataFormats.StorageItems))
-                {
-                    var items = await e.DataView.GetStorageItemsAsync();
-                    var file = items.FirstOrDefault() as StorageFile;
-
-                    if (file != null)
-                    {
-                        using (var stream = await file.OpenAsync(FileAccessMode.Read))
-                        {
-                            var bitmap = new BitmapImage();
-                            await bitmap.SetSourceAsync(stream);
-                            imagePreview.Source = bitmap;
-                        }
-
-                        selectedImagePath = file.Path;
-                    }
-                }
-            };
-
-            dropZone.Tapped += async (s, e) =>
-            {
-                var picker = new Windows.Storage.Pickers.FileOpenPicker();
-                var hwnd = WindowNative.GetWindowHandle(this);
-                InitializeWithWindow.Initialize(picker, hwnd);
-
-                picker.FileTypeFilter.Add(".png");
-                picker.FileTypeFilter.Add(".jpg");
-
-                var file = await picker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    using (var stream = await file.OpenAsync(FileAccessMode.Read))
-                    {
-                        var bitmap = new BitmapImage();
-                        await bitmap.SetSourceAsync(stream);
-                        imagePreview.Source = bitmap;
-                    }
-
-                    selectedImagePath = file.Path;
-                }
-            };
-
-            var dialog = new ContentDialog
-            {
-                Title = "Add Shop Item",
-                CloseButtonText = "Cancel",
-                PrimaryButtonText = "Save",
-                RequestedTheme = ElementTheme.Light,
-                XamlRoot = sourceButton.XamlRoot,
-                Content = new ScrollViewer
-                {
-                    MaxHeight = 500,
-                    VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                    VerticalScrollMode = ScrollMode.Auto,
-                    Content = new StackPanel
-                    {
-                        Spacing = 15,
-                        Children =
-                        {
-                            new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            nameBox,
-                            new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            descBox,
-                            dropZone,
-                            imagePreview,
-                            new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            priceBox,
-                            new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            quantityBox,
-                        },
-                    },
-                },
-            };
-
-            var result = await dialog.ShowAsync();
             if (result != ContentDialogResult.Primary)
             {
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(nameBox.Text) ||
-                string.IsNullOrWhiteSpace(priceBox.Text) ||
-                string.IsNullOrWhiteSpace(quantityBox.Text))
-            {
-                this.ShowError("All fields must be filled!");
-                return;
-            }
-
-            if (!float.TryParse(priceBox.Text, out float price) || !int.TryParse(quantityBox.Text, out int quantity))
-            {
-                this.ShowError("Price or quantity is invalid.");
-                return;
-            }
-
-            var newItem = new ShopItem(0, quantity, price, this.selectedShop.Id, selectedImagePath ?? "Assets/PlaceHolder.png", nameBox.Text, descBox.Text);
-
             try
             {
-                this.ViewModel.AddItem(newItem);
+                this.ViewModel.AddItem(nameBox.Text, descBox.Text, priceBox.Text, quantityBox.Text, imagePath[0] ?? "Assets/PlaceHolder.png");
             }
             catch (Exception ex)
             {
-                this.ShowError(ex.Message);
+                await ShowErrorAsync(button.XamlRoot, ex.Message);
             }
-
-            this.ReapplyCurrentSort();
         }
 
         private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!this.userSession.IsAdmin)
-            {
-                return;
-            }
-
-            var sourceButton = sender as Button;
-            var item = sourceButton?.Tag as ShopItem;
-            if (sourceButton == null || item == null)
+            if (sender is not Button btn || btn.Tag is not ShopItem item)
             {
                 return;
             }
@@ -344,162 +130,54 @@ namespace Content
             var descBox = new TextBox { Text = item.Description };
             var priceBox = new TextBox { Text = item.Price.ToString() };
             var quantityBox = new TextBox { Text = item.Quantity.ToString() };
-            string selectedImagePath = item.Photo;
 
             var imagePreview = new Image
             {
                 Width = 120,
                 Height = 120,
                 Stretch = Stretch.UniformToFill,
+                Source = LoadImageSource(item.Photo),
             };
 
-            try
-            {
-                if (!string.IsNullOrEmpty(item.Photo) && item.Photo.StartsWith("Assets/"))
-                {
-                    imagePreview.Source = new BitmapImage(new Uri($"ms-appx:///{item.Photo}"));
-                }
-                else if (!string.IsNullOrEmpty(item.Photo))
-                {
-                    imagePreview.Source = new BitmapImage(new Uri(item.Photo));
-                }
-            }
-            catch
-            {
-                imagePreview.Source = null;
-            }
+            var imagePath = new string?[] { item.Photo };
+            var dropZone = this.BuildDropZone("Drag image here or click to change", imagePreview, imagePath);
 
-            var dropZone = new Border
+            var result = await BuildItemDialog("Edit Shop Item", btn, new StackPanel
             {
-                Height = 140,
-                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(30, 0, 0, 0)),
-                Child = new TextBlock
+                Spacing = 15,
+                Children =
                 {
-                    Text = "Drag image here or click to change",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
+                    new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    nameBox,
+                    new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    descBox,
+                    dropZone,
+                    imagePreview,
+                    new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    priceBox,
+                    new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
+                    quantityBox,
                 },
-                AllowDrop = true,
-            };
+            }).ShowAsync();
 
-            dropZone.Drop += async (s, e) =>
-            {
-                if (e.DataView.Contains(StandardDataFormats.StorageItems))
-                {
-                    var items = await e.DataView.GetStorageItemsAsync();
-                    var file = items.FirstOrDefault() as StorageFile;
-
-                    if (file != null)
-                    {
-                        using (var stream = await file.OpenAsync(FileAccessMode.Read))
-                        {
-                            var bitmap = new BitmapImage();
-                            await bitmap.SetSourceAsync(stream);
-                            imagePreview.Source = bitmap;
-                        }
-
-                        selectedImagePath = file.Path;
-                    }
-                }
-            };
-
-            dropZone.Tapped += async (s, e) =>
-            {
-                var picker = new Windows.Storage.Pickers.FileOpenPicker();
-                var hwnd = WindowNative.GetWindowHandle(this);
-                InitializeWithWindow.Initialize(picker, hwnd);
-
-                picker.FileTypeFilter.Add(".png");
-                picker.FileTypeFilter.Add(".jpg");
-
-                var file = await picker.PickSingleFileAsync();
-                if (file != null)
-                {
-                    using (var stream = await file.OpenAsync(FileAccessMode.Read))
-                    {
-                        var bitmap = new BitmapImage();
-                        await bitmap.SetSourceAsync(stream);
-                        imagePreview.Source = bitmap;
-                    }
-
-                    selectedImagePath = file.Path;
-                }
-            };
-
-            var dialog = new ContentDialog
-            {
-                Title = "Edit Shop Item",
-                CloseButtonText = "Cancel",
-                PrimaryButtonText = "Save",
-                RequestedTheme = ElementTheme.Light,
-                XamlRoot = sourceButton.XamlRoot,
-                Content = new ScrollViewer
-                {
-                    MaxHeight = 500,
-                    Content = new StackPanel
-                    {
-                        Spacing = 15,
-                        Children =
-                        {
-                            new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            nameBox,
-                            new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            descBox,
-                            dropZone,
-                            imagePreview,
-                            new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            priceBox,
-                            new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                            quantityBox,
-                        },
-                    },
-                },
-            };
-
-            var result = await dialog.ShowAsync();
             if (result != ContentDialogResult.Primary)
             {
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(nameBox.Text) ||
-                string.IsNullOrWhiteSpace(priceBox.Text) ||
-                string.IsNullOrWhiteSpace(quantityBox.Text))
-            {
-                this.ShowError("All fields must be filled!");
-                return;
-            }
-
-            if (!float.TryParse(priceBox.Text, out float price) || !int.TryParse(quantityBox.Text, out int quantity))
-            {
-                this.ShowError("Price or quantity is invalid.");
-                return;
-            }
-
-            var updatedItem = new ShopItem(item.Id, quantity, price, item.ShopId, selectedImagePath ?? item.Photo, nameBox.Text, descBox.Text);
-
             try
             {
-                this.ViewModel.UpdateItem(updatedItem);
+                this.ViewModel.UpdateItem(item, nameBox.Text, descBox.Text, priceBox.Text, quantityBox.Text, imagePath[0] ?? item.Photo);
             }
             catch (Exception ex)
             {
-                this.ShowError(ex.Message);
+                await ShowErrorAsync(btn.XamlRoot, ex.Message);
             }
-
-            this.ReapplyCurrentSort();
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!this.userSession.IsAdmin)
-            {
-                return;
-            }
-
-            var sourceButton = sender as Button;
-            var item = sourceButton?.Tag as ShopItem;
-            if (sourceButton == null || item == null)
+            if (sender is not Button btn || btn.Tag is not ShopItem item)
             {
                 return;
             }
@@ -511,40 +189,20 @@ namespace Content
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "Cancel",
                 RequestedTheme = ElementTheme.Light,
-                XamlRoot = sourceButton.XamlRoot,
+                XamlRoot = btn.XamlRoot,
             };
 
-            var result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
             {
                 this.ViewModel.DeleteItem(item);
-                this.ReapplyCurrentSort();
             }
-        }
-
-        private void OpenCartButton_Click(object sender, RoutedEventArgs e)
-        {
-            var cartPage = new CartPage(this.mainService, this.userSession);
-            cartPage.Activate();
-            this.Close();
         }
 
         private async void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
         {
-            var sourceButton = sender as Button;
-            var item = sourceButton?.Tag as ShopItem;
-            if (item == null)
+            if ((sender as Button)?.Tag is not ShopItem item)
             {
                 return;
-            }
-
-            var currentCart = this.mainService.CartService.GetCartById(this.userSession.UserId);
-            if (currentCart == null)
-            {
-                currentCart = new Cart(this.userSession.UserId,
-                    new Client(this.userSession.UserId, "Current Client"),
-                    new System.Collections.Generic.Dictionary<int, CartItem>());
-                this.mainService.CartService.AddCart(currentCart);
             }
 
             try
@@ -553,51 +211,143 @@ namespace Content
             }
             catch (InvalidOperationException ex)
             {
-                var dialog = new ContentDialog
-                {
-                    Title = "Cannot add to cart",
-                    Content = ex.Message,
-                    CloseButtonText = "OK",
-                    XamlRoot = this.Content.XamlRoot,
-                };
-                await dialog.ShowAsync();
+                await ShowErrorAsync((sender as Button).XamlRoot, ex.Message);
             }
+        }
+
+        private void CartButton_Click(object sender, RoutedEventArgs e)
+        {
+            new CartPage(this.service, this.session).Activate();
+            this.Close();
         }
 
         private void BackToShops_Click(object sender, RoutedEventArgs e)
         {
-            var shopPage = new ShopPage(this.mainService, this.userSession);
-            shopPage.Activate();
+            new ShopPage(this.service, this.session).Activate();
             this.Close();
         }
 
         private void BackToLandingPage_Click(object sender, RoutedEventArgs e)
         {
-            var landingPage = new LandingPage(this.mainService, this.userSession);
-            landingPage.Activate();
+            new LandingPage(this.service, this.session).Activate();
             this.Close();
-        }
-
-        private void SearchBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                var query = ((TextBox)sender).Text;
-                this.ViewModel.Search(query);
-            }
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var item = e.ClickedItem as ShopItem;
-            if (item == null)
+            if (e.ClickedItem is not ShopItem item)
             {
                 return;
             }
 
-            var detailPage = new ItemDetailsPage(this.mainService, this.userSession, item, this.currentCart);
-            detailPage.Activate();
+            var cart = this.service.CartService.GetOrCreateCart(this.session.UserId);
+            new ItemDetailsPage(this.service, this.session, item, cart).Activate();
             this.Close();
+        }
+
+        private static ImageSource? LoadImageSource(string? path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                return path.StartsWith("Assets/")
+                    ? new BitmapImage(new Uri($"ms-appx:///{path}"))
+                    : new BitmapImage(new Uri(path));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private Border BuildDropZone(string label, Image imagePreview, string?[] imagePath)
+        {
+            var dropZone = new Border
+            {
+                Height = 140,
+                Background = new SolidColorBrush(Windows.UI.Color.FromArgb(30, 0, 0, 0)),
+                AllowDrop = true,
+                Child = new TextBlock
+                {
+                    Text = label,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                },
+            };
+
+            dropZone.Drop += async (s, args) =>
+            {
+                if (!args.DataView.Contains(StandardDataFormats.StorageItems))
+                {
+                    return;
+                }
+
+                var items = await args.DataView.GetStorageItemsAsync();
+                if (items.FirstOrDefault() is StorageFile file)
+                {
+                    await ApplyImageFile(file, imagePreview, imagePath);
+                }
+            };
+
+            dropZone.Tapped += async (s, args) =>
+            {
+                var picker = new Windows.Storage.Pickers.FileOpenPicker();
+                InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
+                picker.FileTypeFilter.Add(".png");
+                picker.FileTypeFilter.Add(".jpg");
+
+                var file = await picker.PickSingleFileAsync();
+                if (file != null)
+                {
+                    await ApplyImageFile(file, imagePreview, imagePath);
+                }
+            };
+
+            return dropZone;
+        }
+
+        private static async Task ApplyImageFile(StorageFile file, Image imagePreview, string?[] imagePath)
+        {
+            using var stream = await file.OpenAsync(FileAccessMode.Read);
+            var bitmap = new BitmapImage();
+            await bitmap.SetSourceAsync(stream);
+            imagePreview.Source = bitmap;
+            imagePath[0] = file.Path;
+        }
+
+        private static ContentDialog BuildItemDialog(string title, Button anchor, StackPanel content)
+        {
+            return new ContentDialog
+            {
+                Title = title,
+                CloseButtonText = "Cancel",
+                PrimaryButtonText = "Save",
+                RequestedTheme = ElementTheme.Light,
+                XamlRoot = anchor.XamlRoot,
+                Content = new ScrollViewer
+                {
+                    MaxHeight = 500,
+                    VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                    VerticalScrollMode = ScrollMode.Auto,
+                    Content = content,
+                },
+            };
+        }
+
+        private static async Task ShowErrorAsync(XamlRoot xamlRoot, string message)
+        {
+            await new ContentDialog
+            {
+                Title = "Error",
+                Content = message,
+                CloseButtonText = "OK",
+                RequestedTheme = ElementTheme.Light,
+                XamlRoot = xamlRoot,
+            }.ShowAsync();
         }
     }
 }
