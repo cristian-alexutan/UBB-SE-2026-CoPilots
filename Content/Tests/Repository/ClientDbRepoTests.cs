@@ -10,53 +10,55 @@ namespace TestProject.Repository
         [Test]
         public void AddTest()
         {
-            var repo = new ClientDbRepo(ConnectionString);
-            var client = new Client(0, "Test Client");
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+            Client client = new Client(0, "Test Client");
             repo.Add(client);
-            var inserted = repo.GetAll().FirstOrDefault(c => c.Name == "Test Client");
-            Assert.That(inserted, Is.Not.Null);
-            Assert.That(inserted.Name, Is.EqualTo("Test Client"));
-            repo.Delete(inserted.Id);
+            Client? result = repo.GetById(client.Id);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Name, Is.EqualTo("Test Client"));
+            repo.Delete(client.Id);
         }
 
         [Test]
-        public void DeleteTestSuccessful()
+        public void DeleteTestSuccesfull()
         {
-            var repo = new ClientDbRepo(ConnectionString);
-            repo.Add(new Client(0, "Test Client"));
-            var inserted = repo.GetAll().FirstOrDefault(c => c.Name == "Test Client");
-            Assert.That(inserted, Is.Not.Null);
-            repo.Delete(inserted.Id);
-            var result = repo.GetById(inserted.Id);
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+            Client client = new Client(0, "Test Client");
+            repo.Add(client);
+            Client? result = repo.GetById(client.Id);
+            Assert.That(result, Is.Not.Null);
+            repo.Delete(client.Id);
+            result = repo.GetById(client.Id);
             Assert.That(result, Is.Null);
         }
 
         [Test]
-        public void DeleteTestUnsuccessful()
+        public void DeleteTestUnsuccesfull()
         {
-            var repo = new ClientDbRepo(ConnectionString);
-            Assert.DoesNotThrow(() => repo.Delete(-2));
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+            Client? result = repo.Delete(-2);
+            Assert.That(result, Is.Null);
         }
 
         [Test]
-        public void UpdateTestSuccessful()
+        public void UpdateTestSuccesfull()
         {
-            var repo = new ClientDbRepo(ConnectionString);
-            repo.Add(new Client(0, "Test Client"));
-            var inserted = repo.GetAll().FirstOrDefault(c => c.Name == "Test Client");
-            Assert.That(inserted, Is.Not.Null);
-            repo.Update(new Client(inserted.Id, "Updated Client"));
-            var result = repo.GetById(inserted.Id);
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+            Client client = new Client(0, "Test Client");
+            repo.Add(client);
+            repo.Update(new Client(client.Id, "Updated Client"));
+            Client? result = repo.GetById(client.Id);
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Name, Is.EqualTo("Updated Client"));
-            repo.Delete(inserted.Id);
+            repo.Delete(client.Id);
         }
 
         [Test]
-        public void UpdateTestUnsuccessful()
+        public void UpdateTestUnsuccesfull()
         {
-            var repo = new ClientDbRepo(ConnectionString);
-            Assert.DoesNotThrow(() => repo.Update(new Client(-1, "Updated Client")));
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+            Client? result = repo.Update(new Client(-1, "Updated Client"));
+            Assert.That(result, Is.Null);
         }
     }
 }

@@ -76,9 +76,10 @@ namespace Content.Repository.Database
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("INSERT INTO Client (name) VALUES (@Name)", conn);
+                    var cmd = new SqlCommand(
+                        "INSERT INTO Client (name) VALUES (@Name); SELECT SCOPE_IDENTITY();", conn);
                     cmd.Parameters.AddWithValue("@Name", client.Name);
-                    cmd.ExecuteNonQuery();
+                    client.Id = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (SqlException ex)
@@ -87,16 +88,25 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Delete(int id)
+        public Client? Delete(int id)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    Client? existing = GetById(id);
+
+                    if (existing == null)
+                    {
+                        return null;
+                    }
+
                     var cmd = new SqlCommand("DELETE FROM Client WHERE client_id=@Id", conn);
+
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();
+                    return existing;
                 }
             }
             catch (SqlException ex)
@@ -105,17 +115,27 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Update(Client client)
+        public Client? Update(Client client)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    var cmd = new SqlCommand("UPDATE Client SET name=@Name WHERE client_id=@Id", conn);
+                    Client? existing = GetById(client.Id);
+
+                    if (existing == null)
+                    {
+                        return null;
+                    }
+
+                    var cmd = new SqlCommand(
+                        "UPDATE Client SET name=@Name WHERE client_id=@Id", conn);
+
                     cmd.Parameters.AddWithValue("@Name", client.Name);
                     cmd.Parameters.AddWithValue("@Id", client.Id);
                     cmd.ExecuteNonQuery();
+                    return client;
                 }
             }
             catch (SqlException ex)
