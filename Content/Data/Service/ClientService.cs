@@ -41,14 +41,22 @@ namespace Content.Service
             clientRepo.Add(client);
         }
 
-        public void DeleteClient(int id)
+        public Client? DeleteClient(int id)
         {
-            clientRepo.Delete(id);
+            return clientRepo.Delete(id);
         }
 
-        public void UpdateClient(Client client)
+        public Client? UpdateClient(Client client)
         {
-            clientRepo.Update(client);
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+            if (string.IsNullOrWhiteSpace(client.Name))
+            {
+                throw new ArgumentException("Name is required", nameof(client.Name));
+            }
+            return clientRepo.Update(client);
         }
 
         public Client GetAnyClient()

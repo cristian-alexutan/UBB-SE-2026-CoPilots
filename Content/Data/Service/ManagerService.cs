@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Data.Service.Interface;
 using Content.Domain;
 using Content.Repository.Interface;
+using Windows.Media.Protection.PlayReady;
 
 namespace Content.Service
 {
@@ -43,6 +44,11 @@ namespace Content.Service
                 throw new ArgumentException("Email is required", nameof(manager.Email));
             }
 
+            if (!manager.Email.Contains("@"))
+            {
+                throw new ArgumentException("Email is invalid", nameof(manager.Email));
+            }
+
             if (string.IsNullOrWhiteSpace(manager.Phone))
             {
                 throw new ArgumentException("Phone is required", nameof(manager.Phone));
@@ -51,14 +57,39 @@ namespace Content.Service
             managerRepo.Add(manager);
         }
 
-        public void DeleteManager(int id)
+        public Manager? DeleteManager(int id)
         {
-            managerRepo.Delete(id);
+            return managerRepo.Delete(id);
         }
 
-        public void UpdateManager(Manager manager)
+        public Manager? UpdateManager(Manager manager)
         {
-            managerRepo.Update(manager);
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (string.IsNullOrWhiteSpace(manager.Name))
+            {
+                throw new ArgumentException("Name is required", nameof(manager.Name));
+            }
+
+            if (string.IsNullOrWhiteSpace(manager.Email))
+            {
+                throw new ArgumentException("Email is required", nameof(manager.Email));
+            }
+
+            if (!manager.Email.Contains("@"))
+            {
+                throw new ArgumentException("Email is invalid", nameof(manager.Email));
+            }
+
+            if (string.IsNullOrWhiteSpace(manager.Phone))
+            {
+                throw new ArgumentException("Phone is required", nameof(manager.Phone));
+            }
+
+            return managerRepo.Update(manager);
         }
 
         public Manager GetAnyManager()
