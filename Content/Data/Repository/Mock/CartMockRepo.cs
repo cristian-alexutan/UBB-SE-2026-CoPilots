@@ -8,11 +8,11 @@ using Content.Repository.Interface;
 
 namespace Content.Repository
 {
-    public class CartMemoryRepo : ICartRepo
+    public class CartMockRepo : ICartRepo
     {
         private Dictionary<int, Domain.Cart> carts;
 
-        public CartMemoryRepo()
+        public CartMockRepo()
         {
             carts = new Dictionary<int, Domain.Cart>();
         }

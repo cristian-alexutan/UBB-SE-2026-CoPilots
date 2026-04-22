@@ -5,11 +5,11 @@ using Content.Repository.Interface;
 
 namespace Content.Repository.Memory
 {
-    public class TicketMemoryRepo : ITicketRepo
+    public class TicketMockRepo : ITicketRepo
     {
         private Dictionary<int, Ticket> tickets;
 
-        public TicketMemoryRepo()
+        public TicketMockRepo()
         {
             this.tickets = new Dictionary<int, Ticket>();
         }

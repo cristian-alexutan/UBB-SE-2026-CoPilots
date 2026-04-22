@@ -64,11 +64,12 @@ namespace Content.Repository.Database
             {
                 conn.Open();
                 var cmd = new SqlCommand(
-                    "INSERT INTO Ticket (category, subcategory) VALUES (@Category, @Subcategory)",
+                    "INSERT INTO Ticket (category, subcategory) VALUES (@Category, @Subcategory); " +
+                    "SELECT CAST(SCOPE_IDENTITY() AS int);",
                     conn);
                 cmd.Parameters.AddWithValue("@Category", ticket.Category);
                 cmd.Parameters.AddWithValue("@Subcategory", ticket.Subcategory);
-                cmd.ExecuteNonQuery();
+                ticket.Id = (int)cmd.ExecuteScalar();
             }
         }
 

@@ -11,8 +11,8 @@ namespace Tests.Service
     public class ReservationServiceTests
     {
         private ReservationMockRepo reservationRepo = null!;
-        private ShopItemMemoryRepo shopItemRepo = null!;
-        private CartMemoryRepo cartRepo = null!;
+        private ShopItemMockRepo shopItemRepo = null!;
+        private CartMockRepo cartRepo = null!;
 
         private ShopItemService shopItemService = null!;
         private CartService cartService = null!;
@@ -24,8 +24,8 @@ namespace Tests.Service
         public void Setup()
         {
             reservationRepo = new ReservationMockRepo();
-            shopItemRepo = new ShopItemMemoryRepo();
-            cartRepo = new CartMemoryRepo();
+            shopItemRepo = new ShopItemMockRepo();
+            cartRepo = new CartMockRepo();
 
             shopItemService = new ShopItemService(shopItemRepo);
             cartService = new CartService(cartRepo, shopItemService);
