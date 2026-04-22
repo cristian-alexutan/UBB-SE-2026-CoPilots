@@ -1,11 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Microsoft.UI.Xaml;
 namespace Content.ViewModel.Interface
 {
     public interface ICartViewModel
     {
-        Visibility CancelButtonVisibility { get; }
+        bool IsCancelButtonVisible { get; }
         ObservableCollection<CartShopItem> CartShopItems { get; set; }
         bool IsAdmin { get; }
         bool IsReserveButtonEnabled { get; }

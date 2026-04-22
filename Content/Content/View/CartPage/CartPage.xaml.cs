@@ -10,6 +10,7 @@ namespace Content
 {
     public sealed partial class CartPage : Window
     {
+        public Visibility BoolToVisibility(bool value) => value ? Visibility.Visible : Visibility.Collapsed;
         private readonly MainService service;
         private readonly UserSession session;
 

@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Microsoft.UI.Xaml;
 using Content.Domain;
 using Content.Service;
 using Content.User;
@@ -37,13 +36,13 @@ namespace Content.ViewModel
                 this.isReserved = value;
                 this.OnPropertyChanged();
                 this.OnPropertyChanged(nameof(this.IsReserveButtonEnabled));
-                this.OnPropertyChanged(nameof(this.CancelButtonVisibility));
+                this.OnPropertyChanged(nameof(this.IsCancelButtonVisible));
             }
         }
 
         public bool IsReserveButtonEnabled => !this.IsReserved;
 
-        public Visibility CancelButtonVisibility => this.IsReserved ? Visibility.Visible : Visibility.Collapsed;
+        public bool IsCancelButtonVisible => this.IsReserved;
 
         public string OverallTotal => $"${this.overallTotal:0.00}";
 
