@@ -110,7 +110,7 @@
             Click="Reserve_Click"/>
 
                 <Button Content="Cancel Reservation" Width="170" Height="50" Background="LightPink" Foreground="DarkRed" FontSize="16" FontWeight="SemiBold" 
-            Visibility="{x:Bind ViewModel.CancelButtonVisibility, Mode=OneWay}"
+            Visibility="{x:Bind BoolToVisibility(ViewModel.IsCancelButtonVisible), Mode=OneWay}"
             Margin="15,0,0,0"
             Click="CancelReservation_Click"/>
 
