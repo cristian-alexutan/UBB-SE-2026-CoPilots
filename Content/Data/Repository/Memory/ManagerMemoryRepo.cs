@@ -1,6 +1,6 @@
-﻿using Content.Domain;
+﻿using System.Collections.Generic;
+using Content.Domain;
 using Content.Repository.Interface;
-using System.Collections.Generic;
 
 namespace Content.Repository
 {
@@ -10,12 +10,12 @@ namespace Content.Repository
 
         public ManagerMemoryRepo()
         {
-            managers = new Dictionary<int,Manager>();
+            managers = new Dictionary<int, Manager>();
         }
 
         public void Add(Manager manager)
         {
-            managers[manager.Id]=manager;
+            managers[manager.Id] = manager;
         }
 
         public void Delete(int id)
@@ -38,6 +38,5 @@ namespace Content.Repository
             managers.TryGetValue(id, out Manager manager);
             return manager;
         }
-
     }
 }

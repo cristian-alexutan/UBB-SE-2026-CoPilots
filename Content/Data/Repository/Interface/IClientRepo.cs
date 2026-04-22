@@ -1,5 +1,5 @@
-﻿using Content.Domain;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Content.Domain;
 
 namespace Content.Repository.Interface
 {
@@ -14,6 +14,5 @@ namespace Content.Repository.Interface
         void Delete(int id);
 
         void Update(Client client);
-
     }
 }

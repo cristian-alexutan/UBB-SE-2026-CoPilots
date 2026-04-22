@@ -14,95 +14,112 @@ namespace Tests.Repository
         private const string ConnectionString =
             "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
-        private ReservationDbRepo _repo = null!;
-        private ICartRepo _cartRepo = null!;
-        private IClientRepo _clientRepo = null!;
-        private IShopItemRepo _shopItemRepo = null!;
+        private ReservationDbRepo repo = null!;
+        private ICartRepo cartRepo = null!;
+        private IClientRepo clientRepo = null!;
+        private IShopItemRepo shopItemRepo = null!;
 
-        private List<int> _createdReservationIds = null!;
-        private List<int> _createdCartIds = null!;
-        private List<int> _createdClientIds = null!;
+        private List<int> createdReservationIds = null!;
+        private List<int> createdCartIds = null!;
+        private List<int> createdClientIds = null!;
 
-        private Cart _testCart = null!;
-        private Client _testClient = null!;
+        private Cart testCart = null!;
+        private Client testClient = null!;
 
         [SetUp]
         public void Setup()
         {
-            _clientRepo = new ClientDbRepo(ConnectionString);
-            _shopItemRepo = new ShopItemDbRepo(ConnectionString);
-            _cartRepo = new CartDbRepo(ConnectionString, _clientRepo, _shopItemRepo);
-            _repo = new ReservationDbRepo(ConnectionString, _cartRepo);
+            clientRepo = new ClientDbRepo(ConnectionString);
+            shopItemRepo = new ShopItemDbRepo(ConnectionString);
+            cartRepo = new CartDbRepo(ConnectionString, clientRepo, shopItemRepo);
+            repo = new ReservationDbRepo(ConnectionString, cartRepo);
 
-            _createdReservationIds = new List<int>();
-            _createdCartIds = new List<int>();
-            _createdClientIds = new List<int>();
-
+            createdReservationIds = new List<int>();
+            createdCartIds = new List<int>();
+            createdClientIds = new List<int>();
 
             var uniqueName = "Test Client " + Guid.NewGuid();
-            _testClient = new Client(0, uniqueName);
-            _clientRepo.Add(_testClient);
+            testClient = new Client(0, uniqueName);
+            clientRepo.Add(testClient);
 
-            var persistedClient = _clientRepo.GetAll().First(c => c.Name == uniqueName);
-            _testClient.Id = persistedClient.Id;
-            _createdClientIds.Add(_testClient.Id);
+            var persistedClient = clientRepo.GetAll().First(c => c.Name == uniqueName);
+            testClient.Id = persistedClient.Id;
+            createdClientIds.Add(testClient.Id);
 
-            _testCart = new Cart(0, _testClient, new Dictionary<int, CartItem>());
-            _cartRepo.Add(_testCart);
-            _createdCartIds.Add(_testCart.Id);
+            testCart = new Cart(0, testClient, new Dictionary<int, CartItem>());
+            cartRepo.Add(testCart);
+            createdCartIds.Add(testCart.Id);
         }
 
         [TearDown]
         public void Cleanup()
         {
-            foreach (var id in _createdReservationIds)
+            foreach (var id in createdReservationIds)
             {
-                try { _repo.Delete(id); } catch { }
+                try
+                {
+                    repo.Delete(id);
+                }
+                catch
+                {
+                }
             }
-            foreach (var id in _createdCartIds)
+            foreach (var id in createdCartIds)
             {
-                try { _cartRepo.Delete(id); } catch { }
+                try
+                {
+                    cartRepo.Delete(id);
+                }
+                catch
+                {
+                }
             }
-            foreach (var id in _createdClientIds)
+            foreach (var id in createdClientIds)
             {
-                try { _clientRepo.Delete(id); } catch { }
+                try
+                {
+                    clientRepo.Delete(id);
+                }
+                catch
+                {
+                }
             }
         }
 
         [Test]
         public void Add_ValidReservation_AssignsIdAndPersists()
         {
-            var reservation = new Reservation(_testCart, true, DateTime.Now);
+            var reservation = new Reservation(testCart, true, DateTime.Now);
 
-            _repo.Add(reservation);
-            _createdReservationIds.Add(reservation.Id);
+            repo.Add(reservation);
+            createdReservationIds.Add(reservation.Id);
 
             Assert.That(reservation.Id, Is.Not.EqualTo(0), "Id should be set after Add");
-            var fetched = _repo.GetById(reservation.Id);
+            var fetched = repo.GetById(reservation.Id);
             Assert.That(fetched, Is.Not.Null);
             Assert.Multiple(() =>
             {
                 Assert.That(fetched!.Id, Is.EqualTo(reservation.Id));
                 Assert.That(fetched.Active, Is.True);
-                Assert.That(fetched.ReservationCart.Id, Is.EqualTo(_testCart.Id));
+                Assert.That(fetched.ReservationCart.Id, Is.EqualTo(testCart.Id));
             });
         }
 
         [Test]
         public void GetById_NonExistentId_ReturnsNull()
         {
-            var result = _repo.GetById(-1);
+            var result = repo.GetById(-1);
             Assert.That(result, Is.Null);
         }
 
         [Test]
         public void GetAll_ReturnsAddedReservation()
         {
-            var reservation = new Reservation(_testCart, true, DateTime.Now);
-            _repo.Add(reservation);
-            _createdReservationIds.Add(reservation.Id);
+            var reservation = new Reservation(testCart, true, DateTime.Now);
+            repo.Add(reservation);
+            createdReservationIds.Add(reservation.Id);
 
-            var all = _repo.GetAll().ToList();
+            var all = repo.GetAll().ToList();
 
             Assert.That(all.Any(r => r.Id == reservation.Id), Is.True);
         }
@@ -110,14 +127,14 @@ namespace Tests.Repository
         [Test]
         public void Update_ChangesActiveStatus()
         {
-            var reservation = new Reservation(_testCart, true, DateTime.Now);
-            _repo.Add(reservation);
-            _createdReservationIds.Add(reservation.Id);
+            var reservation = new Reservation(testCart, true, DateTime.Now);
+            repo.Add(reservation);
+            createdReservationIds.Add(reservation.Id);
 
             reservation.Active = false;
-            _repo.Update(reservation);
+            repo.Update(reservation);
 
-            var fetched = _repo.GetById(reservation.Id);
+            var fetched = repo.GetById(reservation.Id);
             Assert.That(fetched, Is.Not.Null);
             Assert.That(fetched!.Active, Is.False);
         }
@@ -125,18 +142,18 @@ namespace Tests.Repository
         [Test]
         public void Delete_ExistingReservation_RemovesFromDatabase()
         {
-            var reservation = new Reservation(_testCart, true, DateTime.Now);
-            _repo.Add(reservation);
+            var reservation = new Reservation(testCart, true, DateTime.Now);
+            repo.Add(reservation);
 
-            _repo.Delete(reservation.Id);
+            repo.Delete(reservation.Id);
 
-            Assert.That(_repo.GetById(reservation.Id), Is.Null);
+            Assert.That(repo.GetById(reservation.Id), Is.Null);
         }
 
         [Test]
         public void Delete_NonExistentId_DoesNotThrow()
         {
-            Assert.DoesNotThrow(() => _repo.Delete(-1));
+            Assert.DoesNotThrow(() => repo.Delete(-1));
         }
     }
 }

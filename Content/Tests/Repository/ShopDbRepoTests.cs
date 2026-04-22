@@ -5,12 +5,12 @@ namespace TestProject.Repository
 {
     public class ShopDbRepoTests
     {
-        private const string connectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private const string ConnectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         [Test]
         public void AddTest()
         {
-            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            ShopDbRepo repo = new ShopDbRepo(ConnectionString);
             Shop shop = new Shop("Test Shop", "Type", 1);
             repo.Add(shop);
             Shop? result = repo.GetById(shop.Id);
@@ -27,7 +27,7 @@ namespace TestProject.Repository
         [Test]
         public void DeleteTestSuccesfull()
         {
-            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            ShopDbRepo repo = new ShopDbRepo(ConnectionString);
             Shop shop = new Shop(0, "Test Shop", "Type", 1);
             repo.Add(shop);
             Shop? result = repo.GetById(shop.Id);
@@ -40,7 +40,7 @@ namespace TestProject.Repository
         [Test]
         public void DeleteTestUnsuccesfull()
         {
-            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            ShopDbRepo repo = new ShopDbRepo(ConnectionString);
             Shop? result = repo.Delete(-2);
             Assert.That(result, Is.Null);
         }
@@ -48,7 +48,7 @@ namespace TestProject.Repository
         [Test]
         public void UpdateTestSuccesfull()
         {
-            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            ShopDbRepo repo = new ShopDbRepo(ConnectionString);
             Shop shop = new Shop(0, "Test Shop", "Type", 1);
             repo.Add(shop);
             repo.Update(new Shop(shop.Id, "Updated Shop", "Type", 1));
@@ -66,7 +66,7 @@ namespace TestProject.Repository
         [Test]
         public void UpdateTestUnsuccesfull()
         {
-            ShopDbRepo repo = new ShopDbRepo(connectionString);
+            ShopDbRepo repo = new ShopDbRepo(ConnectionString);
             Shop? result = repo.Update(new Shop(-1, "Updated Shop", "Type", 1));
             Assert.That(result, Is.Null);
         }

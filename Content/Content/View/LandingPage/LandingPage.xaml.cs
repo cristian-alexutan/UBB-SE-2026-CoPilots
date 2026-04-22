@@ -27,7 +27,7 @@ namespace Content
 
         private void ClientButton_Click(object sender, RoutedEventArgs e)
         {
-            var client = service.clientService.GetAnyClient();
+            var client = service.ClientService.GetAnyClient();
             if (client == null)
             {
                 ErrorText.Text = "No client found in database.";
@@ -43,7 +43,7 @@ namespace Content
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
-            var admin = service.managerService.GetAnyManager();
+            var admin = service.ManagerService.GetAnyManager();
             if (admin == null)
             {
                 ErrorText.Text = "No admin found in database.";

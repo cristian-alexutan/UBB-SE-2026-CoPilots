@@ -10,24 +10,21 @@ namespace Content.Domain
     {
         public int Id { get; set; }
         public Client Client { get; set; }
-        public Dictionary<int,CartItem> CartItems { get; set; }
-
-
-        public Cart() { }
-        public Cart(int Id, Client Client, Dictionary<int,CartItem> CartItems)
+        public Dictionary<int, CartItem> CartItems { get; set; }
+        public Cart(int id, Client client, Dictionary<int, CartItem> cartItems)
         {
-            this.Id = Id;
-            this.Client = Client;
-            this.CartItems = CartItems;
+            this.Id = id;
+            this.Client = client;
+            this.CartItems = cartItems;
         }
         public float GetOverallPrice()
         {
-            float OverallPrice = 0;
-            foreach (CartItem CartItem in CartItems.Values)
+            float overallPrice = 0;
+            foreach (CartItem cartItem in CartItems.Values)
             {
-                OverallPrice += CartItem.GetTotalPrice();
+                overallPrice += cartItem.GetTotalPrice();
             }
-            return OverallPrice;
+            return overallPrice;
         }
 
         public void ClearCart()
@@ -35,20 +32,19 @@ namespace Content.Domain
             CartItems.Clear();
         }
 
-        public void UpdateQuantity(int CartItemId, int Quantity)
+        public void UpdateQuantity(int cartItemId, int quantity)
         {
-            CartItems[CartItemId].Quantity=Quantity;
+            CartItems[cartItemId].Quantity = quantity;
         }
 
-        public void AddCartItem(CartItem CartItem)
+        public void AddCartItem(CartItem cartItem)
         {
-            CartItems[CartItem.Id] = CartItem;
+            CartItems[cartItem.Id] = cartItem;
         }
 
-        public void RemoveCartItem(int CartItemId)
+        public void RemoveCartItem(int cartItemId)
         {
-            CartItems.Remove(CartItemId);
+            CartItems.Remove(cartItemId);
         }
-
     }
 }

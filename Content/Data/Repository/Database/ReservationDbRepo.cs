@@ -1,126 +1,119 @@
-﻿using Content.Domain;
-using Content.Repository.Interface;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Content.Domain;
+using Content.Repository.Interface;
+using Microsoft.Data.SqlClient;
 
 namespace Content.Repository.Database
 {
     public class ReservationDbRepo : IReservationRepo
     {
-        private string ConnectionString;
-        private ICartRepo _cartRepo;
+        private string connectionString;
+        private ICartRepo cartRepo;
 
-        public ReservationDbRepo(string ConnectionString, ICartRepo cartRepo)
+        public ReservationDbRepo(string connectionString, ICartRepo cartRepo)
         {
-            this.ConnectionString = ConnectionString;
-            this._cartRepo = cartRepo;
+            this.connectionString = connectionString;
+            this.cartRepo = cartRepo;
         }
 
         public IEnumerable<Reservation> GetAll()
         {
-            var Reservations = new List<Reservation>();
+            var reservations = new List<Reservation>();
 
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT * FROM Reservation", Conn);
-                var Reader = Cmd.ExecuteReader();
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Reservation", conn);
+                var reader = cmd.ExecuteReader();
 
-                while (Reader.Read())
+                while (reader.Read())
                 {
-                    int CartId = (int)Reader["cart_id"];
+                    int cartId = (int)reader["cart_id"];
 
-                    var Reservation = new Reservation(
-                        (int)Reader["reservation_id"],
-                        _cartRepo.GetById(CartId),
-                        (bool)Reader["active"],
-                        (DateTime)Reader["reservation_date"]
-                    );
+                    var reservation = new Reservation(
+                        (int)reader["reservation_id"],
+                        cartRepo.GetById(cartId),
+                        (bool)reader["active"],
+                        (DateTime)reader["reservation_date"]);
 
-                    Reservations.Add(Reservation);
+                    reservations.Add(reservation);
                 }
             }
 
-            return Reservations;
+            return reservations;
         }
 
-        public Reservation GetById(int Id)
+        public Reservation GetById(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("SELECT * FROM Reservation WHERE reservation_id=@Id", Conn);
-                Cmd.Parameters.AddWithValue("@Id", Id);
-
-                var Reader = Cmd.ExecuteReader();
-                if (Reader.Read())
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Reservation WHERE reservation_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
-                    int CartId = (int)Reader["cart_id"];
+                    int cartId = (int)reader["cart_id"];
                     return new Reservation(
-                        (int)Reader["reservation_id"],
-                        _cartRepo.GetById(CartId),
-                        (bool)Reader["active"],
-                        (DateTime)Reader["reservation_date"]
-                    );
+                        (int)reader["reservation_id"],
+                        cartRepo.GetById(cartId),
+                        (bool)reader["active"],
+                        (DateTime)reader["reservation_date"]);
                 }
             }
 
             return null;
         }
 
-        public void Add(Reservation Reservation)
+        public void Add(Reservation reservation)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand(
+                conn.Open();
+                var cmd = new SqlCommand(
                     "INSERT INTO Reservation (time_slot, reservation_date, cart_id, active) " +
                     "VALUES (@TimeSlot, @ReservationDate, @CartId, @Active);" + "SELECT SCOPE_IDENTITY();",
-                    Conn
-                );
+                    conn);
 
-                Cmd.Parameters.AddWithValue("@TimeSlot", Reservation.ReservationDate.TimeOfDay);
-                Cmd.Parameters.AddWithValue("@ReservationDate", Reservation.ReservationDate.Date);
-                Cmd.Parameters.AddWithValue("@CartId", Reservation.ReservationCart.Id);
-                Cmd.Parameters.AddWithValue("@Active", Reservation.Active);
+                cmd.Parameters.AddWithValue("@TimeSlot", reservation.ReservationDate.TimeOfDay);
+                cmd.Parameters.AddWithValue("@ReservationDate", reservation.ReservationDate.Date);
+                cmd.Parameters.AddWithValue("@CartId", reservation.ReservationCart.Id);
+                cmd.Parameters.AddWithValue("@Active", reservation.Active);
 
-                Reservation.Id = Convert.ToInt32(Cmd.ExecuteScalar());
+                reservation.Id = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                Conn.Open();
-                var Cmd = new SqlCommand("DELETE FROM Reservation WHERE reservation_id=@Id", Conn);
-                Cmd.Parameters.AddWithValue("@Id", Id);
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM Reservation WHERE reservation_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.ExecuteNonQuery();
             }
         }
 
         public void Update(Reservation reservation)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                Conn.Open();
+                conn.Open();
 
-                var Cmd = new SqlCommand(
+                var cmd = new SqlCommand(
                     "UPDATE Reservation SET active = @active WHERE reservation_id = @id",
-                    Conn
-                );
+                    conn);
 
-                Cmd.Parameters.AddWithValue("@active", reservation.Active);
-                Cmd.Parameters.AddWithValue("@id", reservation.Id);
+                cmd.Parameters.AddWithValue("@active", reservation.Active);
+                cmd.Parameters.AddWithValue("@id", reservation.Id);
 
-                Cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
             }
         }
-
-
     }
 }

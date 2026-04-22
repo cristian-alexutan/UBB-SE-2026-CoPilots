@@ -15,15 +15,15 @@ namespace Content.Repository
             this.nextId = 1;
         }
 
-        public void Add(Reservation Reservation)
+        public void Add(Reservation reservation)
         {
-            Reservation.Id = this.nextId++;
-            this.reservations[Reservation.Id] = Reservation;
+            reservation.Id = this.nextId++;
+            this.reservations[reservation.Id] = reservation;
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            this.reservations.Remove(Id);
+            this.reservations.Remove(id);
         }
 
         public IEnumerable<Reservation> GetAll()
@@ -31,9 +31,9 @@ namespace Content.Repository
             return this.reservations.Values;
         }
 
-        public Reservation GetById(int Id)
+        public Reservation GetById(int id)
         {
-            return this.reservations.ContainsKey(Id) ? this.reservations[Id] : null!;
+            return this.reservations.ContainsKey(id) ? this.reservations[id] : null!;
         }
 
         public void Update(Reservation reservation)

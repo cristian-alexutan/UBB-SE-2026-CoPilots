@@ -1,12 +1,12 @@
-﻿using Content.Domain;
+﻿using System.Collections.Generic;
+using Content.Domain;
 using Content.Repository.Interface;
-using System.Collections.Generic;
 
 namespace Content.Repository
 {
     public class ClientMemoryRepo : IClientRepo
     {
-        private Dictionary<int,Client> clients;
+        private Dictionary<int, Client> clients;
 
         public ClientMemoryRepo()
         {
@@ -17,7 +17,6 @@ namespace Content.Repository
         {
             clients[client.Id] = client;
         }
-
 
         public void Delete(int id)
         {
@@ -37,11 +36,11 @@ namespace Content.Repository
         public Client GetById(int id)
         {
             if (clients.ContainsKey(id))
+            {
                 return clients[id];
+            }
 
             return null;
-
         }
-
     }
 }

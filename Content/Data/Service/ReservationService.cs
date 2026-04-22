@@ -1,39 +1,38 @@
-using Content.Domain;
-using Content.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using Content.Domain;
+using Content.Repository.Interface;
 
 namespace Content.Service
 {
     public class ReservationService
     {
-        private readonly IReservationRepo _reservationRepo;
-        private readonly IShopItemService _shopItemService;
-        private readonly ICartService _cartService;
+        private readonly IReservationRepo reservationRepo;
+        private readonly IShopItemService shopItemService;
+        private readonly ICartService cartService;
 
         public ReservationService(IReservationRepo reservationRepo, IShopItemService shopItemService, ICartService cartService)
         {
-            _reservationRepo = reservationRepo;
-            _shopItemService = shopItemService;
-            _cartService = cartService;
+            this.reservationRepo = reservationRepo;
+            this.shopItemService = shopItemService;
+            this.cartService = cartService;
         }
         public IEnumerable<Reservation> GetAllReservations()
         {
-            return _reservationRepo.GetAll();
+            return reservationRepo.GetAll();
         }
         public Reservation GetReservationById(int id)
         {
-            return _reservationRepo.GetById(id);
+            return reservationRepo.GetById(id);
         }
         public void ReserveCart(Reservation reservation)
         {
-
             var reservationCartItems = reservation.ReservationCart.CartItems;
-           
-            foreach(var cartItem in reservationCartItems.Values)
+
+            foreach (var cartItem in reservationCartItems.Values)
             {
-                var shopItem = _shopItemService.GetById(cartItem.ShopItem.Id);
-                if(shopItem.Quantity < cartItem.Quantity)
+                var shopItem = shopItemService.GetById(cartItem.ShopItem.Id);
+                if (shopItem.Quantity < cartItem.Quantity)
                 {
                     throw new Exception($"Not enough stock for '{shopItem.Name}'. " +
                         $"Requested: {cartItem.Quantity}, Available: {shopItem.Quantity}");
@@ -42,22 +41,22 @@ namespace Content.Service
 
             foreach (var cartItem in reservationCartItems.Values)
             {
-                var shopItem = _shopItemService.GetById(cartItem.ShopItem.Id);
+                var shopItem = shopItemService.GetById(cartItem.ShopItem.Id);
                 shopItem.Quantity -= cartItem.Quantity;
-                _shopItemService.UpdateShopItem(shopItem);
+                shopItemService.UpdateShopItem(shopItem);
             }
 
-            _reservationRepo.Add(reservation);
-        }
-        
-        public void DeleteReservation(int id)
-        {
-            _reservationRepo.Delete(id);
+            reservationRepo.Add(reservation);
         }
 
-        public void cancelReservation(int id)
+        public void DeleteReservation(int id)
         {
-            Reservation reservation = _reservationRepo.GetById(id);
+            reservationRepo.Delete(id);
+        }
+
+        public void CancelReservation(int id)
+        {
+            Reservation reservation = reservationRepo.GetById(id);
 
             if (!reservation.Active)
             {
@@ -68,17 +67,16 @@ namespace Content.Service
             {
                 foreach (var cartItem in reservation.ReservationCart.CartItems.Values)
                 {
-                    var shopItem = _shopItemService.GetById(cartItem.ShopItem.Id);
+                    var shopItem = shopItemService.GetById(cartItem.ShopItem.Id);
                     shopItem.Quantity += cartItem.Quantity;
-                    _shopItemService.UpdateShopItem(shopItem);
+                    shopItemService.UpdateShopItem(shopItem);
                 }
             }
 
-            _cartService.ClearCart(reservation.ReservationCart.Id);
+            cartService.ClearCart(reservation.ReservationCart.Id);
             reservation.Active = false;
 
-            _reservationRepo.Update(reservation);
-
+            reservationRepo.Update(reservation);
         }
     }
 }

@@ -5,13 +5,13 @@ namespace Content.Data.Service.Interface
 {
     public interface IMainService
     {
-        ICartService cartService { get; }
-        ClientService clientService { get; }
-        ManagerService managerService { get; }
-        ReservationService reservationService { get; }
+        ICartService CartService { get; }
+        ClientService ClientService { get; }
+        ManagerService ManagerService { get; }
+        ReservationService ReservationService { get; }
         IShopItemService ShopItemService { get; }
-        ShopService shopService { get; }
-        ITicketService ticketService { get; }
+        ShopService ShopService { get; }
+        ITicketService TicketService { get; }
 
         IEnumerable<Shop> GetShopsSortedByTickets();
     }

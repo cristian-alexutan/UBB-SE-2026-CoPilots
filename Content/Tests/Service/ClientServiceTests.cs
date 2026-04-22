@@ -78,7 +78,7 @@ public class ClientServiceTests
         var repo = new ClientMemoryRepo();
         var service = new ClientService(repo);
 
-        var ex = Assert.Throws<ArgumentException>(() => service.AddClient(new Client(1, "")));
+        var ex = Assert.Throws<ArgumentException>(() => service.AddClient(new Client(1, string.Empty)));
 
         Assert.That(ex!.Message, Does.Contain("Name is required"));
         Assert.That(service.GetAllClients(), Is.Empty);

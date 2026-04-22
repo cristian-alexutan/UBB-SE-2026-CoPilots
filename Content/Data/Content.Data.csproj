@@ -4,6 +4,8 @@
 	  <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
 	  <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
+    <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +15,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)|(Platform)'=='Debug|AnyCPU'">
-		<CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
-	</PropertyGroup>
+
 
 </Project>

@@ -5,12 +5,12 @@ namespace TestProject.Repository
 {
     public class ClientDbRepoTests
     {
-        private const string connectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        private const string ConnectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         [Test]
         public void AddTest()
         {
-            var repo = new ClientDbRepo(connectionString);
+            var repo = new ClientDbRepo(ConnectionString);
             var client = new Client(0, "Test Client");
             repo.Add(client);
             var inserted = repo.GetAll().FirstOrDefault(c => c.Name == "Test Client");
@@ -22,7 +22,7 @@ namespace TestProject.Repository
         [Test]
         public void DeleteTestSuccessful()
         {
-            var repo = new ClientDbRepo(connectionString);
+            var repo = new ClientDbRepo(ConnectionString);
             repo.Add(new Client(0, "Test Client"));
             var inserted = repo.GetAll().FirstOrDefault(c => c.Name == "Test Client");
             Assert.That(inserted, Is.Not.Null);
@@ -34,14 +34,14 @@ namespace TestProject.Repository
         [Test]
         public void DeleteTestUnsuccessful()
         {
-            var repo = new ClientDbRepo(connectionString);
+            var repo = new ClientDbRepo(ConnectionString);
             Assert.DoesNotThrow(() => repo.Delete(-2));
         }
 
         [Test]
         public void UpdateTestSuccessful()
         {
-            var repo = new ClientDbRepo(connectionString);
+            var repo = new ClientDbRepo(ConnectionString);
             repo.Add(new Client(0, "Test Client"));
             var inserted = repo.GetAll().FirstOrDefault(c => c.Name == "Test Client");
             Assert.That(inserted, Is.Not.Null);
@@ -55,7 +55,7 @@ namespace TestProject.Repository
         [Test]
         public void UpdateTestUnsuccessful()
         {
-            var repo = new ClientDbRepo(connectionString);
+            var repo = new ClientDbRepo(ConnectionString);
             Assert.DoesNotThrow(() => repo.Update(new Client(-1, "Updated Client")));
         }
     }

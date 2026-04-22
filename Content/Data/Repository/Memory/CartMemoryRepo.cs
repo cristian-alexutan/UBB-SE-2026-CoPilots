@@ -1,59 +1,58 @@
-﻿using Content.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Content.Domain;
 using Content.Repository.Interface;
+
 namespace Content.Repository
 {
     public class CartMemoryRepo : ICartRepo
     {
-        private Dictionary<int,Domain.Cart> carts;
+        private Dictionary<int, Domain.Cart> carts;
 
         public CartMemoryRepo()
         {
-            carts = new Dictionary<int,Domain.Cart>();
+            carts = new Dictionary<int, Domain.Cart>();
         }
 
-        public void Add(Cart Cart)
+        public void Add(Cart cart)
         {
-            carts[Cart.Id] = Cart;
+            carts[cart.Id] = cart;
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            carts.Remove(Id);
+            carts.Remove(id);
         }
 
-
-
-        public void AddItemToCart(int CartId, CartItem Item)
+        public void AddItemToCart(int cartId, CartItem item)
         {
-            var Cart = GetById(CartId);
-            if (Cart != null)
+            var cart = GetById(cartId);
+            if (cart != null)
             {
-                int newId = Cart.CartItems.Count > 0 ? Cart.CartItems.Keys.Max() + 1 : 1;
-                Item.Id = newId;
-                Cart.CartItems[newId] = Item;
+                int newId = cart.CartItems.Count > 0 ? cart.CartItems.Keys.Max() + 1 : 1;
+                item.Id = newId;
+                cart.CartItems[newId] = item;
             }
         }
 
-        public void RemoveItemFromCart(int CartId, int CartItemId)
+        public void RemoveItemFromCart(int cartId, int cartItemId)
         {
-            var Cart = GetById(CartId);
-            if (Cart != null)
+            var cart = GetById(cartId);
+            if (cart != null)
             {
-                Cart.CartItems.Remove(CartItemId);
+                cart.CartItems.Remove(cartItemId);
             }
         }
 
-        public void UpdateItemQuantity(int CartId, int CartItemId, int Quantity)
+        public void UpdateItemQuantity(int cartId, int cartItemId, int quantity)
         {
-            var Cart = GetById(CartId);
-            if (Cart != null && Cart.CartItems.ContainsKey(CartItemId))
+            var cart = GetById(cartId);
+            if (cart != null && cart.CartItems.ContainsKey(cartItemId))
             {
-                Cart.CartItems[CartItemId].Quantity = Quantity;
+                cart.CartItems[cartItemId].Quantity = quantity;
             }
         }
 
@@ -62,18 +61,17 @@ namespace Content.Repository
             return carts.Values;
         }
 
-        public Domain.Cart GetById(int Id)
+        public Domain.Cart GetById(int id)
         {
-            return carts.ContainsKey(Id) ? carts[Id] : null;
+            return carts.ContainsKey(id) ? carts[id] : null;
         }
 
-
-        public void ClearCart(int Id)
+        public void ClearCart(int id)
         {
-            var Cart = GetById(Id);
-            if (Cart != null)
+            var cart = GetById(id);
+            if (cart != null)
             {
-                Cart.CartItems.Clear();
+                cart.CartItems.Clear();
             }
         }
     }

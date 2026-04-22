@@ -1,29 +1,29 @@
-﻿using Content.Data.Service.Interface;
-using Content.Domain;
-using Content.Repository.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Data.Service.Interface;
+using Content.Domain;
+using Content.Repository.Interface;
 
 namespace Content.Service
 {
     public class ManagerService : IManagerService
     {
-        private readonly IManagerRepo _managerRepo;
+        private readonly IManagerRepo managerRepo;
 
         public ManagerService(IManagerRepo managerRepo)
         {
-            _managerRepo = managerRepo;
+            this.managerRepo = managerRepo;
         }
 
         public IEnumerable<Manager> GetAllManagers()
         {
-            return _managerRepo.GetAll();
+            return managerRepo.GetAll();
         }
 
         public Manager GetManagerById(int id)
         {
-            return _managerRepo.GetById(id);
+            return managerRepo.GetById(id);
         }
 
         public void AddManager(Manager manager)
@@ -48,22 +48,22 @@ namespace Content.Service
                 throw new ArgumentException("Phone is required", nameof(manager.Phone));
             }
 
-            _managerRepo.Add(manager);
+            managerRepo.Add(manager);
         }
 
         public void DeleteManager(int id)
         {
-            _managerRepo.Delete(id);
+            managerRepo.Delete(id);
         }
 
         public void UpdateManager(Manager manager)
         {
-            _managerRepo.Update(manager);
+            managerRepo.Update(manager);
         }
 
         public Manager GetAnyManager()
         {
-            return _managerRepo.GetAll().FirstOrDefault();
+            return managerRepo.GetAll().FirstOrDefault();
         }
     }
 }

@@ -1,5 +1,5 @@
-using Content.Domain;
 using System.Collections.Generic;
+using Content.Domain;
 
 namespace Content.Service
 {

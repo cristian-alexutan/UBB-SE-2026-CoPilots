@@ -4,11 +4,10 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Client(int Id, string Name)
+        public Client(int id, string name)
         {
-            this.Id = Id;
-            this.Name = Name;
+            this.Id = id;
+            this.Name = name;
         }
-        
     }
 }

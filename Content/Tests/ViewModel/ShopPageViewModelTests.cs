@@ -98,7 +98,7 @@ namespace Tests.ViewModel
             var vm = CreateVm();
             shopService.ClearReceivedCalls();
 
-            Assert.Throws<ArgumentException>(() => vm.AddShop("", "type"));
+            Assert.Throws<ArgumentException>(() => vm.AddShop(string.Empty, "type"));
             shopService.DidNotReceive().AddShop(Arg.Any<Shop>());
         }
 
@@ -145,7 +145,7 @@ namespace Tests.ViewModel
             var vm = CreateVm();
             var shop = new Shop(1, "old", "oldT", 1);
             Assert.Throws<ArgumentException>(
-                () => vm.EditShop(shop, "", "t"));
+                () => vm.EditShop(shop, string.Empty, "t"));
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace Tests.ViewModel
             var vm = CreateVm();
             var shop = new Shop(1, "old", "oldT", 1);
             Assert.Throws<ArgumentException>(
-                () => vm.EditShop(shop, "n", ""));
+                () => vm.EditShop(shop, "n", string.Empty));
         }
 
         [Test]

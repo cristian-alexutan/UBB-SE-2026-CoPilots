@@ -17,11 +17,11 @@ namespace Content.Helper
      */
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T> _execute;
+        private readonly Action<T> execute;
 
         public RelayCommand(Action<T> execute)
         {
-            _execute = execute;
+            this.execute = execute;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -30,7 +30,7 @@ namespace Content.Helper
 
         public void Execute(object parameter)
         {
-            _execute((T)parameter);
+            execute((T)parameter);
         }
     }
 
@@ -42,11 +42,11 @@ namespace Content.Helper
 
     public class RelayCommand : ICommand
     {
-        private readonly Action _execute;
+        private readonly Action execute;
 
         public RelayCommand(Action execute)
         {
-            _execute = execute;
+            this.execute = execute;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -55,7 +55,7 @@ namespace Content.Helper
 
         public void Execute(object parameter)
         {
-            _execute();
+            execute();
         }
     }
 }

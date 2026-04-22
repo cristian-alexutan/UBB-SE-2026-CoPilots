@@ -13,21 +13,21 @@ namespace Content.ViewModel
 {
     public class ItemDetailsViewModel
     {
-        private readonly MainService _service;
-        private readonly UserSession _session;
+        private readonly MainService service;
+        private readonly UserSession session;
 
-        private ShopItem _item;
-        private Cart _cart;
+        private ShopItem item;
+        private Cart cart;
 
         public ICommand AddToCartCommand { get; }
         public ICommand UpdateItemCommand { get; }
 
         public ItemDetailsViewModel(MainService service, UserSession session, ShopItem item, Cart cart)
         {
-            _service = service;
-            _session = session;
-            _item = item;
-            _cart = cart;
+            this.service = service;
+            this.session = session;
+            this.item = item;
+            this.cart = cart;
 
             AddToCartCommand = new RelayCommand<int>(AddToCart);
             UpdateItemCommand = new RelayCommand<ShopItem>(UpdateItem);
@@ -35,41 +35,41 @@ namespace Content.ViewModel
 
         private void AddToCart(int quantity)
         {
-            var cartItems = _cart.CartItems;
+            var cartItems = cart.CartItems;
             CartItem? existingCartItem = null;
             foreach (var ci in cartItems.Values)
             {
-                if (ci.ShopItem?.Id == _item.Id)
+                if (ci.ShopItem?.Id == item.Id)
                 {
                     existingCartItem = ci;
                     break;
                 }
             }
-            var newStockQuantity = _item.Quantity - quantity;
+            var newStockQuantity = item.Quantity - quantity;
             if (existingCartItem != null)
             {
                 var newCartQuantity = existingCartItem.Quantity + quantity;
-                _service.cartService.UpdateItemQuantity(_cart.Id, existingCartItem.Id, newCartQuantity);
+                service.CartService.UpdateItemQuantity(cart.Id, existingCartItem.Id, newCartQuantity);
             }
             else
             {
-                _service.cartService.AddItemToCart(_cart.Id, new CartItem(0, _item, quantity));
+                service.CartService.AddItemToCart(cart.Id, new CartItem(0, item, quantity));
             }
 
-            _service.ShopItemService.UpdateShopItem(
+            service.ShopItemService.UpdateShopItem(
                 new ShopItem(
-                    _item.Id,
+                    item.Id,
                     newStockQuantity,
-                    _item.Price,
-                    _item.ShopId,
-                    _item.Photo,
-                    _item.Name,
-                    _item.Description));
+                    item.Price,
+                    item.ShopId,
+                    item.Photo,
+                    item.Name,
+                    item.Description));
         }
 
         private void UpdateItem(ShopItem updatedItem)
         {
-            _service.ShopItemService.UpdateShopItem(
+            service.ShopItemService.UpdateShopItem(
                 new ShopItem(
                     updatedItem.Id,
                     updatedItem.Quantity,

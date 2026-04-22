@@ -75,11 +75,11 @@ namespace Tests.Repository
         [Test]
         public void Add_ShopItemWithEmptyPhotoAndDescription_PhotoIsEmptyString()
         {
-            ShopItem shopItem = new ShopItem(5, 10.5f, ShopId, "", "Test shop item", "");
+            ShopItem shopItem = new ShopItem(5, 10.5f, ShopId, string.Empty, "Test shop item", string.Empty);
 
             this.shopItemRepo.Add(shopItem);
 
-            Assert.That(this.shopItemRepo.GetById(shopItem.Id)!.Photo, Is.EqualTo(string.Empty));
+            Assert.That(this.shopItemRepo.GetById(shopItem.Id) !.Photo, Is.EqualTo(string.Empty));
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace Tests.Repository
 
             this.shopItemRepo.Update(updatedItem);
 
-            Assert.That(this.shopItemRepo.GetById(shopItem.Id)!.Name, Is.EqualTo("Test updated shop item"));
+            Assert.That(this.shopItemRepo.GetById(shopItem.Id) !.Name, Is.EqualTo("Test updated shop item"));
         }
 
         [Test]
@@ -116,11 +116,11 @@ namespace Tests.Repository
         {
             ShopItem shopItem = new ShopItem(5, 10.5f, ShopId, "placeholder.png", "Test shop item", "Test shop item description");
             this.shopItemRepo.Add(shopItem);
-            ShopItem updatedItem = new ShopItem(shopItem.Id, 10, 20.5f, ShopId, "", "Test updated shop item", "");
+            ShopItem updatedItem = new ShopItem(shopItem.Id, 10, 20.5f, ShopId, string.Empty, "Test updated shop item", string.Empty);
 
             this.shopItemRepo.Update(updatedItem);
 
-            Assert.That(this.shopItemRepo.GetById(shopItem.Id)!.Photo, Is.EqualTo(string.Empty));
+            Assert.That(this.shopItemRepo.GetById(shopItem.Id) !.Photo, Is.EqualTo(string.Empty));
         }
     }
 }

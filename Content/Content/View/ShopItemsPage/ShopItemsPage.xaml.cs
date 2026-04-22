@@ -104,9 +104,9 @@ namespace Content
             this.mainService = mainService;
             this.userSession = userSession;
             this.selectedShop = selectedShop;
-            this.currentCart = this.mainService.cartService.GetCartById(this.userSession.UserId);
+            this.currentCart = this.mainService.CartService.GetCartById(this.userSession.UserId);
 
-            this.ViewModel = new ShopItemsViewModel(this.mainService.ShopItemService, this.mainService.cartService, this.userSession, this.selectedShop);
+            this.ViewModel = new ShopItemsViewModel(this.mainService.ShopItemService, this.mainService.CartService, this.userSession, this.selectedShop);
             this.RootGrid.DataContext = this.ViewModel;
 
             this.SetActiveSortButton(this.SortAlphabeticButton);
@@ -538,13 +538,13 @@ namespace Content
                 return;
             }
 
-            var currentCart = this.mainService.cartService.GetCartById(this.userSession.UserId);
+            var currentCart = this.mainService.CartService.GetCartById(this.userSession.UserId);
             if (currentCart == null)
             {
                 currentCart = new Cart(this.userSession.UserId,
                     new Client(this.userSession.UserId, "Current Client"),
                     new System.Collections.Generic.Dictionary<int, CartItem>());
-                this.mainService.cartService.AddCart(currentCart);
+                this.mainService.CartService.AddCart(currentCart);
             }
 
             try

@@ -67,7 +67,6 @@ namespace Tests.Service
             Assert.That(all, Has.Count.EqualTo(2));
         }
 
-
         [Test]
         public void DeleteCart_WhenCalled_CartIsNoLongerRetrievable()
         {
@@ -77,7 +76,6 @@ namespace Tests.Service
 
             Assert.That(this.service.GetCartById(1), Is.Null);
         }
-
 
         [Test]
         public void AddItemToCart_WhenItemNotInCartAndStockSufficient_AddsCartItem()
@@ -136,7 +134,6 @@ namespace Tests.Service
                 this.service.AddItemToCart(1, new CartItem(0, shopItem, 1)));
         }
 
-
         [Test]
         public void UpdateItemQuantity_WhenNewQuantityWithinStock_UpdatesQuantity()
         {
@@ -163,7 +160,6 @@ namespace Tests.Service
                 this.service.UpdateItemQuantity(1, cartItem.Id, 10));
         }
 
-
         [Test]
         public void RemoveItemFromCart_WhenItemExists_ItemNoLongerInCart()
         {
@@ -176,7 +172,6 @@ namespace Tests.Service
 
             Assert.That(this.service.GetCartById(1).CartItems, Is.Empty);
         }
-
 
         [Test]
         public void ClearCart_WhenCartHasMultipleItems_AllItemsRemoved()

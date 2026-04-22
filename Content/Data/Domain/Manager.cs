@@ -3,19 +3,16 @@
     public class Manager
     {
         public int Id { get; set; }
-        public  string Name { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
 
-        public Manager(int Id, string Name, string Email, string Phone)
+        public Manager(int id, string name, string email, string phone)
         {
-            this.Id = Id;
-            this.Name = Name;
-            this.Email = Email;
-            this.Phone = Phone;
+            this.Id = id;
+            this.Name = name;
+            this.Email = email;
+            this.Phone = phone;
         }
-
-        
-
     }
 }

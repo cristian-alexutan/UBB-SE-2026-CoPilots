@@ -1,29 +1,29 @@
-using Content.Data.Service.Interface;
-using Content.Domain;
-using Content.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Data.Service.Interface;
+using Content.Domain;
+using Content.Repository.Interface;
 
 namespace Content.Service
 {
     public class ClientService : IClientService
     {
-        private readonly IClientRepo _clientRepo;
+        private readonly IClientRepo clientRepo;
 
         public ClientService(IClientRepo clientRepo)
         {
-            _clientRepo = clientRepo;
+            this.clientRepo = clientRepo;
         }
 
         public IEnumerable<Client> GetAllClients()
         {
-            return _clientRepo.GetAll();
+            return clientRepo.GetAll();
         }
 
         public Client GetClientById(int id)
         {
-            return _clientRepo.GetById(id);
+            return clientRepo.GetById(id);
         }
 
         public void AddClient(Client client)
@@ -38,23 +38,22 @@ namespace Content.Service
                 throw new ArgumentException("Name is required", nameof(client.Name));
             }
 
-            _clientRepo.Add(client);
+            clientRepo.Add(client);
         }
 
         public void DeleteClient(int id)
         {
-            _clientRepo.Delete(id);
+            clientRepo.Delete(id);
         }
 
         public void UpdateClient(Client client)
         {
-            _clientRepo.Update(client);
+            clientRepo.Update(client);
         }
 
         public Client GetAnyClient()
         {
-            return _clientRepo.GetAll().FirstOrDefault();
+            return clientRepo.GetAll().FirstOrDefault();
         }
-
     }
 }
