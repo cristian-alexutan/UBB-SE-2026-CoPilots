@@ -11,8 +11,8 @@ namespace Content.Repository.Interface
 
         void Add(Client client);
 
-        void Delete(int id);
+        Client? Delete(int id);
 
-        void Update(Client client);
+        Client? Update(Client client);
     }
 }

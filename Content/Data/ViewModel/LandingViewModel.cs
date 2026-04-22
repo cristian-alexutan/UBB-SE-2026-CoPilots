@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Content.Data.Service.Interface;
 using Content.Helper;
 using Content.Service;
 using Content.User;
@@ -7,7 +8,7 @@ namespace Content.ViewModel
 {
     public class LandingViewModel
     {
-        private readonly MainService service;
+        private readonly IMainService service;
         private readonly UserSession session;
 
         public bool IsRoleSelected { get; private set; }
@@ -17,7 +18,7 @@ namespace Content.ViewModel
         public ICommand SelectAdminCommand { get; }
         public ICommand SelectClientCommand { get; }
 
-        public LandingViewModel(MainService service, UserSession session)
+        public LandingViewModel(IMainService service, UserSession session)
         {
             this.service = service;
             this.session = session;

@@ -83,14 +83,12 @@ namespace Content.Repository.Database
                 {
                     conn.Open();
                     var cmd = new SqlCommand(
-                        "INSERT INTO Manager (name, email, phone) VALUES (@Name, @Email, @Phone)",
+                        "INSERT INTO Manager (name, email, phone) VALUES (@Name, @Email, @Phone); SELECT SCOPE_IDENTITY();",
                         conn);
-
                     cmd.Parameters.AddWithValue("@Name", manager.Name);
                     cmd.Parameters.AddWithValue("@Email", manager.Email);
                     cmd.Parameters.AddWithValue("@Phone", manager.Phone);
-
-                    cmd.ExecuteNonQuery();
+                    manager.Id = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (SqlException ex)
@@ -99,16 +97,23 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Delete(int id)
+        public Manager? Delete(int id)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    Manager? existing = GetById(id);
+                    if (existing == null)
+                    {
+                        return null;
+                    }
+
                     var cmd = new SqlCommand("DELETE FROM Manager WHERE manager_id=@Id", conn);
                     cmd.Parameters.AddWithValue("@Id", id);
                     cmd.ExecuteNonQuery();
+                    return existing;
                 }
             }
             catch (SqlException ex)
@@ -117,13 +122,18 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Update(Manager manager)
+        public Manager? Update(Manager manager)
         {
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    Manager? existing = GetById(manager.Id);
+                    if (existing == null)
+                    {
+                        return null;
+                    }
                     var cmd = new SqlCommand(
                         "UPDATE Manager SET name=@Name, email=@Email, phone=@Phone WHERE manager_id=@Id",
                         conn);
@@ -132,6 +142,7 @@ namespace Content.Repository.Database
                     cmd.Parameters.AddWithValue("@Phone", manager.Phone);
                     cmd.Parameters.AddWithValue("@Id", manager.Id);
                     cmd.ExecuteNonQuery();
+                    return manager;
                 }
             }
             catch (SqlException ex)
