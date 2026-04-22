@@ -4,7 +4,6 @@ using Content.Domain;
 using Content.Service;
 using Content.User;
 using Content.ViewModel;
-using Microsoft.UI.Xaml;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -69,25 +68,25 @@ namespace Tests.ViewModel
         }
 
         [Test]
-        public void AdminSession_ExposesAdminFlagsAndVisibility()
+        public void AdminSession_ExposesAdminFlags()
         {
             session.SetAdmin(7);
             var vm = CreateVm();
 
             Assert.That(vm.IsAdmin, Is.True);
-            Assert.That(vm.AddShopVisibility, Is.EqualTo(Visibility.Visible));
+            Assert.That(vm.CanAddShop, Is.True);
             Assert.That(vm.IsCartEnabled, Is.False);
             Assert.That(vm.CartOpacity, Is.EqualTo(0.4));
         }
 
         [Test]
-        public void ClientSession_ExposesClientFlagsAndVisibility()
+        public void ClientSession_ExposesClientFlags()
         {
             session.SetClient(3);
             var vm = CreateVm();
 
             Assert.That(vm.IsAdmin, Is.False);
-            Assert.That(vm.AddShopVisibility, Is.EqualTo(Visibility.Collapsed));
+            Assert.That(vm.CanAddShop, Is.False);
             Assert.That(vm.IsCartEnabled, Is.True);
             Assert.That(vm.CartOpacity, Is.EqualTo(1.0));
         }

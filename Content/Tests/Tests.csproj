@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Content.Data.csproj" />
-    <ProjectReference Include="..\Content\Content.csproj" />
   </ItemGroup>
 
   <ItemGroup>

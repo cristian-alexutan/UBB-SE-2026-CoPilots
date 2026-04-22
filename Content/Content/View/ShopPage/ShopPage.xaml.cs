@@ -24,7 +24,7 @@ namespace Content
             ViewModel = new ShopPageViewModel(service.ShopService, service.TicketService, session);
             ShopsGridView.ItemsSource = ViewModel.Shops;
 
-            AddShopButton.Visibility = ViewModel.AddShopVisibility;
+            AddShopButton.Visibility = ViewModel.CanAddShop ? Visibility.Visible : Visibility.Collapsed;
             AddShopButton.Click += AddShopButton_Click;
 
             CartButton.IsEnabled = ViewModel.IsCartEnabled;
