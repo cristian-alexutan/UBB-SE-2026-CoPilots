@@ -8,7 +8,6 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
 
-    <Platforms>x86;x64;ARM64</Platforms>
     <PlatformTarget>x64</PlatformTarget>
     <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
     <CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
