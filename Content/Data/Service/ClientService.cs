@@ -1,3 +1,4 @@
+using Content.Data.Service.Interface;
 using Content.Domain;
 using Content.Repository.Interface;
 using System;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace Content.Service
 {
-    public class ClientService
+    public class ClientService : IClientService
     {
         private readonly IClientRepo _clientRepo;
 

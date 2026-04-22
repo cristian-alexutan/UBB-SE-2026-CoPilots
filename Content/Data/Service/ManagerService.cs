@@ -1,4 +1,5 @@
-﻿using Content.Domain;
+﻿using Content.Data.Service.Interface;
+using Content.Domain;
 using Content.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace Content.Service
 {
-    public class ManagerService
+    public class ManagerService : IManagerService
     {
         private readonly IManagerRepo _managerRepo;
 
@@ -39,12 +40,12 @@ namespace Content.Service
 
             if (string.IsNullOrWhiteSpace(manager.Email))
             {
-                throw new ArgumentException("Email is required", nameof(manager.Email)); 
+                throw new ArgumentException("Email is required", nameof(manager.Email));
             }
 
             if (string.IsNullOrWhiteSpace(manager.Phone))
             {
-                throw new ArgumentException("Phone is required", nameof(manager.Phone)); 
+                throw new ArgumentException("Phone is required", nameof(manager.Phone));
             }
 
             _managerRepo.Add(manager);
