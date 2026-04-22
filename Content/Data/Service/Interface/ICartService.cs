@@ -7,6 +7,7 @@ namespace Content.Service
     {
         IEnumerable<Cart> GetAllCarts();
         Cart GetCartById(int id);
+        Cart GetOrCreateCart(int userId);
         void AddCart(Cart cart);
         void DeleteCart(int id);
         void AddItemToCart(int cartId, CartItem item);
