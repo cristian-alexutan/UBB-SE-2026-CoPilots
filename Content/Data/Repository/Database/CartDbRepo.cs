@@ -1,228 +1,181 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
+
 namespace Content.Repository.Database
 {
     public class CartDbRepo : ICartRepo
     {
+        private string connectionString;
+        private readonly IClientRepo clientRepo;
+        private readonly IShopItemRepo shopItemRepo;
 
-        private string ConnectionString;
-        private readonly IClientRepo _clientRepo;
-        private readonly IShopItemRepo _shopItemRepo;
-
-        public CartDbRepo(string ConnectionString,
-                  IClientRepo clientRepo,
-                  IShopItemRepo shopItemRepo)
+        public CartDbRepo(string connectionString, IClientRepo clientRepo, IShopItemRepo shopItemRepo)
         {
-            this.ConnectionString = ConnectionString;
-            this._clientRepo = clientRepo;
-            this._shopItemRepo = shopItemRepo;
+            this.connectionString = connectionString;
+            this.clientRepo = clientRepo;
+            this.shopItemRepo = shopItemRepo;
         }
+
         public IEnumerable<Cart> GetAll()
         {
-            var Carts = new List<Cart>();
+            var carts = new List<Cart>();
 
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Cart", conn);
+                var reader = cmd.ExecuteReader();
 
-                var Cmd = new SqlCommand("SELECT * FROM Cart", Conn);
-                var Reader = Cmd.ExecuteReader();
-
-                while (Reader.Read())
+                while (reader.Read())
                 {
-                    int ClientId = (int)Reader["client_id"];
-
-                    var Cart = new Cart
-                    (
-                        (int)Reader["cart_id"],
-                        _clientRepo.GetById(ClientId),
-                        new Dictionary<int, CartItem>()
-                    );
-
-                    Carts.Add(Cart);
+                    int clientId = (int)reader["client_id"];
+                    var cart = new Cart(
+                        (int)reader["cart_id"],
+                        this.clientRepo.GetById(clientId),
+                        new Dictionary<int, CartItem>());
+                    carts.Add(cart);
                 }
             }
 
-            foreach (var Cart in Carts)
+            foreach (var cart in carts)
             {
-                Cart.CartItems = GetCartItems(Cart.Id);
+                cart.CartItems = this.GetCartItems(cart.Id);
             }
 
-            return Carts;
+            return carts;
         }
 
-        public Cart GetById(int Id)
+        public Cart GetById(int id)
         {
-            Cart Cart = null;
+            Cart cart = null;
 
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Cart WHERE cart_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                var reader = cmd.ExecuteReader();
 
-                var Cmd = new SqlCommand(
-                    "SELECT * FROM Cart WHERE cart_id=@Id", Conn);
-
-                Cmd.Parameters.AddWithValue("@Id", Id);
-
-                var Reader = Cmd.ExecuteReader();
-
-                if (Reader.Read())
+                if (reader.Read())
                 {
-                    int ClientId = (int)Reader["client_id"];
-
-                    Cart = new Cart
-                    (
-                        Id = (int)Reader["cart_id"],
-                        _clientRepo.GetById(ClientId),
-                        new Dictionary<int, CartItem>()
-                    );
+                    int clientId = (int)reader["client_id"];
+                    cart = new Cart(
+                        (int)reader["cart_id"],
+                        this.clientRepo.GetById(clientId),
+                        new Dictionary<int, CartItem>());
                 }
             }
 
-            if (Cart != null)
+            if (cart != null)
             {
-                Cart.CartItems = GetCartItems(Cart.Id);
+                cart.CartItems = this.GetCartItems(cart.Id);
             }
 
-            return Cart;
+            return cart;
         }
 
-        public void Add(Cart Cart)
+        public void Add(Cart cart)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-
-                var Cmd = new SqlCommand(
-                    "INSERT INTO Cart(client_id, status) VALUES(@ClientId, @Status);"+ "SELECT SCOPE_IDENTITY();", Conn);
-
-                Cmd.Parameters.AddWithValue("@ClientId", Cart.Client.Id);
-                Cmd.Parameters.AddWithValue("@Status", "active");
-
-                Cart.Id = Convert.ToInt32(Cmd.ExecuteScalar());
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "INSERT INTO Cart(client_id, status) VALUES(@ClientId, @Status); SELECT SCOPE_IDENTITY();",
+                    conn);
+                cmd.Parameters.AddWithValue("@ClientId", cart.Client.Id);
+                cmd.Parameters.AddWithValue("@Status", "active");
+                cart.Id = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-
-                var Cmd = new SqlCommand(
-                    "DELETE FROM Cart WHERE cart_id=@Id", Conn);
-
-                Cmd.Parameters.AddWithValue("@Id", Id);
-
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM Cart WHERE cart_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.ExecuteNonQuery();
             }
         }
 
-
-
-
-        public void AddItemToCart(int CartId, CartItem Item)
+        public void AddItemToCart(int cartId, CartItem item)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-
-                var Cmd = new SqlCommand(
-                    "INSERT INTO CartItem(cart_id, item_id, quantity) VALUES(@CartId, @ItemId, @Quantity)",
-                    Conn);
-
-                Cmd.Parameters.AddWithValue("@CartId", CartId);
-                Cmd.Parameters.AddWithValue("@ItemId", Item.ShopItem.Id);
-                Cmd.Parameters.AddWithValue("@Quantity", Item.Quantity);
-
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "INSERT INTO CartItem(cart_id, item_id, quantity) VALUES(@CartId, @ItemId, @Quantity); SELECT SCOPE_IDENTITY();",
+                    conn);
+                cmd.Parameters.AddWithValue("@CartId", cartId);
+                cmd.Parameters.AddWithValue("@ItemId", item.ShopItem.Id);
+                cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
+                item.Id = Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
 
-        public void RemoveItemFromCart(int CartId, int CartItemId)
+        public void RemoveItemFromCart(int cartId, int cartItemId)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-
-                var Cmd = new SqlCommand(
-                    "DELETE FROM CartItem WHERE cart_item_id=@Id", Conn);
-
-                Cmd.Parameters.AddWithValue("@Id", CartItemId);
-
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM CartItem WHERE cart_item_id=@Id", conn);
+                cmd.Parameters.AddWithValue("@Id", cartItemId);
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public void UpdateItemQuantity(int CartId, int CartItemId, int Quantity)
+        public void UpdateItemQuantity(int cartId, int cartItemId, int quantity)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-
-                var Cmd = new SqlCommand(
-                    "UPDATE CartItem SET quantity=@Quantity WHERE cart_item_id=@Id", Conn);
-
-                Cmd.Parameters.AddWithValue("@Quantity", Quantity);
-                Cmd.Parameters.AddWithValue("@Id", CartItemId);
-
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "UPDATE CartItem SET quantity=@Quantity WHERE cart_item_id=@Id",
+                    conn);
+                cmd.Parameters.AddWithValue("@Quantity", quantity);
+                cmd.Parameters.AddWithValue("@Id", cartItemId);
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public void ClearCart(int CartId)
+        public void ClearCart(int cartId)
         {
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
-
-                var Cmd = new SqlCommand(
-                    "DELETE FROM CartItem WHERE cart_id=@CartId", Conn);
-
-                Cmd.Parameters.AddWithValue("@CartId", CartId);
-
-                Cmd.ExecuteNonQuery();
+                conn.Open();
+                var cmd = new SqlCommand("DELETE FROM CartItem WHERE cart_id=@CartId", conn);
+                cmd.Parameters.AddWithValue("@CartId", cartId);
+                cmd.ExecuteNonQuery();
             }
         }
 
-
-        private Dictionary<int, CartItem> GetCartItems(int CartId)
+        private Dictionary<int, CartItem> GetCartItems(int cartId)
         {
-            var Items = new Dictionary<int, CartItem>();
+            var items = new Dictionary<int, CartItem>();
 
-            using (SqlConnection Conn = new SqlConnection(ConnectionString))
+            using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
-                Conn.Open();
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM CartItem WHERE cart_id=@CartId", conn);
+                cmd.Parameters.AddWithValue("@CartId", cartId);
+                var reader = cmd.ExecuteReader();
 
-                var Cmd = new SqlCommand(
-                    "SELECT * FROM CartItem WHERE cart_id=@CartId", Conn);
-
-                Cmd.Parameters.AddWithValue("@CartId", CartId);
-
-                var Reader = Cmd.ExecuteReader();
-
-                while (Reader.Read())
+                while (reader.Read())
                 {
-                    int Id = (int)Reader["cart_item_id"];
-                    int ItemId = (int)Reader["item_id"];
-                    int Quantity = (int)Reader["quantity"];
-
-                    var ShopItem = _shopItemRepo.GetById(ItemId);
-
-                    var CartItem = new CartItem(Id, ShopItem, Quantity);
-
-                    Items[Id] = CartItem;
+                    int id = (int)reader["cart_item_id"];
+                    int itemId = (int)reader["item_id"];
+                    int quantity = (int)reader["quantity"];
+                    var shopItem = this.shopItemRepo.GetById(itemId);
+                    var cartItem = new CartItem(id, shopItem, quantity);
+                    items[id] = cartItem;
                 }
             }
 
-            return Items;
+            return items;
         }
     }
 }

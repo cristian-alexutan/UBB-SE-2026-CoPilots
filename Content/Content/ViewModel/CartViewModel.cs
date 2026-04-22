@@ -4,203 +4,193 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
+using Content.Domain;
 using Content.Service;
 using Content.User;
-using Content.Domain;
+using Content.ViewModel.Interface;
 
 namespace Content.ViewModel
 {
-    public class CartViewModel : INotifyPropertyChanged
+    public class CartViewModel : INotifyPropertyChanged, ICartViewModel
     {
-        private readonly MainService _service;
-        private readonly UserSession _session;
-        private int _currentReservationId; // Stores the active reservation ID for cancellations
+        private readonly MainService service;
+        private readonly UserSession session;
+        private int currentReservationId;
 
+        private bool isReserved;
+
+        private double overallTotal;
 
         public ObservableCollection<CartShopItem> CartShopItems { get; set; }
 
-        public bool IsAdmin => _session.IsAdmin;
+        public bool IsAdmin => this.session.IsAdmin;
 
-        private bool _isReserved;
         public bool IsReserved
         {
-            get => _isReserved;
+            get
+            {
+                return this.isReserved;
+            }
+
             set
             {
-                _isReserved = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsReserveButtonEnabled));
-                OnPropertyChanged(nameof(CancelButtonVisibility));
+                this.isReserved = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.IsReserveButtonEnabled));
+                this.OnPropertyChanged(nameof(this.CancelButtonVisibility));
             }
         }
 
-        public bool IsReserveButtonEnabled => !IsReserved;
-        public Visibility CancelButtonVisibility => IsReserved ? Visibility.Visible : Visibility.Collapsed;
+        public bool IsReserveButtonEnabled => !this.IsReserved;
 
-        private double _overallTotal;
-        public string OverallTotal => $"${_overallTotal:0.00}";
+        public Visibility CancelButtonVisibility => this.IsReserved ? Visibility.Visible : Visibility.Collapsed;
+
+        public string OverallTotal => $"${this.overallTotal:0.00}";
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public CartViewModel(MainService service, UserSession session)
         {
-            _service = service;
-            _session = session;
+            this.service = service;
+            this.session = session;
+            this.CartShopItems = new ObservableCollection<CartShopItem>();
+            this.LoadCartItems();
+            this.CheckExistingReservation();
+        }
 
-            CartShopItems = new ObservableCollection<CartShopItem>();
+        public void Reload()
+        {
+            this.LoadCartItems();
+        }
 
-            LoadCartItems();
-            CheckExistingReservation();
+        public void ChangeQuantity(CartShopItem item, int newQuantity)
+        {
+            this.service.cartService.UpdateItemQuantity(this.session.UserId, item.CartItemId, newQuantity);
+            item.Quantity = newQuantity;
+            this.CalculateOverallTotal();
+        }
+
+        public void RemoveShopItem(CartShopItem item)
+        {
+            this.service.cartService.RemoveItemFromCart(this.session.UserId, item.CartItemId);
+            this.CartShopItems.Remove(item);
+            this.CalculateOverallTotal();
+        }
+
+        public void EmptyCart()
+        {
+            this.service.cartService.ClearCart(this.session.UserId);
+            this.CartShopItems.Clear();
+            this.CalculateOverallTotal();
+        }
+
+        public void ReserveCart()
+        {
+            var cart = this.service.cartService.GetCartById(this.session.UserId);
+            var newReservation = new Reservation(cart, true, DateTime.Now);
+            this.service.reservationService.ReserveCart(newReservation);
+            this.currentReservationId = newReservation.Id;
+            this.IsReserved = true;
+        }
+
+        public void CancelReservation()
+        {
+            this.service.reservationService.cancelReservation(this.currentReservationId);
+            this.IsReserved = false;
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void CheckExistingReservation()
         {
-            var cart = _service.cartService.GetCartById(_session.UserId);
+            var cart = this.service.cartService.GetCartById(this.session.UserId);
             if (cart == null)
             {
                 return;
             }
 
-            var allReservations = _service.reservationService.GetAllReservations();
+            var allReservations = this.service.reservationService.GetAllReservations();
             var activeReservation = allReservations.FirstOrDefault(r =>
                 r.ReservationCart.Id == cart.Id && r.Active);
 
             if (activeReservation != null)
             {
-                _currentReservationId = activeReservation.Id;
-                IsReserved = true;
+                this.currentReservationId = activeReservation.Id;
+                this.IsReserved = true;
             }
         }
 
         private void LoadCartItems()
         {
-            CartShopItems.Clear();
-
-            // Fetch the cart using the current user's ID
-            var cart = _service.cartService.GetCartById(_session.UserId);
+            this.CartShopItems.Clear();
+            var cart = this.service.cartService.GetCartById(this.session.UserId);
 
             if (cart != null && cart.CartItems != null)
             {
-
                 foreach (var dbCartItem in cart.CartItems.Values)
                 {
-                    CartShopItems.Add(new CartShopItem
+                    this.CartShopItems.Add(new CartShopItem
                     {
                         CartItemId = dbCartItem.Id,
                         ShopItem = dbCartItem.ShopItem,
-                        Quantity = dbCartItem.Quantity
+                        Quantity = dbCartItem.Quantity,
                     });
                 }
             }
 
-            CalculateOverallTotal();
-        }
-
-
-        public void Reload()
-        {
-            LoadCartItems();
-        }
-        public void ChangeQuantity(CartShopItem item, int newQuantity)
-        {
-            item.Quantity = newQuantity;
-
-            // Hooked to CartService
-            _service.cartService.UpdateItemQuantity(_session.UserId, item.CartItemId, newQuantity);
-
-            CalculateOverallTotal();
-        }
-
-        public void RemoveShopItem(CartShopItem item)
-        {
-            CartShopItems.Remove(item);
-
-            // Hooked to CartService
-            _service.cartService.RemoveItemFromCart(_session.UserId, item.CartItemId);
-
-            CalculateOverallTotal();
-        }
-
-        public void EmptyCart()
-        {
-            CartShopItems.Clear();
-
-            // Hooked to CartService
-            _service.cartService.ClearCart(_session.UserId);
-
-            CalculateOverallTotal();
-        }
-
-        public void ReserveCart()
-        {
-            var cart = _service.cartService.GetCartById(_session.UserId);
-
-            // Creating a new Reservation based on the commented constructor in ReservationService.cs
-            // Passing 0 for ID assuming the database auto-increments it upon Add
-            var newReservation = new Reservation(cart, true, DateTime.Now);
-
-            _service.reservationService.ReserveCart(newReservation);
-
-            // Storing the ID locally so we can cancel it during this session if needed
-            _currentReservationId = newReservation.Id;
-            IsReserved = true;
-        }
-
-        public void CancelReservation()
-        {
-            // Hooked to ReservationService
-            _service.reservationService.cancelReservation(_currentReservationId);
-
-            IsReserved = false;
+            this.CalculateOverallTotal();
         }
 
         private void CalculateOverallTotal()
         {
-            if (CartShopItems == null || !CartShopItems.Any())
+            if (this.CartShopItems == null || !this.CartShopItems.Any())
             {
-                _overallTotal = 0;
+                this.overallTotal = 0;
             }
             else
             {
-                _overallTotal = CartShopItems.Sum(i => i.Quantity * (i.ShopItem?.Price ?? 0));
+                this.overallTotal = this.CartShopItems.Sum(i => i.Quantity * (i.ShopItem?.Price ?? 0));
             }
 
-            OnPropertyChanged(nameof(OverallTotal));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(nameof(this.OverallTotal));
         }
     }
 
-    // Wrapper class for the UI
     public class CartShopItem : INotifyPropertyChanged
     {
-        // Added to map back to the CartItem in the database
+        private int quantity;
+
         public int CartItemId { get; set; }
-        public string DisplayPrice => ShopItem != null ? $"${ShopItem.Price:0.00}" : "$0.00";
 
         public ShopItem ShopItem { get; set; }
 
-        private int _quantity;
+        public string DisplayPrice => this.ShopItem != null ? $"${this.ShopItem.Price:0.00}" : "$0.00";
+
+        public string ItemTotalPrice => this.ShopItem != null ? $"${(this.Quantity * this.ShopItem.Price):0.00}" : "$0.00";
+
         public int Quantity
         {
-            get => _quantity;
+            get
+            {
+                return this.quantity;
+            }
+
             set
             {
-                _quantity = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(ItemTotalPrice));
+                this.quantity = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.ItemTotalPrice));
             }
         }
 
-        // Includes a null check on ShopItem to prevent crashes during bindings
-        public string ItemTotalPrice => ShopItem != null ? $"${(Quantity * ShopItem.Price):0.00}" : "$0.00";
-
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

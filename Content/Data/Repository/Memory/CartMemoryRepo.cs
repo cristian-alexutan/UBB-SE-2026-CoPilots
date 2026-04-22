@@ -9,31 +9,33 @@ namespace Content.Repository
 {
     public class CartMemoryRepo : ICartRepo
     {
-        private Dictionary<int,Domain.Cart> Carts;
+        private Dictionary<int,Domain.Cart> carts;
 
         public CartMemoryRepo()
         {
-            Carts = new Dictionary<int,Domain.Cart>();
+            carts = new Dictionary<int,Domain.Cart>();
         }
 
         public void Add(Cart Cart)
         {
-            Carts[Cart.Id] = Cart;
+            carts[Cart.Id] = Cart;
         }
 
         public void Delete(int Id)
         {
-            Carts.Remove(Id);
+            carts.Remove(Id);
         }
 
-        
+
 
         public void AddItemToCart(int CartId, CartItem Item)
         {
             var Cart = GetById(CartId);
             if (Cart != null)
             {
-                Cart.CartItems[Item.Id] = Item;
+                int newId = Cart.CartItems.Count > 0 ? Cart.CartItems.Keys.Max() + 1 : 1;
+                Item.Id = newId;
+                Cart.CartItems[newId] = Item;
             }
         }
 
@@ -57,12 +59,12 @@ namespace Content.Repository
 
         public IEnumerable<Cart> GetAll()
         {
-            return Carts.Values;
+            return carts.Values;
         }
 
         public Domain.Cart GetById(int Id)
         {
-            return Carts.ContainsKey(Id) ? Carts[Id] : null;
+            return carts.ContainsKey(Id) ? carts[Id] : null;
         }
 
 

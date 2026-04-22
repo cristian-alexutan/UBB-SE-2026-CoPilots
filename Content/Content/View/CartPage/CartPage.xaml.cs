@@ -4,52 +4,50 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Content.Service;
 using Content.User;
-using Content.ViewModel; // Added to access the new CartViewModel
+using Content.ViewModel;
 
 namespace Content
 {
     public sealed partial class CartPage : Window
     {
+        private readonly MainService service;
+        private readonly UserSession session;
+
         public CartViewModel ViewModel { get; }
 
-        // 1. Changed constructor to accept service and session
-        private readonly MainService _service;
-        private readonly UserSession _session;
         public CartPage(MainService service, UserSession session)
         {
-            // 2. Added safety check to kick out admins if they somehow get here
-            _service = service;
-            _session = session;
+            this.service = service;
+            this.session = session;
 
             if (session.IsAdmin)
             {
                 throw new UnauthorizedAccessException("Admins are not allowed to view or enter the Cart.");
             }
 
-            ViewModel = new CartViewModel(service, session);
+            this.ViewModel = new CartViewModel(service, session);
             this.InitializeComponent();
-
         }
 
         private async void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            var ShopItem = button.DataContext as CartShopItem;
+            var shopItem = button.DataContext as CartShopItem;
 
-            if (ShopItem != null)
+            if (shopItem != null)
             {
-                if (ShopItem.Quantity > 1)
+                if (shopItem.Quantity > 1)
                 {
-                    ViewModel.ChangeQuantity(ShopItem, ShopItem.Quantity - 1);
+                    this.ViewModel.ChangeQuantity(shopItem, shopItem.Quantity - 1);
                 }
-                else if (ShopItem.Quantity == 1)
+                else if (shopItem.Quantity == 1)
                 {
-                    await ShowDeleteConfirmationAsync(ShopItem);
+                    await this.ShowDeleteConfirmationAsync(shopItem);
                 }
             }
         }
 
-        private async Task ShowDeleteConfirmationAsync(CartShopItem ShopItem)
+        private async Task ShowDeleteConfirmationAsync(CartShopItem shopItem)
         {
             ContentDialog deleteDialog = new ContentDialog
             {
@@ -58,32 +56,41 @@ namespace Content
                 PrimaryButtonText = "Delete",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot
+                XamlRoot = this.Content.XamlRoot,
             };
 
             ContentDialogResult result = await deleteDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-                ViewModel.RemoveShopItem(ShopItem);
+                this.ViewModel.RemoveShopItem(shopItem);
             }
         }
 
-        private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
+        private async void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            var ShopItem = button.DataContext as CartShopItem;
+            var shopItem = button.DataContext as CartShopItem;
 
-            if (ShopItem != null)
+            if (shopItem != null)
             {
-                ViewModel.ChangeQuantity(ShopItem, ShopItem.Quantity + 1);
+                try
+                {
+                    this.ViewModel.ChangeQuantity(shopItem, shopItem.Quantity + 1);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    await this.ShowErrorDialogAsync("Cannot increase quantity", ex.Message);
+                }
             }
         }
 
         private async void EmptyCart_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.CartShopItems.Count == 0) return;
-            
+            if (this.ViewModel.CartShopItems.Count == 0)
+            {
+                return;
+            }
 
             ContentDialog emptyDialog = new ContentDialog
             {
@@ -92,14 +99,14 @@ namespace Content
                 PrimaryButtonText = "Empty Cart",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot
+                XamlRoot = this.Content.XamlRoot,
             };
 
             ContentDialogResult result = await emptyDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-                ViewModel.EmptyCart();
+                this.ViewModel.EmptyCart();
             }
         }
 
@@ -111,36 +118,37 @@ namespace Content
                 Content = message,
                 CloseButtonText = "OK",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot
+                XamlRoot = this.Content.XamlRoot,
             };
 
             await errorDialog.ShowAsync();
         }
-        private void Reserve_Click(object sender, RoutedEventArgs e)
+
+        private async void Reserve_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.CartShopItems.Count > 0)
+            if (this.ViewModel.CartShopItems.Count > 0)
             {
                 try
                 {
-                    ViewModel.ReserveCart();
+                    this.ViewModel.ReserveCart();
                 }
                 catch (Exception ex)
                 {
-                    ShowErrorDialogAsync("Reservation Error", ex.Message);
+                    await this.ShowErrorDialogAsync("Reservation Error", ex.Message);
                 }
             }
         }
 
-        private void CancelReservation_Click(object sender, RoutedEventArgs e)
+        private async void CancelReservation_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                ViewModel.CancelReservation();
-                ViewModel.Reload();
+                this.ViewModel.CancelReservation();
+                this.ViewModel.Reload();
             }
             catch (Exception ex)
             {
-                ShowErrorDialogAsync("Cancellation Error", ex.Message);
+                await this.ShowErrorDialogAsync("Cancellation Error", ex.Message);
             }
         }
 
@@ -153,36 +161,24 @@ namespace Content
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot
+                XamlRoot = this.Content.XamlRoot,
             };
 
             ContentDialogResult result = await backDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-
-                var shopPage = new ShopPage(_service, _session);
-
-
+                var shopPage = new ShopPage(this.service, this.session);
                 shopPage.Activate();
-
-
                 this.Close();
             }
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            // Create the landing page passing the stored service and session
-            var landingPage = new LandingPage(_service, _session);
-
-            // Show the landing page
+            var landingPage = new LandingPage(this.service, this.session);
             landingPage.Activate();
-
-
             this.Close();
         }
     }
-
-
 }

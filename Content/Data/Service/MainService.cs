@@ -9,7 +9,7 @@ namespace Content.Service
 {
     public class MainService : IMainService
     {
-        public CartService cartService { get; }
+        public ICartService cartService { get; }
         public ShopService shopService { get; }
         public ITicketService ticketService { get; }
         public ClientService clientService { get; }
@@ -29,12 +29,13 @@ namespace Content.Service
             var reservationRepo = new ReservationDbRepo(connectionString, cartRepo);
 
 
-            this.cartService = new CartService(cartRepo);
+            this.ShopItemService = new ShopItemService(shopItemRepo);
             this.shopService = new ShopService(shopRepo);
+            this.cartService = new CartService(cartRepo, ShopItemService);
             this.ticketService = new TicketService(ticketRepo);
             this.clientService = new ClientService(clientRepo);
             this.managerService = new ManagerService(managerRepo);
-            this.ShopItemService = new ShopItemService(shopItemRepo);
+            
             this.reservationService = new ReservationService(reservationRepo,ShopItemService,cartService);
             
         }

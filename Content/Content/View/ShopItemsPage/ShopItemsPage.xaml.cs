@@ -529,7 +529,7 @@ namespace Content
             this.Close();
         }
 
-        private void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
+        private async void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
         {
             var sourceButton = sender as Button;
             var item = sourceButton?.Tag as ShopItem;
@@ -541,11 +541,27 @@ namespace Content
             var currentCart = this.mainService.cartService.GetCartById(this.userSession.UserId);
             if (currentCart == null)
             {
-                currentCart = new Cart(this.userSession.UserId, new Client(this.userSession.UserId, "Current Client"), new System.Collections.Generic.Dictionary<int, CartItem>());
+                currentCart = new Cart(this.userSession.UserId,
+                    new Client(this.userSession.UserId, "Current Client"),
+                    new System.Collections.Generic.Dictionary<int, CartItem>());
                 this.mainService.cartService.AddCart(currentCart);
             }
 
-            this.ViewModel.AddToCart(item, 1);
+            try
+            {
+                this.ViewModel.AddToCart(item, 1);
+            }
+            catch (InvalidOperationException ex)
+            {
+                var dialog = new ContentDialog
+                {
+                    Title = "Cannot add to cart",
+                    Content = ex.Message,
+                    CloseButtonText = "OK",
+                    XamlRoot = this.Content.XamlRoot,
+                };
+                await dialog.ShowAsync();
+            }
         }
 
         private void BackToShops_Click(object sender, RoutedEventArgs e)
