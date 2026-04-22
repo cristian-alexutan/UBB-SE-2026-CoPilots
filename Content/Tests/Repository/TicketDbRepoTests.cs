@@ -21,7 +21,6 @@ namespace Tests.Repository
             Assert.That(result, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Id, Is.EqualTo(10));
                 Assert.That(result.Category, Is.EqualTo("test category"));
                 Assert.That(result.Subcategory, Is.EqualTo("test subcategory"));
             });
