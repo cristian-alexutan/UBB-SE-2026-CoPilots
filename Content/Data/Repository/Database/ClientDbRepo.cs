@@ -1,17 +1,17 @@
-﻿using Content.Domain;
+﻿using System.Collections.Generic;
+using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
-using System.Collections.Generic;
 
 namespace Content.Repository.Database
 {
     public class ClientDbRepo : IClientRepo
     {
-        private string ConnectionString;
+        private string connectionString;
 
         public ClientDbRepo(string connectionString)
         {
-            this.ConnectionString = connectionString;
+            this.connectionString = connectionString;
         }
 
         public IEnumerable<Client> GetAll()
@@ -20,7 +20,7 @@ namespace Content.Repository.Database
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     var cmd = new SqlCommand("SELECT * FROM Client", conn);
@@ -30,8 +30,7 @@ namespace Content.Repository.Database
                     {
                         clients.Add(new Client(
                             (int)reader["client_id"],
-                            (string)reader["name"]
-                        ));
+                            (string)reader["name"]));
                     }
                 }
             }
@@ -47,7 +46,7 @@ namespace Content.Repository.Database
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     var cmd = new SqlCommand("SELECT * FROM Client WHERE client_id=@Id", conn);
@@ -58,8 +57,7 @@ namespace Content.Repository.Database
                     {
                         return new Client(
                             (int)reader["client_id"],
-                            (string)reader["name"]
-                        );
+                            (string)reader["name"]);
                     }
                 }
             }
@@ -75,7 +73,7 @@ namespace Content.Repository.Database
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     var cmd = new SqlCommand("INSERT INTO Client (name) VALUES (@Name)", conn);
@@ -93,7 +91,7 @@ namespace Content.Repository.Database
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     var cmd = new SqlCommand("DELETE FROM Client WHERE client_id=@Id", conn);
@@ -111,7 +109,7 @@ namespace Content.Repository.Database
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     var cmd = new SqlCommand("UPDATE Client SET name=@Name WHERE client_id=@Id", conn);

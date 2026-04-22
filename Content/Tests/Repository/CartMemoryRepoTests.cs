@@ -26,7 +26,6 @@ namespace Tests.Repository
             return new ShopItem(id, 10, 5.0f, 1, string.Empty, "Item", "desc");
         }
 
-
         [Test]
         public void GetById_AfterAdd_ReturnsAddedCart()
         {
@@ -46,7 +45,6 @@ namespace Tests.Repository
             Assert.That(result, Is.Null);
         }
 
-
         [Test]
         public void GetAll_WhenTwoCartsAdded_ReturnsBoth()
         {
@@ -65,7 +63,6 @@ namespace Tests.Repository
 
             Assert.That(this.repo.GetById(1), Is.Null);
         }
-
 
         [Test]
         public void AddItemToCart_WhenCalled_AssignsNonZeroIdToItem()
@@ -102,7 +99,6 @@ namespace Tests.Repository
             Assert.That(this.repo.GetById(2).CartItems, Is.Empty);
         }
 
-
         [Test]
         public void RemoveItemFromCart_WhenItemExists_ItemRemovedFromCart()
         {
@@ -115,7 +111,6 @@ namespace Tests.Repository
             Assert.That(this.repo.GetById(1).CartItems, Is.Empty);
         }
 
-
         [Test]
         public void UpdateItemQuantity_WhenItemExists_QuantityIsUpdated()
         {
@@ -127,7 +122,6 @@ namespace Tests.Repository
 
             Assert.That(this.repo.GetById(1).CartItems[item.Id].Quantity, Is.EqualTo(5));
         }
-
 
         [Test]
         public void ClearCart_WhenCartHasMultipleItems_AllItemsRemoved()

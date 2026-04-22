@@ -65,37 +65,37 @@ namespace Content.ViewModel
 
         public void ChangeQuantity(CartShopItem item, int newQuantity)
         {
-            this.service.cartService.UpdateItemQuantity(this.session.UserId, item.CartItemId, newQuantity);
+            this.service.CartService.UpdateItemQuantity(this.session.UserId, item.CartItemId, newQuantity);
             item.Quantity = newQuantity;
             this.CalculateOverallTotal();
         }
 
         public void RemoveShopItem(CartShopItem item)
         {
-            this.service.cartService.RemoveItemFromCart(this.session.UserId, item.CartItemId);
+            this.service.CartService.RemoveItemFromCart(this.session.UserId, item.CartItemId);
             this.CartShopItems.Remove(item);
             this.CalculateOverallTotal();
         }
 
         public void EmptyCart()
         {
-            this.service.cartService.ClearCart(this.session.UserId);
+            this.service.CartService.ClearCart(this.session.UserId);
             this.CartShopItems.Clear();
             this.CalculateOverallTotal();
         }
 
         public void ReserveCart()
         {
-            var cart = this.service.cartService.GetCartById(this.session.UserId);
+            var cart = this.service.CartService.GetCartById(this.session.UserId);
             var newReservation = new Reservation(cart, true, DateTime.Now);
-            this.service.reservationService.ReserveCart(newReservation);
+            this.service.ReservationService.ReserveCart(newReservation);
             this.currentReservationId = newReservation.Id;
             this.IsReserved = true;
         }
 
         public void CancelReservation()
         {
-            this.service.reservationService.cancelReservation(this.currentReservationId);
+            this.service.ReservationService.CancelReservation(this.currentReservationId);
             this.IsReserved = false;
         }
 
@@ -106,13 +106,13 @@ namespace Content.ViewModel
 
         private void CheckExistingReservation()
         {
-            var cart = this.service.cartService.GetCartById(this.session.UserId);
+            var cart = this.service.CartService.GetCartById(this.session.UserId);
             if (cart == null)
             {
                 return;
             }
 
-            var allReservations = this.service.reservationService.GetAllReservations();
+            var allReservations = this.service.ReservationService.GetAllReservations();
             var activeReservation = allReservations.FirstOrDefault(r =>
                 r.ReservationCart.Id == cart.Id && r.Active);
 
@@ -126,7 +126,7 @@ namespace Content.ViewModel
         private void LoadCartItems()
         {
             this.CartShopItems.Clear();
-            var cart = this.service.cartService.GetCartById(this.session.UserId);
+            var cart = this.service.CartService.GetCartById(this.session.UserId);
 
             if (cart != null && cart.CartItems != null)
             {

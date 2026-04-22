@@ -109,7 +109,7 @@ namespace Tests.Repository
 
             this.shopItemRepo.Update(updatedItem);
 
-            Assert.That(this.shopItemRepo.GetById(shopItem.Id)!.Name, Is.EqualTo("Updated shop item"));
+            Assert.That(this.shopItemRepo.GetById(shopItem.Id) !.Name, Is.EqualTo("Updated shop item"));
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace Tests.Repository
 
             this.shopItemRepo.Update(updatedItem);
 
-            Assert.That(this.shopItemRepo.GetById(shopItem.Id)!.Price, Is.EqualTo(20.5f));
+            Assert.That(this.shopItemRepo.GetById(shopItem.Id) !.Price, Is.EqualTo(20.5f));
         }
 
         [Test]

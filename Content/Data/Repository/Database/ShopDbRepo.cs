@@ -15,7 +15,8 @@
             this.connectionString = connectionString;
         }
 
-        private Shop mapShop(SqlDataReader reader) {
+        private Shop MapShop(SqlDataReader reader)
+        {
             int managerId = (int)reader["manager_id"];
             return new Shop(
                 (int)reader["shop_id"],
@@ -34,23 +35,23 @@
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    shops.Add(this.mapShop(reader));
+                    shops.Add(this.MapShop(reader));
                 }
             }
 
             return shops;
         }
 
-        public Shop? GetById(int Id)
+        public Shop? GetById(int id)
         {
             using SqlConnection conn = new (this.connectionString);
             conn.Open();
             var cmd = new SqlCommand("SELECT * FROM Shop WHERE shop_id=@Id", conn);
-            cmd.Parameters.AddWithValue("@Id", Id);
+            cmd.Parameters.AddWithValue("@Id", id);
             var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                return this.mapShop(reader);
+                return this.MapShop(reader);
             }
 
             return null;
@@ -103,8 +104,7 @@
                 conn.Open();
                 var cmd = new SqlCommand(
                     "UPDATE Shop SET name=@Name, type=@Type, manager_id=@ManagerId WHERE shop_id=@Id",
-                    conn
-                );
+                    conn);
 
                 cmd.Parameters.AddWithValue("@Name", shop.Name);
                 cmd.Parameters.AddWithValue("@Type", shop.Type);

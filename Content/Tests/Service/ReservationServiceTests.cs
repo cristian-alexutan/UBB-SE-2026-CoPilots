@@ -10,34 +10,34 @@ namespace Tests.Service
     [TestFixture]
     public class ReservationServiceTests
     {
-        private ReservationMockRepo _reservationRepo = null!;
-        private ShopItemMemoryRepo _shopItemRepo = null!;
-        private CartMemoryRepo _cartRepo = null!;
+        private ReservationMockRepo reservationRepo = null!;
+        private ShopItemMemoryRepo shopItemRepo = null!;
+        private CartMemoryRepo cartRepo = null!;
 
-        private ShopItemService _shopItemService = null!;
-        private CartService _cartService = null!;
-        private ReservationService _service = null!;
+        private ShopItemService shopItemService = null!;
+        private CartService cartService = null!;
+        private ReservationService service = null!;
 
-        private Client _client = null!;
+        private Client client = null!;
 
         [SetUp]
         public void Setup()
         {
-            _reservationRepo = new ReservationMockRepo();
-            _shopItemRepo = new ShopItemMemoryRepo();
-            _cartRepo = new CartMemoryRepo();
+            reservationRepo = new ReservationMockRepo();
+            shopItemRepo = new ShopItemMemoryRepo();
+            cartRepo = new CartMemoryRepo();
 
-            _shopItemService = new ShopItemService(_shopItemRepo);
-            _cartService = new CartService(_cartRepo, _shopItemService);
-            _service = new ReservationService(_reservationRepo, _shopItemService, _cartService);
+            shopItemService = new ShopItemService(shopItemRepo);
+            cartService = new CartService(cartRepo, shopItemService);
+            service = new ReservationService(reservationRepo, shopItemService, cartService);
 
-            _client = new Client(1, "Test Client");
+            client = new Client(1, "Test Client");
         }
 
         private ShopItem AddShopItem(string name, int quantity, float price = 10f)
         {
             var item = new ShopItem(0, quantity, price, 1, "photo.jpg", name, "desc");
-            _shopItemRepo.Add(item);
+            shopItemRepo.Add(item);
             return item;
         }
 
@@ -52,8 +52,8 @@ namespace Tests.Service
                 nextCartItemId++;
             }
 
-            var cart = new Cart(cartId, _client, cartItems);
-            _cartRepo.Add(cart);
+            var cart = new Cart(cartId, client, cartItems);
+            cartRepo.Add(cart);
             return cart;
         }
 
@@ -66,10 +66,10 @@ namespace Tests.Service
             var cart1 = BuildCart(1, (itemA, 1));
             var cart2 = BuildCart(2, (itemB, 2));
 
-            _service.ReserveCart(new Reservation(cart1, true, DateTime.Now));
-            _service.ReserveCart(new Reservation(cart2, true, DateTime.Now));
+            service.ReserveCart(new Reservation(cart1, true, DateTime.Now));
+            service.ReserveCart(new Reservation(cart2, true, DateTime.Now));
 
-            var all = _service.GetAllReservations().ToList();
+            var all = service.GetAllReservations().ToList();
 
             Assert.That(all, Has.Count.EqualTo(2));
         }
@@ -81,9 +81,9 @@ namespace Tests.Service
             var cart = BuildCart(1, (item, 2));
             var reservation = new Reservation(cart, true, DateTime.Now);
 
-            _service.ReserveCart(reservation);
+            service.ReserveCart(reservation);
 
-            var fetched = _service.GetReservationById(reservation.Id);
+            var fetched = service.GetReservationById(reservation.Id);
 
             Assert.That(fetched, Is.Not.Null);
             Assert.That(fetched.Id, Is.EqualTo(reservation.Id));
@@ -97,13 +97,11 @@ namespace Tests.Service
             var cart = BuildCart(1, (item, 3));
             var reservation = new Reservation(cart, true, DateTime.Now);
 
-            _service.ReserveCart(reservation);
+            service.ReserveCart(reservation);
 
-          
             Assert.That(reservation.Id, Is.Not.EqualTo(0), "Id should be assigned by repo");
-            Assert.That(_shopItemService.GetById(item.Id).Quantity, Is.EqualTo(7));
-            Assert.That(_service.GetAllReservations().Count(), Is.EqualTo(1));
-           
+            Assert.That(shopItemService.GetById(item.Id).Quantity, Is.EqualTo(7));
+            Assert.That(service.GetAllReservations().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -113,7 +111,7 @@ namespace Tests.Service
             var cart = BuildCart(1, (item, 5));
             var reservation = new Reservation(cart, true, DateTime.Now);
 
-            var ex = Assert.Throws<Exception>(() => _service.ReserveCart(reservation));
+            var ex = Assert.Throws<Exception>(() => service.ReserveCart(reservation));
 
             Assert.That(ex!.Message, Does.Contain("Not enough stock"));
         }
@@ -126,14 +124,12 @@ namespace Tests.Service
             var cart = BuildCart(1, (itemA, 3), (itemB, 5));
             var reservation = new Reservation(cart, true, DateTime.Now);
 
-            Assert.Throws<Exception>(() => _service.ReserveCart(reservation));
+            Assert.Throws<Exception>(() => service.ReserveCart(reservation));
 
-                        
-            Assert.That(_shopItemService.GetById(itemA.Id).Quantity, Is.EqualTo(10),
+            Assert.That(shopItemService.GetById(itemA.Id).Quantity, Is.EqualTo(10),
                 "Stock for item A must not be touched if the whole reservation fails");
-            Assert.That(_shopItemService.GetById(itemB.Id).Quantity, Is.EqualTo(1));
-            Assert.That(_service.GetAllReservations(), Is.Empty);
-            
+            Assert.That(shopItemService.GetById(itemB.Id).Quantity, Is.EqualTo(1));
+            Assert.That(service.GetAllReservations(), Is.Empty);
         }
 
         [Test]
@@ -142,11 +138,11 @@ namespace Tests.Service
             var item = AddShopItem("A", 10);
             var cart = BuildCart(1, (item, 1));
             var reservation = new Reservation(cart, true, DateTime.Now);
-            _service.ReserveCart(reservation);
+            service.ReserveCart(reservation);
 
-            _service.DeleteReservation(reservation.Id);
+            service.DeleteReservation(reservation.Id);
 
-            Assert.That(_service.GetAllReservations(), Is.Empty);
+            Assert.That(service.GetAllReservations(), Is.Empty);
         }
 
         [Test]
@@ -155,20 +151,18 @@ namespace Tests.Service
             var item = AddShopItem("A", 10);
             var cart = BuildCart(1, (item, 4));
             var reservation = new Reservation(cart, true, DateTime.Now);
-            _service.ReserveCart(reservation);
+            service.ReserveCart(reservation);
 
-            Assume.That(_shopItemService.GetById(item.Id).Quantity, Is.EqualTo(6));
+            Assume.That(shopItemService.GetById(item.Id).Quantity, Is.EqualTo(6));
 
-            _service.cancelReservation(reservation.Id);
+            service.CancelReservation(reservation.Id);
 
-         
-            Assert.That(_shopItemService.GetById(item.Id).Quantity, Is.EqualTo(10),
+            Assert.That(shopItemService.GetById(item.Id).Quantity, Is.EqualTo(10),
                 "Stock should be restored after cancellation");
-            Assert.That(_cartRepo.GetById(cart.Id).CartItems, Is.Empty,
+            Assert.That(cartRepo.GetById(cart.Id).CartItems, Is.Empty,
                 "Cart should be cleared after cancellation");
-            Assert.That(_service.GetReservationById(reservation.Id).Active, Is.False,
+            Assert.That(service.GetReservationById(reservation.Id).Active, Is.False,
                 "Reservation should be marked inactive");
-           
         }
 
         [Test]
@@ -178,17 +172,15 @@ namespace Tests.Service
             var cart = BuildCart(1, (item, 3));
 
             var reservation = new Reservation(cart, false, DateTime.Now);
-            _reservationRepo.Add(reservation);
+            reservationRepo.Add(reservation);
 
-            _service.cancelReservation(reservation.Id);
+            service.CancelReservation(reservation.Id);
 
-
-            Assert.That(_shopItemService.GetById(item.Id).Quantity, Is.EqualTo(10),
+            Assert.That(shopItemService.GetById(item.Id).Quantity, Is.EqualTo(10),
                 "Stock must not change for an already-inactive reservation");
-            Assert.That(_cartRepo.GetById(cart.Id).CartItems, Has.Count.EqualTo(1),
+            Assert.That(cartRepo.GetById(cart.Id).CartItems, Has.Count.EqualTo(1),
                 "Cart must not be cleared for an already-inactive reservation");
-            Assert.That(_service.GetReservationById(reservation.Id).Active, Is.False);
-            
+            Assert.That(service.GetReservationById(reservation.Id).Active, Is.False);
         }
     }
 }

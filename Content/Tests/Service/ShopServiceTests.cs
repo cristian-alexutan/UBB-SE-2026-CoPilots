@@ -56,9 +56,9 @@ public class ShopServiceTests
         ShopService service = new ShopService(repo);
         List<Shop> shops = new List<Shop>
         {
-            new(1, "B", "Type", 1),
-            new(2, "A", "Type", 1),
-            new(3, "C", "Type", 1),
+            new (1, "B", "Type", 1),
+            new (2, "A", "Type", 1),
+            new (3, "C", "Type", 1),
         };
         List<Shop> result = service.SortAlphabetically(shops).ToList();
         Assert.That(result.Select(s => s.Name), Is.EqualTo(new[] { "A", "B", "C" }));

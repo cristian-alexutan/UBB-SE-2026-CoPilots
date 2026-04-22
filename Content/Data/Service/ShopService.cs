@@ -1,11 +1,11 @@
-﻿namespace Content.Service
-{
-    using Content.Data.Service.Interface;
-    using Content.Domain;
-    using Content.Repository.Interface;
-    using System.Collections;
+﻿using System.Collections;
+using Content.Data.Service.Interface;
+using Content.Domain;
+using Content.Repository.Interface;
 
-    public class ShopService: IShopService
+namespace Content.Service
+{
+    public class ShopService : IShopService
     {
         private readonly IShopRepo shopRepo;
 

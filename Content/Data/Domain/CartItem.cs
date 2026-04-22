@@ -12,11 +12,11 @@ namespace Content.Domain
         public ShopItem ShopItem { get; set; }
         public int Quantity { get; set; }
 
-        public CartItem(int Id, ShopItem ShopItem, int Quantity)
+        public CartItem(int id, ShopItem shopItem, int quantity)
         {
-            this.Id = Id;
-            this.ShopItem = ShopItem;
-            this.Quantity = Quantity;
+            this.Id = id;
+            this.ShopItem = shopItem;
+            this.Quantity = quantity;
         }
 
         public float GetTotalPrice()

@@ -1,9 +1,9 @@
-﻿using Content.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Content.Domain;
 using Content.Domain;
 
 namespace Content.Repository.Interface
@@ -11,13 +11,13 @@ namespace Content.Repository.Interface
     public interface ICartRepo
     {
         IEnumerable<Cart> GetAll();
-        Cart GetById(int Id);
-        void Add(Cart Cart);
-        void Delete(int Id);
+        Cart GetById(int id);
+        void Add(Cart cart);
+        void Delete(int id);
 
-        void AddItemToCart(int CartId, CartItem Item);
-        void RemoveItemFromCart(int CartId, int CartItemId);
-        void UpdateItemQuantity(int CartId, int CartItemId, int Quantity);
-        void ClearCart(int CartId);
+        void AddItemToCart(int cartId, CartItem item);
+        void RemoveItemFromCart(int cartId, int cartItemId);
+        void UpdateItemQuantity(int cartId, int cartItemId, int quantity);
+        void ClearCart(int cartId);
     }
 }

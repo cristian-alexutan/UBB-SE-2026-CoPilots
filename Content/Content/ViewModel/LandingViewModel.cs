@@ -28,7 +28,7 @@ namespace Content.ViewModel
 
         private void SetAdmin()
         {
-            var manager = service.managerService.GetAnyManager();
+            var manager = service.ManagerService.GetAnyManager();
             if (manager == null)
             {
                 ErrorMessage = "No admin found.";
@@ -40,7 +40,7 @@ namespace Content.ViewModel
 
         private void SetClient()
         {
-            var client = service.clientService.GetAnyClient();
+            var client = service.ClientService.GetAnyClient();
             if (client == null)
             {
                 ErrorMessage = "No client found.";

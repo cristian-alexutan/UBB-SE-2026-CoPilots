@@ -8,26 +8,24 @@ namespace Content.Domain
 {
     public class Reservation
     {
-
         public int Id { get; set; }
         public Cart ReservationCart { get; set; }
         public bool Active { get; set; }
         public DateTime ReservationDate { get; set; }
 
-        public Reservation(int Id, Cart ReservationCart, bool Active, DateTime ReservationDate)
+        public Reservation(int id, Cart reservationCart, bool active, DateTime reservationDate)
         {
-            this.Id = Id;
-            this.ReservationCart = ReservationCart;
-            this.Active = Active;
-            this.ReservationDate = ReservationDate;
+            this.Id = id;
+            this.ReservationCart = reservationCart;
+            this.Active = active;
+            this.ReservationDate = reservationDate;
         }
 
-        public Reservation(Cart ReservationCart, bool Active, DateTime ReservationDate)
+        public Reservation(Cart reservationCart, bool active, DateTime reservationDate)
         {
-            this.ReservationCart= ReservationCart;
-            this.Active= Active;
-            this.ReservationDate= ReservationDate;
+            this.ReservationCart = reservationCart;
+            this.Active = active;
+            this.ReservationDate = reservationDate;
         }
-        
     }
 }

@@ -79,7 +79,7 @@ public class ManagerServiceTests
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
-            service.AddManager(new Manager(1, "", "alice@mail.com", "0700000001")));
+            service.AddManager(new Manager(1, string.Empty, "alice@mail.com", "0700000001")));
 
         Assert.That(ex!.Message, Does.Contain("Name is required"));
         Assert.That(service.GetAllManagers(), Is.Empty);
@@ -105,7 +105,7 @@ public class ManagerServiceTests
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
-            service.AddManager(new Manager(1, "Alice", "", "0700000001")));
+            service.AddManager(new Manager(1, "Alice", string.Empty, "0700000001")));
 
         Assert.That(ex!.Message, Does.Contain("Email is required"));
         Assert.That(service.GetAllManagers(), Is.Empty);
@@ -131,7 +131,7 @@ public class ManagerServiceTests
         var service = new ManagerService(repo);
 
         var ex = Assert.Throws<ArgumentException>(() =>
-            service.AddManager(new Manager(1, "Alice", "alice@mail.com", "")));
+            service.AddManager(new Manager(1, "Alice", "alice@mail.com", string.Empty)));
 
         Assert.That(ex!.Message, Does.Contain("Phone is required"));
         Assert.That(service.GetAllManagers(), Is.Empty);
