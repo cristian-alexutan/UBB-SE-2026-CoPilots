@@ -88,7 +88,22 @@ namespace Content
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                ViewModel.AddShop(nameBox.Text, typeBox.Text);
+                try
+                {
+                    ViewModel.AddShop(nameBox.Text, typeBox.Text);
+                }
+                catch (Exception ex)
+                {
+                    var errorDialog = new ContentDialog
+                    {
+                        Title = "Error",
+                        Content = ex.Message,
+                        CloseButtonText = "OK",
+                        RequestedTheme = ElementTheme.Light,
+                        XamlRoot = button.XamlRoot
+                    };
+                    await errorDialog.ShowAsync();
+                }
             }
         }
 
@@ -127,7 +142,22 @@ namespace Content
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    ViewModel.EditShop(shop, nameBox.Text, typeBox.Text);
+                    try
+                    {
+                        ViewModel.EditShop(shop, nameBox.Text, typeBox.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                        var errorDialog = new ContentDialog
+                        {
+                            Title = "Error",
+                            Content = ex.Message,
+                            CloseButtonText = "OK",
+                            RequestedTheme = ElementTheme.Light,
+                            XamlRoot = btn.XamlRoot
+                        };
+                        await errorDialog.ShowAsync();
+                    }
                 }
             }
         }
