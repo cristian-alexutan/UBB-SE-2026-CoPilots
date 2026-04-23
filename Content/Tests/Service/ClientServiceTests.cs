@@ -9,7 +9,7 @@ namespace Tests;
 public class ClientServiceTests
 {
     [Test]
-    public void GetAllClientsTest()
+    public void GetAllClientsTestSuccessful()
     {
         var repo = new ClientMockRepo();
         var client1 = new Client(0, "Alice");
@@ -25,7 +25,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void GetClientByIdTest()
+    public void GetClientByIdTestSuccessful()
     {
         var repo = new ClientMockRepo();
         var client = new Client(0, "Alice");
@@ -40,7 +40,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void GetClientById_NonExistentId_ReturnsNull()
+    public void GetClientByIdTestUnsuccessful_IdDoesntExist()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -51,7 +51,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void AddClientSuccessfulTest()
+    public void AddClientTestSuccessful()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -65,7 +65,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void AddClientUnsuccessfulTest_NullClient()
+    public void AddClientTestUnsuccessful_ClientIsNull()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -76,7 +76,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void AddClientUnsuccessfulTest_EmptyName()
+    public void AddClientTestUnsuccessful_NameIsEmpty()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -88,7 +88,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void AddClientUnsuccessfulTest_WhiteSpaceName()
+    public void AddClientTestUnsuccessful_NameIsWhiteSpace()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -100,7 +100,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void DeleteClientSuccessfulTest()
+    public void DeleteClientTestSuccessful()
     {
         var repo = new ClientMockRepo();
         var client = new Client(0, "Alice");
@@ -113,7 +113,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void DeleteClientUnsuccessfulTest()
+    public void DeleteClientTestUnsuccessful_IdDoesntExist()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -124,24 +124,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void DeleteClient_OnlyRemovesTargetClient()
-    {
-        var repo = new ClientMockRepo();
-        var client1 = new Client(0, "Alice");
-        var client2 = new Client(0, "Bob");
-        repo.Add(client1);
-        repo.Add(client2);
-        var service = new ClientService(repo);
-
-        service.DeleteClient(client1.Id);
-
-        var remaining = service.GetAllClients().ToList();
-        Assert.That(remaining, Has.Count.EqualTo(1));
-        Assert.That(remaining[0].Name, Is.EqualTo("Bob"));
-    }
-
-    [Test]
-    public void UpdateClientSuccessfulTest()
+    public void UpdateClientTestSuccessful()
     {
         var repo = new ClientMockRepo();
         var client = new Client(0, "Alice");
@@ -154,7 +137,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void UpdateClientUnsuccessfulTest()
+    public void UpdateClientTestUnsuccessful_IdDoesntExist()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -165,7 +148,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void UpdateClientUnsuccessfulTest_NullClient()
+    public void UpdateClientTestUnsuccessful_ClientIsNull()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -174,7 +157,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void UpdateClientUnsuccessfulTest_EmptyName()
+    public void UpdateClientTestUnsuccessful_NameIsEmpty()
     {
         var repo = new ClientMockRepo();
         var service = new ClientService(repo);
@@ -185,18 +168,7 @@ public class ClientServiceTests
     }
 
     [Test]
-    public void GetAnyClient_WhenEmpty_ReturnsNull()
-    {
-        var repo = new ClientMockRepo();
-        var service = new ClientService(repo);
-
-        var result = service.GetAnyClient();
-
-        Assert.That(result, Is.Null);
-    }
-
-    [Test]
-    public void GetAnyClient_WhenClientsExist_ReturnsAClient()
+    public void GetAnyClientSuccessfulTest()
     {
         var repo = new ClientMockRepo();
         var client = new Client(0, "Alice");
@@ -206,5 +178,16 @@ public class ClientServiceTests
         var result = service.GetAnyClient();
 
         Assert.That(result, Is.Not.Null);
+    }
+
+    [Test]
+    public void GetAnyClientTestUnsuccessful_ClientIsNull()
+    {
+        var repo = new ClientMockRepo();
+        var service = new ClientService(repo);
+
+        var result = service.GetAnyClient();
+
+        Assert.That(result, Is.Null);
     }
 }

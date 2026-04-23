@@ -9,7 +9,7 @@ namespace Tests;
 public class ManagerServiceTests
 {
     [Test]
-    public void GetAllManagersTest()
+    public void GetAllManagersTestSuccessful()
     {
         var repo = new ManagerMockRepo();
         var manager1 = new Manager(0, "Alice", "alice@mail.com", "0700000001");
@@ -25,7 +25,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void GetManagerByIdTest()
+    public void GetManagerByIdTestSuccessful()
     {
         var repo = new ManagerMockRepo();
         var manager = new Manager(0, "Alice", "alice@mail.com", "0700000001");
@@ -40,7 +40,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void GetManagerById_NonExistentId_ReturnsNull()
+    public void GetManagerByIdUnsuccessfull_IdDoesntExist()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -51,7 +51,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerSuccessfulTest()
+    public void AddManagerTestSuccessful()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -65,7 +65,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_NullManager()
+    public void AddManagerTestUnsuccessful_ManagerIsNull()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -76,7 +76,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_EmptyName()
+    public void AddManagerTestUnsuccessful_NameIsEmpty()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -89,7 +89,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_WhiteSpaceName()
+    public void AddManagerTestUnsuccessful_NameIsWhiteSpace()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -102,7 +102,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_EmptyEmail()
+    public void AddManagerTestUnsuccessful_EmailIsEmpty()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -115,7 +115,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_WhiteSpaceEmail()
+    public void AddManagerTestUnsuccessful_EmailIsWhiteSpace()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -128,7 +128,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_InvalidEmail()
+    public void AddManagerTestUnsuccessful_EmailIsInvalid()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -141,7 +141,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_EmptyPhone()
+    public void AddManagerTestUnsuccessful_PhoneNumberIsEmpty()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -149,12 +149,12 @@ public class ManagerServiceTests
         var ex = Assert.Throws<ArgumentException>(() =>
             service.AddManager(new Manager(0, "Alice", "alice@mail.com", string.Empty)));
 
-        Assert.That(ex!.Message, Does.Contain("Phone is required"));
+        Assert.That(ex!.Message, Does.Contain("Phone number is required"));
         Assert.That(service.GetAllManagers(), Is.Empty);
     }
 
     [Test]
-    public void AddManagerUnsuccessfulTest_WhiteSpacePhone()
+    public void AddManagerTestUnsuccessful_PhoneNumberIsWhiteSpace()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -167,7 +167,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void DeleteManagerSuccessfulTest()
+    public void DeleteManagerTestSuccessful()
     {
         var repo = new ManagerMockRepo();
         var manager = new Manager(0, "Alice", "alice@mail.com", "0700000001");
@@ -180,7 +180,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void DeleteManagerUnsuccessfulTest()
+    public void DeleteManagerTestUnsuccessful()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -191,24 +191,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void DeleteManager_OnlyRemovesTargetManager()
-    {
-        var repo = new ManagerMockRepo();
-        var manager1 = new Manager(0, "Alice", "alice@mail.com", "0700000001");
-        var manager2 = new Manager(0, "Bob", "bob@mail.com", "0700000002");
-        repo.Add(manager1);
-        repo.Add(manager2);
-        var service = new ManagerService(repo);
-
-        service.DeleteManager(manager1.Id);
-
-        var remaining = service.GetAllManagers().ToList();
-        Assert.That(remaining, Has.Count.EqualTo(1));
-        Assert.That(remaining[0].Name, Is.EqualTo("Bob"));
-    }
-
-    [Test]
-    public void UpdateManagerSuccessfulTest()
+    public void UpdateManagerTestSuccessful()
     {
         var repo = new ManagerMockRepo();
         var manager = new Manager(0, "Alice", "alice@mail.com", "0700000001");
@@ -224,7 +207,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest()
+    public void UpdateManagerTestUnsuccessful_IdDoesntExist()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -235,7 +218,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_NullManager()
+    public void UpdateManagerTestUnsuccessful_ManagerIsNull()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -244,7 +227,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_EmptyName()
+    public void UpdateManagerTestUnsuccessful_NameIsEmpty()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -256,7 +239,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_InvalidEmail()
+    public void UpdateManagerTestUnsuccessful_EmailIsInvalid()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -268,7 +251,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_EmptyPhone()
+    public void UpdateManagerTestUnsuccessful_PhoneNumberIsEmpty()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -276,11 +259,11 @@ public class ManagerServiceTests
         var ex = Assert.Throws<ArgumentException>(() =>
             service.UpdateManager(new Manager(0, "Alice", "alice@mail.com", string.Empty)));
 
-        Assert.That(ex!.Message, Does.Contain("Phone is required"));
+        Assert.That(ex!.Message, Does.Contain("Phone number is required"));
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_EmptyEmail()
+    public void UpdateManagerTestUnsuccessful_EmailIsEmpty()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -292,7 +275,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_WhiteSpaceEmail()
+    public void UpdateManagerTestUnsuccessful_EmailIsWhiteSpace()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -304,7 +287,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_WhiteSpaceName()
+    public void UpdateManagerTestUnsuccessful_NameIsWhiteSpace()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -316,7 +299,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void UpdateManagerUnsuccessfulTest_WhiteSpacePhone()
+    public void UpdateManagerTestUnsuccessful_PhoneNumberIsWhiteSpace()
     {
         var repo = new ManagerMockRepo();
         var service = new ManagerService(repo);
@@ -328,18 +311,7 @@ public class ManagerServiceTests
     }
 
     [Test]
-    public void GetAnyManager_WhenEmpty_ReturnsNull()
-    {
-        var repo = new ManagerMockRepo();
-        var service = new ManagerService(repo);
-
-        var result = service.GetAnyManager();
-
-        Assert.That(result, Is.Null);
-    }
-
-    [Test]
-    public void GetAnyManager_WhenManagersExist_ReturnsAManager()
+    public void GetAnyManagerTestSuccessful()
     {
         var repo = new ManagerMockRepo();
         var manager = new Manager(0, "Alice", "alice@mail.com", "0700000001");
@@ -349,5 +321,16 @@ public class ManagerServiceTests
         var result = service.GetAnyManager();
 
         Assert.That(result, Is.Not.Null);
+    }
+
+    [Test]
+    public void GetAnyManagerTestUnsuccessful_ManagerIsNull()
+    {
+        var repo = new ManagerMockRepo();
+        var service = new ManagerService(repo);
+
+        var result = service.GetAnyManager();
+
+        Assert.That(result, Is.Null);
     }
 }

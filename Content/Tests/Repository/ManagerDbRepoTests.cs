@@ -9,7 +9,7 @@ namespace TestProject.Repository
         private const string ConnectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         [Test]
-        public void AddTest()
+        public void AddTestSuccesfull()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager manager = new Manager(0, "Test Manager", "test@mail.com", "0700000001");
@@ -39,7 +39,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void DeleteTestUnsuccessful()
+        public void DeleteTestUnsuccessful_IdDoesntExist()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager? result = repo.Delete(-2);
@@ -65,7 +65,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void UpdateTestUnsuccessful()
+        public void UpdateTestUnsuccessful_ManagerIsNull()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager? result = repo.Update(new Manager(-1, "Updated Manager", "updated@mail.com", "0700000099"));
@@ -73,7 +73,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void GetAllTest()
+        public void GetAllTestSuccesfull()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager manager1 = new Manager(0, "Test Manager 1", "test1@mail.com", "0700000001");
@@ -90,7 +90,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void GetByIdTestUnsuccessful()
+        public void GetByIdTestUnsuccessful_IdDoesntExist()
         {
             var repo = new ManagerDbRepo(ConnectionString);
 

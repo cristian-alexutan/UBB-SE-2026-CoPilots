@@ -8,7 +8,7 @@ namespace TestProject.Repository
         private const string ConnectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         [Test]
-        public void AddTest()
+        public void AddTestSuccesfull()
         {
             ClientDbRepo repo = new ClientDbRepo(ConnectionString);
             Client client = new Client(0, "Test Client");
@@ -33,7 +33,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void DeleteTestUnsuccesfull()
+        public void DeleteTestUnsuccesfull_IdDoesntExist()
         {
             ClientDbRepo repo = new ClientDbRepo(ConnectionString);
             Client? result = repo.Delete(-2);
@@ -54,7 +54,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void UpdateTestUnsuccesfull()
+        public void UpdateTestUnsuccesfull_ClientIsNull()
         {
             ClientDbRepo repo = new ClientDbRepo(ConnectionString);
             Client? result = repo.Update(new Client(-1, "Updated Client"));
@@ -62,7 +62,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void GetAllTest()
+        public void GetAllTestSuccesfull()
         {
             ClientDbRepo repo = new ClientDbRepo(ConnectionString);
             Client client1 = new Client(0, "Test Client 1");
@@ -79,7 +79,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void GetByIdTestUnsuccessful()
+        public void GetByIdTestUnsuccessful_IdDoesntExist()
         {
             ClientDbRepo repo = new ClientDbRepo(ConnectionString);
 
