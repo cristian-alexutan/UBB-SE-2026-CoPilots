@@ -69,7 +69,7 @@ namespace Content.Service
         {
             if (currentShop == null)
             {
-                throw new ArgumentNullException(nameof(currentShop));
+                throw new ArgumentNullException("shop cannot be null");
             }
 
             return this.GetItemsByShopId(currentShop.Id)
@@ -80,7 +80,7 @@ namespace Content.Service
         {
             if (currentShop == null)
             {
-                throw new ArgumentNullException(nameof(currentShop));
+                throw new ArgumentNullException("shop cannot be null");
             }
 
             return this.GetItemsByShopId(currentShop.Id)

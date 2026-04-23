@@ -250,5 +250,19 @@ namespace Tests.Service
 
             Assert.That(result.ToList(), Is.EqualTo(new List<ShopItem> { shopItem2, shopItem1 }));
         }
+
+        [Test]
+        public void GetItemsSortedAlphabeticallyNullShop()
+        {
+            var exception = Assert.Catch<ArgumentNullException>(() => this.shopItemService.GetItemsSortedAlphabetically(null!));
+            Assert.That(exception!.Message, Does.Contain("shop"));
+        }
+
+        [Test]
+        public void GetItemsSortedByPriceNullShop()
+        {
+            var exception = Assert.Catch<ArgumentNullException>(() => this.shopItemService.GetItemsSortedByPrice(null!));
+            Assert.That(exception!.Message, Does.Contain("shop"));
+        }
     }
 }
