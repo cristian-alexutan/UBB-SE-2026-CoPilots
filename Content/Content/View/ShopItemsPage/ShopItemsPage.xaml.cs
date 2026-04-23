@@ -19,6 +19,8 @@ namespace Content
     {
         public IShopItemsViewModel ViewModel { get; private set; }
 
+        private Shop selectedShop;
+
         public ShopItemsPage()
         {
             this.InitializeComponent();
@@ -27,7 +29,7 @@ namespace Content
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            var selectedShop = (Shop)e.Parameter;
+            selectedShop = (Shop)e.Parameter;
             this.ShopNameTextBlock.Text = selectedShop.Name;
 
             this.ViewModel = new ShopItemsViewModel(App.ShopItemService, App.CartService, App.Session, selectedShop);
@@ -91,7 +93,7 @@ namespace Content
             var imagePath = new string?[] { null };
             var dropZone = this.BuildDropZone("Drag image here or click to select", imagePreview, imagePath);
 
-            var result = await BuildItemDialog("Add Shop Item", button, new StackPanel
+            var dialog = BuildItemDialog("Add Shop Item", button, new StackPanel
             {
                 Spacing = 15,
                 Children =
@@ -107,7 +109,9 @@ namespace Content
                     new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                     quantityBox,
                 },
-            }).ShowAsync();
+            });
+
+            var result = await dialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
             {
@@ -147,7 +151,7 @@ namespace Content
             var imagePath = new string?[] { item.Photo };
             var dropZone = this.BuildDropZone("Drag image here or click to change", imagePreview, imagePath);
 
-            var result = await BuildItemDialog("Edit Shop Item", btn, new StackPanel
+            var dialog = BuildItemDialog("Edit Shop Item", btn, new StackPanel
             {
                 Spacing = 15,
                 Children =
@@ -163,7 +167,9 @@ namespace Content
                     new TextBlock { Text = "Quantity", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                     quantityBox,
                 },
-            }).ShowAsync();
+            });
+
+            var result = await dialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
             {
@@ -243,10 +249,10 @@ namespace Content
             }
 
             var cart = App.CartService.GetOrCreateCart(App.Session.UserId);
-            this.Frame.Navigate(typeof(ItemDetailsPage), new ItemDetailsNavArgs(item, cart));
+            this.Frame.Navigate(typeof(ItemDetailsPage), new ItemDetailsNavArgs(item, cart, selectedShop));
         }
 
-        private static ImageSource? LoadImageSource(string? path)
+        private static ImageSource LoadImageSource(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -255,9 +261,12 @@ namespace Content
 
             try
             {
-                return path.StartsWith("Assets/")
-                    ? new BitmapImage(new Uri($"ms-appx:///{path}"))
-                    : new BitmapImage(new Uri(path));
+                if (path.StartsWith("Assets/"))
+                {
+                    return new BitmapImage(new Uri($"ms-appx:///{path}"));
+                }
+
+                return new BitmapImage(new Uri(path));
             }
             catch
             {
@@ -280,21 +289,21 @@ namespace Content
                 },
             };
 
-            dropZone.Drop += async (s, args) =>
+            dropZone.Drop += async (dropSender, dropArgs) =>
             {
-                if (!args.DataView.Contains(StandardDataFormats.StorageItems))
+                if (!dropArgs.DataView.Contains(StandardDataFormats.StorageItems))
                 {
                     return;
                 }
 
-                var items = await args.DataView.GetStorageItemsAsync();
+                var items = await dropArgs.DataView.GetStorageItemsAsync();
                 if (items.FirstOrDefault() is StorageFile file)
                 {
                     await ApplyImageFile(file, imagePreview, imagePath);
                 }
             };
 
-            dropZone.Tapped += async (s, args) =>
+            dropZone.Tapped += async (tapSender, tapArgs) =>
             {
                 var picker = new Windows.Storage.Pickers.FileOpenPicker();
                 InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(App.MainWindow));
@@ -341,14 +350,15 @@ namespace Content
 
         private static async Task ShowErrorAsync(XamlRoot xamlRoot, string message)
         {
-            await new ContentDialog
+            var dialog = new ContentDialog
             {
                 Title = "Error",
                 Content = message,
                 CloseButtonText = "OK",
                 RequestedTheme = ElementTheme.Light,
                 XamlRoot = xamlRoot,
-            }.ShowAsync();
+            };
+            await dialog.ShowAsync();
         }
     }
 
@@ -358,10 +368,13 @@ namespace Content
 
         public Cart Cart { get; }
 
-        public ItemDetailsNavArgs(ShopItem item, Cart cart)
+        public Shop Shop { get; }
+
+        public ItemDetailsNavArgs(ShopItem item, Cart cart, Shop shop)
         {
             this.Item = item;
             this.Cart = cart;
+            this.Shop = shop;
         }
     }
 }
