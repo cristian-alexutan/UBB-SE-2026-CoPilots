@@ -52,6 +52,11 @@ namespace Content.ViewModel
 
         public CartViewModel(ICartService cartService, IReservationService reservationService, UserSession session)
         {
+            if (session.IsAdmin)
+            {
+                throw new UnauthorizedAccessException("Admins are not allowed to view or enter the Cart.");
+            }
+
             this.cartService = cartService;
             this.reservationService = reservationService;
             this.session = session;

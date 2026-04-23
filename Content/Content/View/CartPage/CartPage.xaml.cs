@@ -15,11 +15,6 @@ namespace Content
 
         public CartPage()
         {
-            if (App.Session.IsAdmin)
-            {
-                throw new UnauthorizedAccessException("Admins are not allowed to view or enter the Cart.");
-            }
-
             this.ViewModel = new CartViewModel(App.CartService, App.ReservationService, App.Session);
             this.InitializeComponent();
         }
