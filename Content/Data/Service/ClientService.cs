@@ -59,9 +59,9 @@ namespace Content.Service
             return clientRepo.Update(client);
         }
 
-        public Client GetAnyClient()
+        public Client? GetAnyClient()
         {
-            return clientRepo.GetAll().First();
+            return clientRepo.GetAll().FirstOrDefault();
         }
     }
 }

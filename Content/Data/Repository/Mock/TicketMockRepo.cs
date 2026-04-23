@@ -37,7 +37,7 @@ namespace Content.Repository
 
         public int CountBySubcategory(string subcategory)
         {
-            return this.tickets.Values.Count(t => t.Category == "Duty Free Shops" && t.Subcategory == subcategory);
+            return this.tickets.Values.Count(t => t.Subcategory == subcategory);
         }
     }
 }

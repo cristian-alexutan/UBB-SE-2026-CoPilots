@@ -91,9 +91,9 @@ namespace Content.Service
             return managerRepo.Update(manager);
         }
 
-        public Manager GetAnyManager()
+        public Manager? GetAnyManager()
         {
-            return managerRepo.GetAll().First();
+            return managerRepo.GetAll().FirstOrDefault();
         }
     }
 }
