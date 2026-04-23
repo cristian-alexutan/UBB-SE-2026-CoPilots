@@ -69,21 +69,29 @@ namespace Content.ViewModel
         {
             this.cartService.UpdateItemQuantity(this.session.UserId, item.CartItemId, newQuantity);
             item.Quantity = newQuantity;
-            this.CalculateOverallTotal();
+            this.overallTotal = this.cartService.GetCartTotal(this.session.UserId);
+            this.OnPropertyChanged(nameof(this.OverallTotal));
         }
 
         public void RemoveShopItem(CartShopItem item)
         {
             this.cartService.RemoveItemFromCart(this.session.UserId, item.CartItemId);
             this.CartShopItems.Remove(item);
-            this.CalculateOverallTotal();
+            this.overallTotal = this.cartService.GetCartTotal(this.session.UserId);
+            this.OnPropertyChanged(nameof(this.OverallTotal));
         }
 
         public void EmptyCart()
         {
             this.cartService.ClearCart(this.session.UserId);
             this.CartShopItems.Clear();
-            this.CalculateOverallTotal();
+            this.overallTotal = this.cartService.GetCartTotal(this.session.UserId);
+            this.OnPropertyChanged(nameof(this.OverallTotal));
+        }
+        public void DecreaseQuantity(CartShopItem item)
+        {
+            this.cartService.DecreaseItemQuantity(this.session.UserId, item.CartItemId);
+            this.Reload();
         }
 
         public void ReserveCart()
@@ -115,14 +123,24 @@ namespace Content.ViewModel
             }
 
             var allReservations = this.reservationService.GetAllReservations();
-            var activeReservation = allReservations.FirstOrDefault(r =>
-                r.ReservationCart.Id == cart.Id && r.Active);
-
+            Reservation activeReservation = null;
+            foreach (var reservation in allReservations)
+            {
+                if (reservation.ReservationCart.Id == cart.Id && reservation.Active)
+                {
+                    activeReservation = reservation;
+                    break;
+                }
+            }
             if (activeReservation != null)
             {
                 this.currentReservationId = activeReservation.Id;
                 this.IsReserved = true;
             }
+        }
+        public bool IsLastItem(CartShopItem item)
+        {
+            return this.cartService.IsLastCartItem(this.session.UserId, item.CartItemId);
         }
 
         private void LoadCartItems()
@@ -143,20 +161,7 @@ namespace Content.ViewModel
                 }
             }
 
-            this.CalculateOverallTotal();
-        }
-
-        private void CalculateOverallTotal()
-        {
-            if (this.CartShopItems == null || !this.CartShopItems.Any())
-            {
-                this.overallTotal = 0;
-            }
-            else
-            {
-                this.overallTotal = this.CartShopItems.Sum(i => i.Quantity * (i.ShopItem?.Price ?? 0));
-            }
-
+            this.overallTotal = this.cartService.GetCartTotal(this.session.UserId);
             this.OnPropertyChanged(nameof(this.OverallTotal));
         }
     }

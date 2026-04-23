@@ -31,13 +31,13 @@ namespace Content
 
             if (shopItem != null)
             {
-                if (shopItem.Quantity > 1)
-                {
-                    this.ViewModel.ChangeQuantity(shopItem, shopItem.Quantity - 1);
-                }
-                else if (shopItem.Quantity == 1)
+                if (this.ViewModel.IsLastItem(shopItem))
                 {
                     await this.ShowDeleteConfirmationAsync(shopItem);
+                }
+                else
+                {
+                    this.ViewModel.DecreaseQuantity(shopItem);
                 }
             }
         }

@@ -10,6 +10,7 @@ namespace Content.Service
     {
         private readonly ICartRepo cartRepo;
         private readonly IShopItemService shopItemService;
+        private const int MinimumCartItemQuantity = 1;
 
         public CartService(ICartRepo cartRepo, IShopItemService shopItemService)
         {
@@ -52,7 +53,18 @@ namespace Content.Service
         public void AddItemToCart(int cartId, CartItem item)
         {
             var cart = this.cartRepo.GetById(cartId);
-            var existing = cart?.CartItems.Values.FirstOrDefault(ci => ci.ShopItem?.Id == item.ShopItem.Id);
+            CartItem existing = null;
+            if (cart != null)
+            {
+                foreach (var ci in cart.CartItems.Values)
+                {
+                    if (ci.ShopItem?.Id == item.ShopItem.Id)
+                    {
+                        existing = ci;
+                        break;
+                    }
+                }
+            }
             var shopItem = this.shopItemService.GetById(item.ShopItem.Id);
 
             int totalQuantity = (existing?.Quantity ?? 0) + item.Quantity;
@@ -79,7 +91,18 @@ namespace Content.Service
         public void UpdateItemQuantity(int cartId, int cartItemId, int quantity)
         {
             var cart = this.cartRepo.GetById(cartId);
-            var cartItem = cart?.CartItems.Values.FirstOrDefault(ci => ci.Id == cartItemId);
+            CartItem cartItem = null;
+            if (cart != null)
+            {
+                foreach (var ci in cart.CartItems.Values)
+                {
+                    if (ci.Id == cartItemId)
+                    {
+                        cartItem = ci;
+                        break;
+                    }
+                }
+            }
             if (cartItem != null)
             {
                 var shopItem = this.shopItemService.GetById(cartItem.ShopItem.Id);
@@ -95,6 +118,65 @@ namespace Content.Service
         public void ClearCart(int cartId)
         {
             this.cartRepo.ClearCart(cartId);
+        }
+        public double GetCartTotal(int cartId)
+        {
+            var cart = this.cartRepo.GetById(cartId);
+            if (cart == null)
+            {
+                return 0;
+            }
+
+            return cart.GetOverallPrice();
+        }
+        public void DecreaseItemQuantity(int cartId, int cartItemId)
+        {
+            var cart = this.cartRepo.GetById(cartId);
+            CartItem cartItem = null;
+            if (cart != null)
+            {
+                foreach (var ci in cart.CartItems.Values)
+                {
+                    if (ci.Id == cartItemId)
+                    {
+                        cartItem = ci;
+                        break;
+                    }
+                }
+            }
+
+            if (cartItem == null)
+            {
+                return;
+            }
+
+            if (cartItem.Quantity > MinimumCartItemQuantity)
+            {
+                this.cartRepo.UpdateItemQuantity(cartId, cartItemId, cartItem.Quantity - 1);
+            }
+            else
+            {
+                this.cartRepo.RemoveItemFromCart(cartId, cartItemId);
+            }
+        }
+        public bool IsLastCartItem(int cartId, int cartItemId)
+        {
+            var cart = this.cartRepo.GetById(cartId);
+            if (cart == null)
+            {
+                return false;
+            }
+
+            CartItem cartItem = null;
+            foreach (var ci in cart.CartItems.Values)
+            {
+                if (ci.Id == cartItemId)
+                {
+                    cartItem = ci;
+                    break;
+                }
+            }
+            return cartItem != null && cartItem.Quantity == MinimumCartItemQuantity;
         }
     }
 }

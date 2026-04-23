@@ -186,5 +186,98 @@ namespace Tests.Service
 
             Assert.That(this.service.GetCartById(1).CartItems, Is.Empty);
         }
+        [Test]
+        public void DecreaseItemQuantity_WhenQuantityGreaterThanOne_DecreasesQuantityByOne()
+        {
+            var shopItem = AddShopItem("Wine", 10);
+            AddCart(1);
+            this.service.AddItemToCart(1, new CartItem(0, shopItem, 3));
+            var cartItem = this.service.GetCartById(1).CartItems.Values.First();
+
+            this.service.DecreaseItemQuantity(1, cartItem.Id);
+
+            Assert.That(this.service.GetCartById(1).CartItems.Values.First().Quantity, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void DecreaseItemQuantity_WhenQuantityIsOne_RemovesItemFromCart()
+        {
+            var shopItem = AddShopItem("Wine", 10);
+            AddCart(1);
+            this.service.AddItemToCart(1, new CartItem(0, shopItem, 1));
+            var cartItem = this.service.GetCartById(1).CartItems.Values.First();
+
+            this.service.DecreaseItemQuantity(1, cartItem.Id);
+
+            Assert.That(this.service.GetCartById(1).CartItems, Is.Empty);
+        }
+
+        [Test]
+        public void DecreaseItemQuantity_WhenCartItemDoesNotExist_DoesNothing()
+        {
+            AddCart(1);
+
+            Assert.DoesNotThrow(() => this.service.DecreaseItemQuantity(1, 999));
+
+            Assert.That(this.service.GetCartById(1).CartItems, Is.Empty);
+        }
+
+        [Test]
+        public void GetCartTotal_WhenCartIsEmpty_ReturnsZero()
+        {
+            AddCart(1);
+
+            var total = this.service.GetCartTotal(1);
+
+            Assert.That(total, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void GetCartTotal_WhenCartHasItems_ReturnsCorrectSum()
+        {
+            var shopItem = AddShopItem("Wine", 10, 5.0f);
+            AddCart(1);
+            this.service.AddItemToCart(1, new CartItem(0, shopItem, 3));
+
+            var total = this.service.GetCartTotal(1);
+
+            Assert.That(total, Is.EqualTo(15.0f).Within(0.001));
+        }
+
+        [Test]
+        public void IsLastCartItem_WhenQuantityIsOne_ReturnsTrue()
+        {
+            var shopItem = AddShopItem("Wine", 10);
+            AddCart(1);
+            this.service.AddItemToCart(1, new CartItem(0, shopItem, 1));
+            var cartItem = this.service.GetCartById(1).CartItems.Values.First();
+
+            var result = this.service.IsLastCartItem(1, cartItem.Id);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void IsLastCartItem_WhenQuantityGreaterThanOne_ReturnsFalse()
+        {
+            var shopItem = AddShopItem("Wine", 10);
+            AddCart(1);
+            this.service.AddItemToCart(1, new CartItem(0, shopItem, 3));
+            var cartItem = this.service.GetCartById(1).CartItems.Values.First();
+
+            var result = this.service.IsLastCartItem(1, cartItem.Id);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void IsLastCartItem_WhenCartItemDoesNotExist_ReturnsFalse()
+        {
+            AddCart(1);
+
+            var result = this.service.IsLastCartItem(1, 999);
+
+            Assert.That(result, Is.False);
+        }
     }
 }

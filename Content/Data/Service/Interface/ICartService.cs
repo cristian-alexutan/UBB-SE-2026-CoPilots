@@ -14,5 +14,8 @@ namespace Content.Service
         void RemoveItemFromCart(int cartId, int cartItemId);
         void UpdateItemQuantity(int cartId, int cartItemId, int quantity);
         void ClearCart(int cartId);
+        void DecreaseItemQuantity(int cartId, int cartItemId);
+        double GetCartTotal(int cartId);
+        bool IsLastCartItem(int cartId, int cartItemId);
     }
 }
