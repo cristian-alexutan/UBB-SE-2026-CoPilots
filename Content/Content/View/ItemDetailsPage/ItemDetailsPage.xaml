@@ -335,7 +335,8 @@
                                                  PlaceholderForeground="{StaticResource PlaceholderBrush}"
                                                  HorizontalTextAlignment="Center"
                                                  VerticalContentAlignment="Center"
-                                                 CornerRadius="10" />
+                                                 CornerRadius="10" 
+                                                 TextChanged="QuantityBox_TextChanged"/>
 
                                         <Button Grid.Column="2"
                                                 Width="44" Height="44"

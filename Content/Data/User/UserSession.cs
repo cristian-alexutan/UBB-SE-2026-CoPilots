@@ -9,6 +9,7 @@ namespace Content.User
     public class UserSession
     {
         public int UserId { get; private set; }
+
         public bool IsAdmin { get; private set; }
 
         public void SetAdmin(int managerId)
