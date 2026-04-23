@@ -280,6 +280,54 @@ public class ManagerServiceTests
     }
 
     [Test]
+    public void UpdateManagerUnsuccessfulTest_EmptyEmail()
+    {
+        var repo = new ManagerMockRepo();
+        var service = new ManagerService(repo);
+
+        var ex = Assert.Throws<ArgumentException>(() =>
+            service.UpdateManager(new Manager(0, "Alice", string.Empty, "0700000001")));
+
+        Assert.That(ex!.Message, Does.Contain("Email is required"));
+    }
+
+    [Test]
+    public void UpdateManagerUnsuccessfulTest_WhiteSpaceEmail()
+    {
+        var repo = new ManagerMockRepo();
+        var service = new ManagerService(repo);
+
+        var ex = Assert.Throws<ArgumentException>(() =>
+            service.UpdateManager(new Manager(0, "Alice", "   ", "0700000001")));
+
+        Assert.That(ex!.Message, Does.Contain("Email is required"));
+    }
+
+    [Test]
+    public void UpdateManagerUnsuccessfulTest_WhiteSpaceName()
+    {
+        var repo = new ManagerMockRepo();
+        var service = new ManagerService(repo);
+
+        var ex = Assert.Throws<ArgumentException>(() =>
+            service.UpdateManager(new Manager(0, "   ", "alice@mail.com", "0700000001")));
+
+        Assert.That(ex!.Message, Does.Contain("Name is required"));
+    }
+
+    [Test]
+    public void UpdateManagerUnsuccessfulTest_WhiteSpacePhone()
+    {
+        var repo = new ManagerMockRepo();
+        var service = new ManagerService(repo);
+
+        var ex = Assert.Throws<ArgumentException>(() =>
+            service.UpdateManager(new Manager(0, "Alice", "alice@mail.com", "   ")));
+
+        Assert.That(ex!.Message, Does.Contain("Phone is required"));
+    }
+
+    [Test]
     public void GetAnyManager_WhenEmpty_ReturnsNull()
     {
         var repo = new ManagerMockRepo();
