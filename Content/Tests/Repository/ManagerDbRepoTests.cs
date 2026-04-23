@@ -9,7 +9,7 @@ namespace TestProject.Repository
         private const string ConnectionString = "Server=.\\SQLEXPRESS;Database=DutyFreeShops_Test;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
 
         [Test]
-        public void AddTest()
+        public void AddTestSuccesfull()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager manager = new Manager(0, "Test Manager", "test@mail.com", "0700000001");
@@ -39,7 +39,7 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void DeleteTestUnsuccessful()
+        public void DeleteTestUnsuccessful_IdDoesntExist()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager? result = repo.Delete(-2);
@@ -65,10 +65,37 @@ namespace TestProject.Repository
         }
 
         [Test]
-        public void UpdateTestUnsuccessful()
+        public void UpdateTestUnsuccessful_ManagerIsNull()
         {
             var repo = new ManagerDbRepo(ConnectionString);
             Manager? result = repo.Update(new Manager(-1, "Updated Manager", "updated@mail.com", "0700000099"));
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void GetAllTestSuccesfull()
+        {
+            var repo = new ManagerDbRepo(ConnectionString);
+            Manager manager1 = new Manager(0, "Test Manager 1", "test1@mail.com", "0700000001");
+            Manager manager2 = new Manager(0, "Test Manager 2", "test2@mail.com", "0700000002");
+            repo.Add(manager1);
+            repo.Add(manager2);
+
+            IEnumerable<Manager> result = repo.GetAll();
+
+            Assert.That(result.Count(), Is.GreaterThanOrEqualTo(2));
+
+            repo.Delete(manager1.Id);
+            repo.Delete(manager2.Id);
+        }
+
+        [Test]
+        public void GetByIdTestUnsuccessful_IdDoesntExist()
+        {
+            var repo = new ManagerDbRepo(ConnectionString);
+
+            Manager? result = repo.GetById(-1);
+
             Assert.That(result, Is.Null);
         }
     }

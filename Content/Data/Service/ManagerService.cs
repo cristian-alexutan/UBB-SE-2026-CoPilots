@@ -93,7 +93,7 @@ namespace Content.Service
 
         public Manager GetAnyManager()
         {
-            return managerRepo.GetAll().FirstOrDefault();
+            return managerRepo.GetAll().First();
         }
     }
 }
