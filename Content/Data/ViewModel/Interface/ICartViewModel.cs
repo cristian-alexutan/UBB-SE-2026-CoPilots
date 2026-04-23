@@ -1,8 +1,9 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+
 namespace Content.ViewModel.Interface
 {
-    public interface ICartViewModel
+    public interface ICartViewModel : INotifyPropertyChanged
     {
         bool IsCancelButtonVisible { get; }
         ObservableCollection<CartShopItem> CartShopItems { get; set; }
@@ -10,8 +11,6 @@ namespace Content.ViewModel.Interface
         bool IsReserveButtonEnabled { get; }
         bool IsReserved { get; set; }
         string OverallTotal { get; }
-
-        event PropertyChangedEventHandler PropertyChanged;
 
         void CancelReservation();
         void ChangeQuantity(CartShopItem item, int newQuantity);
