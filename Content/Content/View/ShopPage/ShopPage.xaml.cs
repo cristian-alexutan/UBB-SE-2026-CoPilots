@@ -1,7 +1,7 @@
 using System;
 using Content.Domain;
-using Content.ViewModel;
 using Content.ViewModel.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -15,7 +15,7 @@ namespace Content
         {
             this.InitializeComponent();
 
-            ViewModel = new ShopPageViewModel(App.ShopService, App.TicketService, App.Session);
+            ViewModel = App.Services.GetRequiredService<IShopPageViewModel>();
             ShopsGridView.ItemsSource = ViewModel.Shops;
 
             AddShopButton.Visibility = ViewModel.CanAddShop ? Visibility.Visible : Visibility.Collapsed;

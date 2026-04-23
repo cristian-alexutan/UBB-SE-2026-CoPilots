@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using Content.ViewModel;
 using Content.ViewModel.Interface;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Content
 {
@@ -15,7 +16,7 @@ namespace Content
 
         public CartPage()
         {
-            this.ViewModel = new CartViewModel(App.CartService, App.ReservationService, App.Session);
+            this.ViewModel = App.Services.GetRequiredService<ICartViewModel>();
             this.InitializeComponent();
         }
 

@@ -32,9 +32,9 @@ namespace Tests.ViewModel
             return new ShopItem(1, quantity, price, this.shop.Id, "photo.jpg", name, "description");
         }
 
-        private ItemDetailsViewModel CreateViewModel(ShopItem item, Cart cart = null)
+        private ItemDetailsViewModel CreateViewModel(ShopItem item)
         {
-            return new ItemDetailsViewModel(this.cartService, this.shopItemService, this.session, item, cart, this.shop);
+            return new ItemDetailsViewModel(this.cartService, this.shopItemService, this.session, item, this.shop);
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace Tests.ViewModel
             var existingCart = new Cart(this.session.UserId, new Client(this.session.UserId, "Client"), new Dictionary<int, CartItem>());
             this.cartService.GetCartById(this.session.UserId).Returns(existingCart);
 
-            var viewModel = this.CreateViewModel(item, existingCart);
+            var viewModel = this.CreateViewModel(item);
             viewModel.SetQuantityFromText("3");
 
             viewModel.AddToCartCommand.Execute(null);
@@ -116,7 +116,7 @@ namespace Tests.ViewModel
             var existingCart = new Cart(this.session.UserId, new Client(this.session.UserId, "Client"), new Dictionary<int, CartItem>());
             this.cartService.GetCartById(this.session.UserId).Returns(existingCart);
 
-            var viewModel = this.CreateViewModel(item, existingCart);
+            var viewModel = this.CreateViewModel(item);
             viewModel.SetQuantityFromText("3");
 
             var eventFired = false;
@@ -151,7 +151,7 @@ namespace Tests.ViewModel
                 .When(service => service.AddItemToCart(Arg.Any<int>(), Arg.Any<CartItem>()))
                 .Do(_ => throw new InvalidOperationException("Not enough stock."));
 
-            var viewModel = this.CreateViewModel(item, existingCart);
+            var viewModel = this.CreateViewModel(item);
             viewModel.SetQuantityFromText("2");
 
             string errorMessage = null;
@@ -172,7 +172,7 @@ namespace Tests.ViewModel
                 .When(service => service.AddItemToCart(Arg.Any<int>(), Arg.Any<CartItem>()))
                 .Do(_ => throw new InvalidOperationException("Not enough stock."));
 
-            var viewModel = this.CreateViewModel(item, existingCart);
+            var viewModel = this.CreateViewModel(item);
             viewModel.SetQuantityFromText("2");
 
             var successEventFired = false;
