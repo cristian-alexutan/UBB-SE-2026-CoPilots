@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Content.Data.Service.Interface;
 using Content.Domain;
 using Content.Service;
 using Content.User;
@@ -12,7 +13,8 @@ namespace Content.ViewModel
 {
     public class CartViewModel : INotifyPropertyChanged, ICartViewModel
     {
-        private readonly MainService service;
+        private readonly ICartService cartService;
+        private readonly IReservationService reservationService;
         private readonly UserSession session;
         private int currentReservationId;
 
@@ -48,9 +50,10 @@ namespace Content.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public CartViewModel(MainService service, UserSession session)
+        public CartViewModel(ICartService cartService, IReservationService reservationService, UserSession session)
         {
-            this.service = service;
+            this.cartService = cartService;
+            this.reservationService = reservationService;
             this.session = session;
             this.CartShopItems = new ObservableCollection<CartShopItem>();
             this.LoadCartItems();
@@ -64,37 +67,37 @@ namespace Content.ViewModel
 
         public void ChangeQuantity(CartShopItem item, int newQuantity)
         {
-            this.service.CartService.UpdateItemQuantity(this.session.UserId, item.CartItemId, newQuantity);
+            this.cartService.UpdateItemQuantity(this.session.UserId, item.CartItemId, newQuantity);
             item.Quantity = newQuantity;
             this.CalculateOverallTotal();
         }
 
         public void RemoveShopItem(CartShopItem item)
         {
-            this.service.CartService.RemoveItemFromCart(this.session.UserId, item.CartItemId);
+            this.cartService.RemoveItemFromCart(this.session.UserId, item.CartItemId);
             this.CartShopItems.Remove(item);
             this.CalculateOverallTotal();
         }
 
         public void EmptyCart()
         {
-            this.service.CartService.ClearCart(this.session.UserId);
+            this.cartService.ClearCart(this.session.UserId);
             this.CartShopItems.Clear();
             this.CalculateOverallTotal();
         }
 
         public void ReserveCart()
         {
-            var cart = this.service.CartService.GetCartById(this.session.UserId);
+            var cart = this.cartService.GetCartById(this.session.UserId);
             var newReservation = new Reservation(cart, true, DateTime.Now);
-            this.service.ReservationService.ReserveCart(newReservation);
+            this.reservationService.ReserveCart(newReservation);
             this.currentReservationId = newReservation.Id;
             this.IsReserved = true;
         }
 
         public void CancelReservation()
         {
-            this.service.ReservationService.CancelReservation(this.currentReservationId);
+            this.reservationService.CancelReservation(this.currentReservationId);
             this.IsReserved = false;
         }
 
@@ -105,13 +108,13 @@ namespace Content.ViewModel
 
         private void CheckExistingReservation()
         {
-            var cart = this.service.CartService.GetCartById(this.session.UserId);
+            var cart = this.cartService.GetCartById(this.session.UserId);
             if (cart == null)
             {
                 return;
             }
 
-            var allReservations = this.service.ReservationService.GetAllReservations();
+            var allReservations = this.reservationService.GetAllReservations();
             var activeReservation = allReservations.FirstOrDefault(r =>
                 r.ReservationCart.Id == cart.Id && r.Active);
 
@@ -125,7 +128,7 @@ namespace Content.ViewModel
         private void LoadCartItems()
         {
             this.CartShopItems.Clear();
-            var cart = this.service.CartService.GetCartById(this.session.UserId);
+            var cart = this.cartService.GetCartById(this.session.UserId);
 
             if (cart != null && cart.CartItems != null)
             {

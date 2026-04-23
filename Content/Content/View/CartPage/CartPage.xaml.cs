@@ -2,31 +2,25 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Content.Service;
-using Content.User;
 using Content.ViewModel;
+using Content.ViewModel.Interface;
 
 namespace Content
 {
-    public sealed partial class CartPage : Window
+    public sealed partial class CartPage : Page
     {
         public Visibility BoolToVisibility(bool value) => value ? Visibility.Visible : Visibility.Collapsed;
-        private readonly MainService service;
-        private readonly UserSession session;
 
-        public CartViewModel ViewModel { get; }
+        public ICartViewModel ViewModel { get; }
 
-        public CartPage(MainService service, UserSession session)
+        public CartPage()
         {
-            this.service = service;
-            this.session = session;
-
-            if (session.IsAdmin)
+            if (App.Session.IsAdmin)
             {
                 throw new UnauthorizedAccessException("Admins are not allowed to view or enter the Cart.");
             }
 
-            this.ViewModel = new CartViewModel(service, session);
+            this.ViewModel = new CartViewModel(App.CartService, App.ReservationService, App.Session);
             this.InitializeComponent();
         }
 
@@ -57,7 +51,7 @@ namespace Content
                 PrimaryButtonText = "Delete",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot,
+                XamlRoot = this.XamlRoot,
             };
 
             ContentDialogResult result = await deleteDialog.ShowAsync();
@@ -100,7 +94,7 @@ namespace Content
                 PrimaryButtonText = "Empty Cart",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot,
+                XamlRoot = this.XamlRoot,
             };
 
             ContentDialogResult result = await emptyDialog.ShowAsync();
@@ -119,7 +113,7 @@ namespace Content
                 Content = message,
                 CloseButtonText = "OK",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot,
+                XamlRoot = this.XamlRoot,
             };
 
             await errorDialog.ShowAsync();
@@ -162,24 +156,20 @@ namespace Content
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "Cancel",
                 DefaultButton = ContentDialogButton.Close,
-                XamlRoot = this.Content.XamlRoot,
+                XamlRoot = this.XamlRoot,
             };
 
             ContentDialogResult result = await backDialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-                var shopPage = new ShopPage(this.service, this.session);
-                shopPage.Activate();
-                this.Close();
+                this.Frame.Navigate(typeof(ShopPage));
             }
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            var landingPage = new LandingPage(this.service, this.session);
-            landingPage.Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(LandingPage));
         }
     }
 }

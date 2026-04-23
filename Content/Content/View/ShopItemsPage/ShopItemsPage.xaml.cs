@@ -2,35 +2,35 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Domain;
-using Content.Service;
-using Content.User;
 using Content.ViewModel;
 using Content.ViewModel.Interface;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Microsoft.UI.Xaml.Navigation;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using WinRT.Interop;
 
 namespace Content
 {
-    public sealed partial class ShopItemsPage : Window
+    public sealed partial class ShopItemsPage : Page
     {
-        private readonly MainService service;
-        private readonly UserSession session;
+        public IShopItemsViewModel ViewModel { get; private set; }
 
-        public IShopItemsViewModel ViewModel { get; }
-
-        public ShopItemsPage(MainService service, UserSession session, Shop selectedShop)
+        public ShopItemsPage()
         {
             this.InitializeComponent();
-            this.service = service;
-            this.session = session;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var selectedShop = (Shop)e.Parameter;
             this.ShopNameTextBlock.Text = selectedShop.Name;
 
-            this.ViewModel = new ShopItemsViewModel(service.ShopItemService, service.CartService, session, selectedShop);
+            this.ViewModel = new ShopItemsViewModel(App.ShopItemService, App.CartService, App.Session, selectedShop);
             this.ItemsGridView.ItemsSource = this.ViewModel.Items;
 
             this.AddButton.Visibility = this.ViewModel.CanAddItem ? Visibility.Visible : Visibility.Collapsed;
@@ -41,6 +41,11 @@ namespace Content
 
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (this.ViewModel == null)
+            {
+                return;
+            }
+
             if (sender is ComboBox combo && combo.SelectedItem is ComboBoxItem item)
             {
                 switch (item.Content.ToString())
@@ -217,20 +222,17 @@ namespace Content
 
         private void CartButton_Click(object sender, RoutedEventArgs e)
         {
-            new CartPage(this.service, this.session).Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(CartPage));
         }
 
         private void BackToShops_Click(object sender, RoutedEventArgs e)
         {
-            new ShopPage(this.service, this.session).Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(ShopPage));
         }
 
         private void BackToLandingPage_Click(object sender, RoutedEventArgs e)
         {
-            new LandingPage(this.service, this.session).Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(LandingPage));
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
@@ -240,9 +242,8 @@ namespace Content
                 return;
             }
 
-            var cart = this.service.CartService.GetOrCreateCart(this.session.UserId);
-            new ItemDetailsPage(this.service, this.session, item, cart).Activate();
-            this.Close();
+            var cart = App.CartService.GetOrCreateCart(App.Session.UserId);
+            this.Frame.Navigate(typeof(ItemDetailsPage), new ItemDetailsNavArgs(item, cart));
         }
 
         private static ImageSource? LoadImageSource(string? path)
@@ -296,7 +297,7 @@ namespace Content
             dropZone.Tapped += async (s, args) =>
             {
                 var picker = new Windows.Storage.Pickers.FileOpenPicker();
-                InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
+                InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(App.MainWindow));
                 picker.FileTypeFilter.Add(".png");
                 picker.FileTypeFilter.Add(".jpg");
 
@@ -348,6 +349,19 @@ namespace Content
                 RequestedTheme = ElementTheme.Light,
                 XamlRoot = xamlRoot,
             }.ShowAsync();
+        }
+    }
+
+    public class ItemDetailsNavArgs
+    {
+        public ShopItem Item { get; }
+
+        public Cart Cart { get; }
+
+        public ItemDetailsNavArgs(ShopItem item, Cart cart)
+        {
+            this.Item = item;
+            this.Cart = cart;
         }
     }
 }

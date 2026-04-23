@@ -1,7 +1,5 @@
 using System;
 using Content.Domain;
-using Content.Service;
-using Content.User;
 using Content.ViewModel;
 using Content.ViewModel.Interface;
 using Microsoft.UI.Xaml;
@@ -9,19 +7,15 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Content
 {
-    public sealed partial class ShopPage : Window
+    public sealed partial class ShopPage : Page
     {
         public IShopPageViewModel ViewModel { get; }
-        private readonly MainService service;
-        private readonly UserSession session;
 
-        public ShopPage(MainService service, UserSession session)
+        public ShopPage()
         {
             this.InitializeComponent();
-            this.service = service;
-            this.session = session;
 
-            ViewModel = new ShopPageViewModel(service.ShopService, service.TicketService, session);
+            ViewModel = new ShopPageViewModel(App.ShopService, App.TicketService, App.Session);
             ShopsGridView.ItemsSource = ViewModel.Shops;
 
             AddShopButton.Visibility = ViewModel.CanAddShop ? Visibility.Visible : Visibility.Collapsed;
@@ -39,23 +33,17 @@ namespace Content
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
-            var landingPage = new LandingPage(service, session);
-            landingPage.Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(LandingPage));
         }
 
         private void ShopsGridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            var shopItemPage = new ShopItemsPage(service, session, ((Shop)e.ClickedItem));
-            shopItemPage.Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(ShopItemsPage), (Shop)e.ClickedItem);
         }
 
         private void CartButton_Click(object sender, RoutedEventArgs e)
         {
-            var cart = new CartPage(service, session);
-            cart.Activate();
-            this.Close();
+            this.Frame.Navigate(typeof(CartPage));
         }
 
         private async void AddShopButton_Click(object sender, RoutedEventArgs e)
