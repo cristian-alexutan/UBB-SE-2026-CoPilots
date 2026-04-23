@@ -1,12 +1,11 @@
-<Window
+<Page
     x:Class="Content.ItemDetailsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Content"
-    mc:Ignorable="d"
-    Title="Duty-free shops">
+    mc:Ignorable="d">
 
     <Grid x:Name="Root" Background="#F6F7F9">
         <Grid.Resources>
@@ -453,4 +452,4 @@
             </Grid>
         </ScrollViewer>
     </Grid>
-</Window>
+</Page>

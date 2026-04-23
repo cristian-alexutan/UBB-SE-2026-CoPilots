@@ -1,26 +1,19 @@
-using Content.Data.Service.Interface;
-using Content.Helper;
-using Content.Service;
-using Content.User;
 using Content.ViewModel;
+using Content.ViewModel.Interface;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Content
 {
-    public sealed partial class LandingPage : Window
+    public sealed partial class LandingPage : Page
     {
-        private readonly MainService service;
-        private readonly UserSession session;
-        public LandingViewModel ViewModel { get; }
-        public LandingPage(MainService service, UserSession session)
+        public ILandingViewModel ViewModel { get; }
+
+        public LandingPage()
         {
             this.InitializeComponent();
 
-            this.service = service;
-            this.session = session;
-
-            ViewModel = new LandingViewModel(service, session);
+            ViewModel = new LandingViewModel(App.ClientService, App.ManagerService, App.Session);
 
             ClientButton.Click += ClientButton_Click;
             AdminButton.Click += AdminButton_Click;
@@ -31,7 +24,7 @@ namespace Content
             ViewModel.SelectClientCommand.Execute(null);
             if (ViewModel.IsRoleSelected)
             {
-                OpenShop();
+                this.Frame.Navigate(typeof(ShopPage));
             }
             else
             {
@@ -45,20 +38,13 @@ namespace Content
             ViewModel.SelectAdminCommand.Execute(null);
             if (ViewModel.IsRoleSelected)
             {
-                OpenShop();
+                this.Frame.Navigate(typeof(ShopPage));
             }
             else
             {
                 ErrorText.Text = ViewModel.ErrorMessage;
                 ErrorText.Visibility = Visibility.Visible;
             }
-        }
-
-        private void OpenShop()
-        {
-            var shopPage = new ShopPage(service, session);
-            shopPage.Activate();
-            this.Close();
         }
     }
 }

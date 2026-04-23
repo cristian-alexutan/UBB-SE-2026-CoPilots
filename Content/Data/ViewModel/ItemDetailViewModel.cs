@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Content.Service;
-using Content.User;
 using Content.Domain;
 using Content.Helper;
+using Content.Service;
+using Content.User;
+using Content.ViewModel.Interface;
 
 namespace Content.ViewModel
 {
-    public class ItemDetailsViewModel
+    public class ItemDetailsViewModel : IItemDetailsViewModel
     {
-        private readonly MainService service;
+        private readonly ICartService cartService;
+        private readonly IShopItemService shopItemService;
         private readonly UserSession session;
 
         private ShopItem item;
@@ -22,9 +19,10 @@ namespace Content.ViewModel
         public ICommand AddToCartCommand { get; }
         public ICommand UpdateItemCommand { get; }
 
-        public ItemDetailsViewModel(MainService service, UserSession session, ShopItem item, Cart cart)
+        public ItemDetailsViewModel(ICartService cartService, IShopItemService shopItemService, UserSession session, ShopItem item, Cart cart)
         {
-            this.service = service;
+            this.cartService = cartService;
+            this.shopItemService = shopItemService;
             this.session = session;
             this.item = item;
             this.cart = cart;
@@ -49,14 +47,14 @@ namespace Content.ViewModel
             if (existingCartItem != null)
             {
                 var newCartQuantity = existingCartItem.Quantity + quantity;
-                service.CartService.UpdateItemQuantity(cart.Id, existingCartItem.Id, newCartQuantity);
+                cartService.UpdateItemQuantity(cart.Id, existingCartItem.Id, newCartQuantity);
             }
             else
             {
-                service.CartService.AddItemToCart(cart.Id, new CartItem(0, item, quantity));
+                cartService.AddItemToCart(cart.Id, new CartItem(0, item, quantity));
             }
 
-            service.ShopItemService.UpdateShopItem(
+            shopItemService.UpdateShopItem(
                 new ShopItem(
                     item.Id,
                     newStockQuantity,
@@ -69,7 +67,7 @@ namespace Content.ViewModel
 
         private void UpdateItem(ShopItem updatedItem)
         {
-            service.ShopItemService.UpdateShopItem(
+            shopItemService.UpdateShopItem(
                 new ShopItem(
                     updatedItem.Id,
                     updatedItem.Quantity,
