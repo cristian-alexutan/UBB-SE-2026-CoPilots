@@ -89,7 +89,7 @@ namespace Content.Repository.Database
             using (SqlConnection conn = new SqlConnection(this.connectionString))
             {
                 conn.Open();
-                var cmd = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE category='Duty Free Shops' AND subcategory=@Subcategory", conn);
+                var cmd = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE subcategory=@Subcategory", conn);
                 cmd.Parameters.AddWithValue("@Subcategory", subcategory);
                 return (int)cmd.ExecuteScalar();
             }
