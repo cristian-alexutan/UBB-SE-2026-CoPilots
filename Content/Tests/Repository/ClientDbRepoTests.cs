@@ -60,5 +60,32 @@ namespace TestProject.Repository
             Client? result = repo.Update(new Client(-1, "Updated Client"));
             Assert.That(result, Is.Null);
         }
+
+        [Test]
+        public void GetAllTest()
+        {
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+            Client client1 = new Client(0, "Test Client 1");
+            Client client2 = new Client(0, "Test Client 2");
+            repo.Add(client1);
+            repo.Add(client2);
+
+            IEnumerable<Client> result = repo.GetAll();
+
+            Assert.That(result.Count(), Is.GreaterThanOrEqualTo(2));
+
+            repo.Delete(client1.Id);
+            repo.Delete(client2.Id);
+        }
+
+        [Test]
+        public void GetByIdTestUnsuccessful()
+        {
+            ClientDbRepo repo = new ClientDbRepo(ConnectionString);
+
+            Client? result = repo.GetById(-1);
+
+            Assert.That(result, Is.Null);
+        }
     }
 }

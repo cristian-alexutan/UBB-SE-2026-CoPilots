@@ -71,5 +71,32 @@ namespace TestProject.Repository
             Manager? result = repo.Update(new Manager(-1, "Updated Manager", "updated@mail.com", "0700000099"));
             Assert.That(result, Is.Null);
         }
+
+        [Test]
+        public void GetAllTest()
+        {
+            var repo = new ManagerDbRepo(ConnectionString);
+            Manager manager1 = new Manager(0, "Test Manager 1", "test1@mail.com", "0700000001");
+            Manager manager2 = new Manager(0, "Test Manager 2", "test2@mail.com", "0700000002");
+            repo.Add(manager1);
+            repo.Add(manager2);
+
+            IEnumerable<Manager> result = repo.GetAll();
+
+            Assert.That(result.Count(), Is.GreaterThanOrEqualTo(2));
+
+            repo.Delete(manager1.Id);
+            repo.Delete(manager2.Id);
+        }
+
+        [Test]
+        public void GetByIdTestUnsuccessful()
+        {
+            var repo = new ManagerDbRepo(ConnectionString);
+
+            Manager? result = repo.GetById(-1);
+
+            Assert.That(result, Is.Null);
+        }
     }
 }
