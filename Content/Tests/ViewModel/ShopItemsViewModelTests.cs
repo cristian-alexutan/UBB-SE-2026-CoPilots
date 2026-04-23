@@ -269,5 +269,60 @@ namespace Tests.ViewModel
 
             Assert.That(viewModel.Items, Is.Empty);
         }
+
+        [Test]
+        public void DeleteItemNull()
+        {
+            ShopItemsViewModel viewModel = this.CreateAdminViewModel();
+            Assert.Throws<ArgumentNullException>(
+                () => viewModel.DeleteItem(null!));
+        }
+
+        [Test]
+        public void EditItemNull()
+        {
+            ShopItem existingItem = new ShopItem(5, 10f, 1, string.Empty, "item1", "desc1");
+            this.shopItemRepo.Add(existingItem);
+            ShopItemsViewModel viewModel = this.CreateAdminViewModel();
+            Assert.Throws<ArgumentNullException>(
+                () => viewModel.UpdateItem(null!, "item2", "desc2", "20", "3", "img2.png"));
+        }
+
+        [Test]
+        public void SearchEmpty()
+        {
+            ShopItemsViewModel viewModel = this.CreateClientViewModel();
+            int countAll = viewModel.Items.Count;
+            viewModel.Search(string.Empty);
+            Assert.That(viewModel.Items.Count, Is.EqualTo(countAll));
+        }
+
+        [Test]
+        public void CreateViewModelNullShopItemService()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ShopItemsViewModel(null!, this.cartService, this.session, this.shop));
+        }
+
+        [Test]
+        public void CreateViewModelNullCartService()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ShopItemsViewModel(this.shopItemService, null!, this.session, this.shop));
+        }
+
+        [Test]
+        public void CreateViewModelNullSession()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ShopItemsViewModel(this.shopItemService, this.cartService, null!, this.shop));
+        }
+
+        [Test]
+        public void CreateViewModelNullShop()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ShopItemsViewModel(this.shopItemService, this.cartService, this.session, null!));
+        }
     }
 }

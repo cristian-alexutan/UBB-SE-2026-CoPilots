@@ -233,5 +233,12 @@ namespace Tests.ViewModel
 
             Assert.That(result, Is.False);
         }
+
+        [Test]
+        public void CancelReservationNullCart_DoesNotThrow()
+        {
+            this.cartService.GetCartById(1).Returns((Cart)null!);
+            Assert.DoesNotThrow(() => this.viewModel.CancelReservation());
+        }
     }
 }
