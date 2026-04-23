@@ -149,7 +149,7 @@ public class ManagerServiceTests
         var ex = Assert.Throws<ArgumentException>(() =>
             service.AddManager(new Manager(0, "Alice", "alice@mail.com", string.Empty)));
 
-        Assert.That(ex!.Message, Does.Contain("Phone number is required"));
+        Assert.That(ex!.Message, Does.Contain("Phone is required"));
         Assert.That(service.GetAllManagers(), Is.Empty);
     }
 
@@ -259,7 +259,7 @@ public class ManagerServiceTests
         var ex = Assert.Throws<ArgumentException>(() =>
             service.UpdateManager(new Manager(0, "Alice", "alice@mail.com", string.Empty)));
 
-        Assert.That(ex!.Message, Does.Contain("Phone number is required"));
+        Assert.That(ex!.Message, Does.Contain("Phone is required"));
     }
 
     [Test]
