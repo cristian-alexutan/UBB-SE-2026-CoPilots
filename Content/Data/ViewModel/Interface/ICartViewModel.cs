@@ -18,5 +18,7 @@ namespace Content.ViewModel.Interface
         void Reload();
         void RemoveShopItem(CartShopItem item);
         void ReserveCart();
+        void DecreaseQuantity(CartShopItem item);
+        bool IsLastItem(CartShopItem item);
     }
 }
