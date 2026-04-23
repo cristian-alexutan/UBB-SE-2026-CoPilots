@@ -182,5 +182,14 @@ namespace Tests.Service
                 "Cart must not be cleared for an already-inactive reservation");
             Assert.That(service.GetReservationById(reservation.Id).Active, Is.False);
         }
+
+        [Test]
+        public void CancelReservationCartItemsNull()
+        {
+            var item = AddShopItem("A", 10);
+            var reservation = new Reservation(null!, true, DateTime.Now);
+            reservationRepo.Add(reservation);
+            Assert.Throws<NullReferenceException>(() => service.CancelReservation(reservation.Id));
+        }
     }
 }

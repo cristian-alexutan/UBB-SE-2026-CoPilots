@@ -279,5 +279,29 @@ namespace Tests.Service
 
             Assert.That(result, Is.False);
         }
+
+        [Test]
+        public void CartTotalNullCart()
+        {
+            var total = this.service.GetCartTotal(999);
+            Assert.That(total, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AddItemToCartShopItemDoesNotExist()
+        {
+            AddCart(1);
+            var missingShopItem = new ShopItem(999, 5, 10f, 1, string.Empty, "ghost", "desc");
+            var cartItem = new CartItem(0, missingShopItem, 1);
+
+            Assert.Throws<InvalidOperationException>(() => this.service.AddItemToCart(1, cartItem));
+        }
+
+        [Test]
+        public void IsLastCartItemNullCart()
+        {
+            var result = this.service.IsLastCartItem(999, 1);
+            Assert.That(result, Is.False);
+        }
     }
 }
