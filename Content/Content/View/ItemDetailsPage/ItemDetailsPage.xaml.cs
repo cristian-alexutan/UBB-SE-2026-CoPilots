@@ -1,7 +1,8 @@
 using System;
 using System.ComponentModel;
-using Content.ViewModel;
+using Content.Domain;
 using Content.ViewModel.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -24,13 +25,8 @@ namespace Content
             base.OnNavigatedTo(e);
             var args = (ItemDetailsNavArgs)e.Parameter;
 
-            ViewModel = new ItemDetailsViewModel(
-                App.CartService,
-                App.ShopItemService,
-                App.Session,
-                args.Item,
-                args.Cart,
-                args.Shop);
+            var viewModelFactory = App.Services.GetRequiredService<Func<ShopItem, Shop, IItemDetailsViewModel>>();
+            ViewModel = viewModelFactory(args.Item, args.Shop);
 
             this.DataContext = ViewModel;
 

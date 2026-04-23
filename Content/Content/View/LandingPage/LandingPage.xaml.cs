@@ -1,5 +1,5 @@
-using Content.ViewModel;
 using Content.ViewModel.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -13,7 +13,7 @@ namespace Content
         {
             this.InitializeComponent();
 
-            ViewModel = new LandingViewModel(App.ClientService, App.ManagerService, App.Session);
+            ViewModel = App.Services.GetRequiredService<ILandingViewModel>();
 
             ClientButton.Click += ClientButton_Click;
             AdminButton.Click += AdminButton_Click;

@@ -165,14 +165,12 @@ namespace Content.ViewModel
             IShopItemService shopItemService,
             UserSession session,
             ShopItem item,
-            Cart cart,
             Shop currentShop)
         {
             this.cartService = cartService;
             this.shopItemService = shopItemService;
             this.session = session;
             this.item = item;
-            this.cart = cart;
             this.CurrentShop = currentShop;
 
             editName = item.Name;

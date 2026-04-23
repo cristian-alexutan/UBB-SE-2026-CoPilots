@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Domain;
-using Content.ViewModel;
 using Content.ViewModel.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -32,7 +32,8 @@ namespace Content
             selectedShop = (Shop)e.Parameter;
             this.ShopNameTextBlock.Text = selectedShop.Name;
 
-            this.ViewModel = new ShopItemsViewModel(App.ShopItemService, App.CartService, App.Session, selectedShop);
+            var viewModelFactory = App.Services.GetRequiredService<Func<Shop, IShopItemsViewModel>>();
+            this.ViewModel = viewModelFactory(selectedShop);
             this.ItemsGridView.ItemsSource = this.ViewModel.Items;
 
             this.AddButton.Visibility = this.ViewModel.CanAddItem ? Visibility.Visible : Visibility.Collapsed;
@@ -248,8 +249,7 @@ namespace Content
                 return;
             }
 
-            var cart = App.CartService.GetOrCreateCart(App.Session.UserId);
-            this.Frame.Navigate(typeof(ItemDetailsPage), new ItemDetailsNavArgs(item, cart, selectedShop));
+            this.Frame.Navigate(typeof(ItemDetailsPage), new ItemDetailsNavArgs(item, selectedShop));
         }
 
         private static ImageSource LoadImageSource(string path)
@@ -366,14 +366,11 @@ namespace Content
     {
         public ShopItem Item { get; }
 
-        public Cart Cart { get; }
-
         public Shop Shop { get; }
 
-        public ItemDetailsNavArgs(ShopItem item, Cart cart, Shop shop)
+        public ItemDetailsNavArgs(ShopItem item, Shop shop)
         {
             this.Item = item;
-            this.Cart = cart;
             this.Shop = shop;
         }
     }
