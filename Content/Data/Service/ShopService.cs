@@ -31,7 +31,7 @@ namespace Content.Service
                 throw new Exception("Type field must not be empty");
             }
 
-            var nameExists = this.shopRepo.GetAll().Any(othershop => string.Equals(othershop.Name, shop.Name));
+            var nameExists = this.shopRepo.GetAll().Any(otherShop => string.Equals(otherShop.Name, shop.Name, StringComparison.OrdinalIgnoreCase));
             if (nameExists)
             {
                 throw new Exception("Shop name already exists");
@@ -61,8 +61,8 @@ namespace Content.Service
                 throw new Exception("Type field must not be empty");
             }
 
-            var isDuplicate = shopRepo.GetAll().Any(newshop =>
-                newshop.Id != shop.Id && string.Equals(newshop.Name, shop.Name));
+            var isDuplicate = shopRepo.GetAll().Any(newShop =>
+                newShop.Id != shop.Id && string.Equals(newShop.Name, shop.Name));
 
             if (isDuplicate)
             {
