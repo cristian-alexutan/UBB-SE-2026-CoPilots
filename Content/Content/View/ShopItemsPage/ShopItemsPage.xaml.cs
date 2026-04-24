@@ -12,7 +12,8 @@ using Microsoft.UI.Xaml.Navigation;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using WinRT.Interop;
-
+using Microsoft.UI.Xaml.Input;
+using Windows.System;
 namespace Content
 {
     public sealed partial class ShopItemsPage : Page
@@ -66,20 +67,20 @@ namespace Content
             }
         }
 
-        private void SearchBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs eventArguments)
         {
-            if (e.Key == Windows.System.VirtualKey.Enter)
+            if (eventArguments.Key == VirtualKey.Enter && sender is TextBox textBox)
             {
-                this.ViewModel.Search(((TextBox)sender).Text);
+                ViewModel.Search(textBox.Text);
             }
         }
 
-        private async void AddButton_Click(object sender, RoutedEventArgs e)
+        private async void AddButton_Click(object sender, RoutedEventArgs eventArguments)
         {
             var button = sender as Button;
 
             var nameBox = new TextBox { PlaceholderText = "Enter item name" };
-            var descBox = new TextBox { PlaceholderText = "Enter description" };
+            var descriptionBox = new TextBox { PlaceholderText = "Enter description" };
             var priceBox = new TextBox { PlaceholderText = "Enter price" };
             var quantityBox = new TextBox { PlaceholderText = "Enter quantity" };
 
@@ -102,7 +103,7 @@ namespace Content
                     new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                     nameBox,
                     new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                    descBox,
+                    descriptionBox,
                     dropZone,
                     imagePreview,
                     new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
@@ -121,7 +122,7 @@ namespace Content
 
             try
             {
-                this.ViewModel.AddItem(nameBox.Text, descBox.Text, priceBox.Text, quantityBox.Text, imagePath[0] ?? "Assets/PlaceHolder.png");
+                this.ViewModel.AddItem(nameBox.Text, descriptionBox.Text, priceBox.Text, quantityBox.Text, imagePath[0] ?? "Assets/PlaceHolder.png");
             }
             catch (Exception ex)
             {
@@ -129,15 +130,15 @@ namespace Content
             }
         }
 
-        private async void EditButton_Click(object sender, RoutedEventArgs e)
+        private async void EditButton_Click(object sender, RoutedEventArgs eeventArguments)
         {
-            if (sender is not Button btn || btn.Tag is not ShopItem item)
+            if (sender is not Button button || button.Tag is not ShopItem item)
             {
                 return;
             }
 
             var nameBox = new TextBox { Text = item.Name };
-            var descBox = new TextBox { Text = item.Description };
+            var descriptionBox = new TextBox { Text = item.Description };
             var priceBox = new TextBox { Text = item.Price.ToString() };
             var quantityBox = new TextBox { Text = item.Quantity.ToString() };
 
@@ -152,7 +153,7 @@ namespace Content
             var imagePath = new string?[] { item.Photo };
             var dropZone = this.BuildDropZone("Drag image here or click to change", imagePreview, imagePath);
 
-            var dialog = BuildItemDialog("Edit Shop Item", btn, new StackPanel
+            var dialog = BuildItemDialog("Edit Shop Item", button, new StackPanel
             {
                 Spacing = 15,
                 Children =
@@ -160,7 +161,7 @@ namespace Content
                     new TextBlock { Text = "Item Name", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
                     nameBox,
                     new TextBlock { Text = "Description", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
-                    descBox,
+                    descriptionBox,
                     dropZone,
                     imagePreview,
                     new TextBlock { Text = "Price", FontWeight = Microsoft.UI.Text.FontWeights.Bold },
@@ -179,17 +180,17 @@ namespace Content
 
             try
             {
-                this.ViewModel.UpdateItem(item, nameBox.Text, descBox.Text, priceBox.Text, quantityBox.Text, imagePath[0] ?? item.Photo);
+                this.ViewModel.UpdateItem(item, nameBox.Text, descriptionBox.Text, priceBox.Text, quantityBox.Text, imagePath[0] ?? item.Photo);
             }
             catch (Exception ex)
             {
-                await ShowErrorAsync(btn.XamlRoot, ex.Message);
+                await ShowErrorAsync(button.XamlRoot, ex.Message);
             }
         }
 
-        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs evemtArguments)
         {
-            if (sender is not Button btn || btn.Tag is not ShopItem item)
+            if (sender is not Button button || button.Tag is not ShopItem item)
             {
                 return;
             }
@@ -201,7 +202,7 @@ namespace Content
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "Cancel",
                 RequestedTheme = ElementTheme.Light,
-                XamlRoot = btn.XamlRoot,
+                XamlRoot = button.XamlRoot,
             };
 
             if (await dialog.ShowAsync() == ContentDialogResult.Primary)
@@ -210,7 +211,7 @@ namespace Content
             }
         }
 
-        private async void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
+        private async void AddItemToCartButton_Click(object sender, RoutedEventArgs eventArguments)
         {
             if ((sender as Button)?.Tag is not ShopItem item)
             {
@@ -227,24 +228,24 @@ namespace Content
             }
         }
 
-        private void CartButton_Click(object sender, RoutedEventArgs e)
+        private void CartButton_Click(object sender, RoutedEventArgs eventArguments)
         {
             this.Frame.Navigate(typeof(CartPage));
         }
 
-        private void BackToShops_Click(object sender, RoutedEventArgs e)
+        private void BackToShops_Click(object sender, RoutedEventArgs eventArguments)
         {
             this.Frame.Navigate(typeof(ShopPage));
         }
 
-        private void BackToLandingPage_Click(object sender, RoutedEventArgs e)
+        private void BackToLandingPage_Click(object sender, RoutedEventArgs eventArguments)
         {
             this.Frame.Navigate(typeof(LandingPage));
         }
 
-        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void GridView_ItemClick(object sender, ItemClickEventArgs eventArguments)
         {
-            if (e.ClickedItem is not ShopItem item)
+            if (eventArguments.ClickedItem is not ShopItem item)
             {
                 return;
             }

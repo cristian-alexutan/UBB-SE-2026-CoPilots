@@ -42,11 +42,6 @@ namespace Content.ViewModel
 
         public void AddItem(string name, string description, string priceText, string quantityText, string imagePath)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Item name cannot be empty.");
-            }
-
             if (!float.TryParse(priceText, out float price))
             {
                 throw new ArgumentException("Price is not a valid number.");
@@ -57,21 +52,13 @@ namespace Content.ViewModel
                 throw new ArgumentException("Quantity is not a valid number.");
             }
 
-            this.shopItemService.AddShopItem(new ShopItem(0, quantity, price, this.currentShop.Id, imagePath, name, description));
+            this.shopItemService.AddShopItem(new ShopItem(quantity, price, this.currentShop.Id, imagePath, name, description));
             this.LoadItems();
         }
 
         public void UpdateItem(ShopItem item, string name, string description, string priceText, string quantityText, string imagePath)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Item name cannot be empty.");
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             if (!float.TryParse(priceText, out float price))
             {
@@ -89,10 +76,7 @@ namespace Content.ViewModel
 
         public void DeleteItem(ShopItem item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             this.shopItemService.RemoveShopItem(item.Id);
             this.LoadItems();
