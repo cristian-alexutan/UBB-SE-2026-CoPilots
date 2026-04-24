@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Content.Data.ViewModel.Interface;
 using Content.Domain;
 using Content.Service;
 using Content.User;
@@ -16,13 +17,15 @@ namespace Content.ViewModel
         private readonly ITicketService ticketService;
         private readonly UserSession session;
         private List<Shop> allShops = new ();
+        private double clientCartOpacity = 1.0;
+        private double adminCartOpacity = 0.4;
 
         public ObservableCollection<Shop> Shops { get; } = new ObservableCollection<Shop>();
 
         public bool IsAdmin => session.IsAdmin;
         public bool CanAddShop => session.IsAdmin;
         public bool IsCartEnabled => !session.IsAdmin;
-        public double CartOpacity => session.IsAdmin ? 0.4 : 1.0;
+        public double CartOpacity => session.IsAdmin ? adminCartOpacity : clientCartOpacity;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -31,70 +34,29 @@ namespace Content.ViewModel
             this.shopService = shopService ?? throw new ArgumentNullException(nameof(shopService));
             this.ticketService = ticketService ?? throw new ArgumentNullException(nameof(ticketService));
             this.session = session ?? throw new ArgumentNullException(nameof(session));
-            LoadItems();
-        }
-
-        public void LoadItems()
-        {
-            ReplaceShops(shopService.GetAllAvailableShops());
+            LoadShops();
         }
 
         public void AddShop(string name, string type)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Shop name cannot be empty");
-            }
-
-            if (string.IsNullOrWhiteSpace(type))
-            {
-                throw new ArgumentException("Shop type cannot be empty");
-            }
-
             shopService.AddShop(new Shop(name, type, session.UserId));
-            LoadItems();
+            LoadShops();
         }
 
         public void EditShop(Shop shop, string newName, string newType)
         {
-            if (shop == null)
-            {
-                throw new ArgumentNullException(nameof(shop));
-            }
-
-            if (string.IsNullOrWhiteSpace(newName))
-            {
-                throw new ArgumentException("Shop name cannot be empty.", nameof(newName));
-            }
-
-            if (string.IsNullOrWhiteSpace(newType))
-            {
-                throw new ArgumentException("Shop type cannot be empty.", nameof(newType));
-            }
-
             shopService.UpdateShop(new Shop(shop.Id, newName, newType, session.UserId));
-            LoadItems();
+            LoadShops();
         }
 
         public void DeleteShop(Shop shop)
         {
-            if (shop == null)
-            {
-                throw new ArgumentNullException(nameof(shop));
-            }
-
             shopService.DeleteShop(shop.Id);
-            LoadItems();
+            LoadShops();
         }
 
         public void Search(string query)
         {
-            if (string.IsNullOrWhiteSpace(query))
-            {
-                LoadItems();
-                return;
-            }
-
             ReplaceShops(shopService.SearchByName(query));
         }
 
@@ -102,7 +64,7 @@ namespace Content.ViewModel
         {
             var sorted = shopService
                 .GetAllAvailableShops()
-                .OrderBy(s => ticketService.CountTicketsBySubcategory(s.Name));
+                .OrderBy(shop => ticketService.CountTicketsBySubcategory(shop.Name));
             ReplaceShops(sorted);
         }
 
@@ -119,6 +81,10 @@ namespace Content.ViewModel
             {
                 Shops.Add(shop);
             }
+        }
+        public void LoadShops()
+        {
+            this.ReplaceShops(shopService.GetAllAvailableShops());
         }
     }
 }
