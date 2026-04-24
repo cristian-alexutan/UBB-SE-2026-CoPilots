@@ -26,7 +26,12 @@ namespace Content.Service
                 throw new Exception("Name field must not be empty");
             }
 
-            var nameExists = this.shopRepo.GetAll().Any(s => string.Equals(s.Name, shop.Name));
+            if (string.IsNullOrWhiteSpace(shop.Type))
+            {
+                throw new Exception("Type field must not be empty");
+            }
+
+            var nameExists = this.shopRepo.GetAll().Any(othershop => string.Equals(othershop.Name, shop.Name));
             if (nameExists)
             {
                 throw new Exception("Shop name already exists");
@@ -51,9 +56,13 @@ namespace Content.Service
             {
                 throw new Exception("Name field must not be empty");
             }
+            if (string.IsNullOrWhiteSpace(shop.Type))
+            {
+                throw new Exception("Type field must not be empty");
+            }
 
-            var isDuplicate = shopRepo.GetAll().Any(s =>
-                s.Id != shop.Id && string.Equals(s.Name, shop.Name));
+            var isDuplicate = shopRepo.GetAll().Any(newshop =>
+                newshop.Id != shop.Id && string.Equals(newshop.Name, shop.Name));
 
             if (isDuplicate)
             {
@@ -66,7 +75,7 @@ namespace Content.Service
         public IEnumerable<Shop> SearchByName(string input)
         {
             var filtered = this.GetAllAvailableShops()
-                .Where(i => i.Name.Contains(input, StringComparison.OrdinalIgnoreCase))
+                .Where(shop => shop.Name.Contains(input, StringComparison.OrdinalIgnoreCase))
                 .ToList();
             return filtered;
         }

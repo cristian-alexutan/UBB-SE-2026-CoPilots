@@ -10,6 +10,7 @@ using Content.Service;
 using Content.User;
 using Content.ViewModel;
 using Content.ViewModel.Interface;
+using Content.Data.ViewModel.Interface;
 
 namespace Content
 {

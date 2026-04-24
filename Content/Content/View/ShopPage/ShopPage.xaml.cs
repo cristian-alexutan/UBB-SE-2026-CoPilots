@@ -1,6 +1,6 @@
 using System;
 using Content.Domain;
-using Content.ViewModel.Interface;
+using Content.Data.ViewModel.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -190,7 +190,7 @@ namespace Content
 
                 if (selected == "None")
                 {
-                    ViewModel.LoadItems();
+                    ViewModel.LoadShops();
                 }
                 else if (selected == "Shop Name")
                 {

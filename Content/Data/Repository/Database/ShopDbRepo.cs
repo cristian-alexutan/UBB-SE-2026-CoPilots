@@ -28,11 +28,11 @@
         public IEnumerable<Shop> GetAll()
         {
             var shops = new List<Shop>();
-            using (SqlConnection conn = new (this.connectionString))
+            using (SqlConnection connection = new (this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Shop", conn);
-                var reader = cmd.ExecuteReader();
+                connection.Open();
+                var selectAllShopsCommand = new SqlCommand("SELECT * FROM Shop", connection);
+                var reader = selectAllShopsCommand.ExecuteReader();
                 while (reader.Read())
                 {
                     shops.Add(this.MapShop(reader));
@@ -44,11 +44,11 @@
 
         public Shop? GetById(int id)
         {
-            using SqlConnection conn = new (this.connectionString);
-            conn.Open();
-            var cmd = new SqlCommand("SELECT * FROM Shop WHERE shop_id=@Id", conn);
-            cmd.Parameters.AddWithValue("@Id", id);
-            var reader = cmd.ExecuteReader();
+            using SqlConnection connection = new (this.connectionString);
+            connection.Open();
+            var selectShopWithIdCommand = new SqlCommand("SELECT * FROM Shop WHERE shop_id=@Id", connection);
+            selectShopWithIdCommand.Parameters.AddWithValue("@Id", id);
+            var reader = selectShopWithIdCommand.ExecuteReader();
             if (reader.Read())
             {
                 return this.MapShop(reader);
@@ -59,20 +59,19 @@
 
         public void Add(Shop shop)
         {
-            using SqlConnection conn = new (this.connectionString);
-            conn.Open();
+            using SqlConnection connection = new (this.connectionString);
+            connection.Open();
 
-            var cmd = new SqlCommand(
+            var insertCommand = new SqlCommand(
                 "INSERT INTO Shop (name, type, manager_id) " +
                 "VALUES (@Name, @Type, @ManagerId); " +
                 "SELECT CAST(SCOPE_IDENTITY() AS int);",
-                conn);
+                connection);
+            insertCommand.Parameters.AddWithValue("@Name", shop.Name);
+            insertCommand.Parameters.AddWithValue("@Type", shop.Type);
+            insertCommand.Parameters.AddWithValue("@ManagerId", shop.ManagerId);
 
-            cmd.Parameters.AddWithValue("@Name", shop.Name);
-            cmd.Parameters.AddWithValue("@Type", shop.Type);
-            cmd.Parameters.AddWithValue("@ManagerId", shop.ManagerId);
-
-            shop.Id = (int)cmd.ExecuteScalar();
+            shop.Id = (int)insertCommand.ExecuteScalar();
         }
 
         public Shop? Delete(int id)
@@ -83,11 +82,11 @@
                 return null;
             }
 
-            using SqlConnection conn = new SqlConnection(this.connectionString);
-            conn.Open();
-            var cmd = new SqlCommand("DELETE FROM Shop WHERE shop_id=@Id", conn);
-            cmd.Parameters.AddWithValue("@Id", id);
-            cmd.ExecuteNonQuery();
+            using SqlConnection connection = new SqlConnection(this.connectionString);
+            connection.Open();
+            var deleteCommand = new SqlCommand("DELETE FROM Shop WHERE shop_id=@Id", connection);
+            deleteCommand.Parameters.AddWithValue("@Id", id);
+            deleteCommand.ExecuteNonQuery();
             return exist;
         }
 
@@ -99,19 +98,19 @@
                 return null;
             }
 
-            using (SqlConnection conn = new (this.connectionString))
+            using (SqlConnection connection = new (this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand(
+                connection.Open();
+                var updateCommand = new SqlCommand(
                     "UPDATE Shop SET name=@Name, type=@Type, manager_id=@ManagerId WHERE shop_id=@Id",
-                    conn);
+                    connection);
 
-                cmd.Parameters.AddWithValue("@Name", shop.Name);
-                cmd.Parameters.AddWithValue("@Type", shop.Type);
-                cmd.Parameters.AddWithValue("@ManagerId", shop.ManagerId);
-                cmd.Parameters.AddWithValue("@Id", shop.Id);
+                updateCommand.Parameters.AddWithValue("@Name", shop.Name);
+                updateCommand.Parameters.AddWithValue("@Type", shop.Type);
+                updateCommand.Parameters.AddWithValue("@ManagerId", shop.ManagerId);
+                updateCommand.Parameters.AddWithValue("@Id", shop.Id);
 
-                cmd.ExecuteNonQuery();
+                updateCommand.ExecuteNonQuery();
             }
 
             return shop;
