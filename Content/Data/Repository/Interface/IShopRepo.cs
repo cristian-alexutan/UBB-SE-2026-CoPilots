@@ -7,7 +7,7 @@
     {
         IEnumerable<Shop> GetAll();
 
-        Shop GetById(int id);
+        Shop? GetById(int id);
 
         void Add(Shop shop);
 
