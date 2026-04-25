@@ -30,12 +30,12 @@ namespace Content.Service
         {
             if (client == null)
             {
-                throw new ArgumentNullException(nameof(client));
+                throw new Exception("Client must not be null");
             }
 
             if (string.IsNullOrWhiteSpace(client.Name))
             {
-                throw new ArgumentException("Name is required", nameof(client.Name));
+                throw new Exception("Name field must not be empty");
             }
 
             clientRepo.Add(client);
@@ -50,11 +50,11 @@ namespace Content.Service
         {
             if (client == null)
             {
-                throw new ArgumentNullException(nameof(client));
+                throw new Exception("Client must not be null");
             }
             if (string.IsNullOrWhiteSpace(client.Name))
             {
-                throw new ArgumentException("Name is required", nameof(client.Name));
+                throw new Exception("Name field must not be empty");
             }
             return clientRepo.Update(client);
         }
