@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
@@ -7,7 +8,7 @@ namespace Content.Repository.Database
 {
     public class ManagerDbRepo : IManagerRepo
     {
-        private string connectionString;
+        private readonly string connectionString;
 
         public ManagerDbRepo(string connectionString)
         {
@@ -18,11 +19,11 @@ namespace Content.Repository.Database
         {
             var managers = new List<Manager>();
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Manager", conn);
-                var reader = cmd.ExecuteReader();
+                connection.Open();
+                var selectAllManagersCommand = new SqlCommand("SELECT * FROM Manager", connection);
+                var reader = selectAllManagersCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -41,13 +42,13 @@ namespace Content.Repository.Database
 
         public Manager GetById(int id)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Manager WHERE manager_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
+                connection.Open();
+                var selectManagerByIdCommand = new SqlCommand("SELECT * FROM Manager WHERE manager_id=@Id", connection);
+                selectManagerByIdCommand.Parameters.AddWithValue("@Id", id);
 
-                var reader = cmd.ExecuteReader();
+                var reader = selectManagerByIdCommand.ExecuteReader();
                 if (reader.Read())
                 {
                     return new Manager(
@@ -63,55 +64,55 @@ namespace Content.Repository.Database
 
         public void Add(Manager manager)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand(
+                connection.Open();
+                var addManagerCommand = new SqlCommand(
                     "INSERT INTO Manager (name, email, phone) VALUES (@Name, @Email, @Phone); SELECT SCOPE_IDENTITY();",
-                    conn);
-                cmd.Parameters.AddWithValue("@Name", manager.Name);
-                cmd.Parameters.AddWithValue("@Email", manager.Email);
-                cmd.Parameters.AddWithValue("@Phone", manager.Phone);
-                manager.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                    connection);
+                addManagerCommand.Parameters.AddWithValue("@Name", manager.Name);
+                addManagerCommand.Parameters.AddWithValue("@Email", manager.Email);
+                addManagerCommand.Parameters.AddWithValue("@Phone", manager.Phone);
+                manager.Id = Convert.ToInt32(addManagerCommand.ExecuteScalar());
             }
         }
 
         public Manager? Delete(int id)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                conn.Open();
+                connection.Open();
                 Manager? existing = GetById(id);
                 if (existing == null)
                 {
                     return null;
                 }
 
-                var cmd = new SqlCommand("DELETE FROM Manager WHERE manager_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                cmd.ExecuteNonQuery();
+                var deleteManagerCommand = new SqlCommand("DELETE FROM Manager WHERE manager_id=@Id", connection);
+                deleteManagerCommand.Parameters.AddWithValue("@Id", id);
+                deleteManagerCommand.ExecuteNonQuery();
                 return existing;
             }
         }
 
         public Manager? Update(Manager manager)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                conn.Open();
+                connection.Open();
                 Manager? existing = GetById(manager.Id);
                 if (existing == null)
                 {
                     return null;
                 }
-                var cmd = new SqlCommand(
+                var updateManagerCommand = new SqlCommand(
                     "UPDATE Manager SET name=@Name, email=@Email, phone=@Phone WHERE manager_id=@Id",
-                    conn);
-                cmd.Parameters.AddWithValue("@Name", manager.Name);
-                cmd.Parameters.AddWithValue("@Email", manager.Email);
-                cmd.Parameters.AddWithValue("@Phone", manager.Phone);
-                cmd.Parameters.AddWithValue("@Id", manager.Id);
-                cmd.ExecuteNonQuery();
+                    connection);
+                updateManagerCommand.Parameters.AddWithValue("@Name", manager.Name);
+                updateManagerCommand.Parameters.AddWithValue("@Email", manager.Email);
+                updateManagerCommand.Parameters.AddWithValue("@Phone", manager.Phone);
+                updateManagerCommand.Parameters.AddWithValue("@Id", manager.Id);
+                updateManagerCommand.ExecuteNonQuery();
                 return manager;
             }
         }
