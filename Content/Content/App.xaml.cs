@@ -49,9 +49,6 @@ namespace Content
                 conn,
                 sp.GetRequiredService<IClientRepo>(),
                 sp.GetRequiredService<IShopItemRepo>()));
-            services.AddSingleton<IReservationRepo>(sp => new ReservationDbRepo(
-                conn,
-                sp.GetRequiredService<ICartRepo>()));
 
             services.AddSingleton<IShopItemService, ShopItemService>();
             services.AddSingleton<IShopService, ShopService>();
@@ -59,6 +56,11 @@ namespace Content
             services.AddSingleton<ITicketService, TicketService>();
             services.AddSingleton<IClientService, ClientService>();
             services.AddSingleton<IManagerService, ManagerService>();
+
+            services.AddSingleton<IReservationRepo>(sp => new ReservationDbRepo(
+                conn,
+                sp.GetRequiredService<ICartService>()));
+
             services.AddSingleton<IReservationService, ReservationService>();
 
             services.AddSingleton<UserSession>();
