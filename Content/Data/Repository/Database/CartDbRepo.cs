@@ -9,12 +9,10 @@
     public class CartDbRepo : ICartRepo
     {
         private readonly string connectionString;
-        private readonly IClientRepo clientRepo;
 
-        public CartDbRepo(string connectionString, IClientRepo clientRepo)
+        public CartDbRepo(string connectionString)
         {
             this.connectionString = connectionString;
-            this.clientRepo = clientRepo;
         }
 
         public IEnumerable<Cart> GetAll()
@@ -32,7 +30,7 @@
                     int clientId = (int)reader["client_id"];
                     var cart = new Cart(
                         (int)reader["cart_id"],
-                        this.clientRepo.GetById(clientId),
+                        new Client(clientId, string.Empty),
                         new Dictionary<int, CartItem>());
                     carts.Add(cart);
                 }
@@ -62,7 +60,7 @@
                     int clientId = (int)reader["client_id"];
                     cart = new Cart(
                         (int)reader["cart_id"],
-                        this.clientRepo.GetById(clientId),
+                        new Client(clientId, string.Empty),
                         new Dictionary<int, CartItem>());
                 }
             }

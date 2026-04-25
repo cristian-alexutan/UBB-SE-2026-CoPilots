@@ -45,9 +45,7 @@ namespace Content
             services.AddSingleton<IManagerRepo>(_ => new ManagerDbRepo(conn));
             services.AddSingleton<IShopRepo>(_ => new ShopDbRepo(conn));
             services.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(conn));
-            services.AddSingleton<ICartRepo>(sp => new CartDbRepo(
-                conn,
-                sp.GetRequiredService<IClientRepo>()));
+            services.AddSingleton<ICartRepo>(_ => new CartDbRepo(conn));
             services.AddSingleton<IReservationRepo>(sp => new ReservationDbRepo(
                 conn,
                 sp.GetRequiredService<ICartRepo>()));
