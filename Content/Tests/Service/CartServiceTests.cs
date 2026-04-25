@@ -2,10 +2,13 @@
 using Content.Domain;
 using Content.Repository.Interface;
 using Content.Service;
+using Content.Data.Service.Interface;
 using NSubstitute;
+using NUnit.Framework;
 
-namespace Tests;
+namespace Tests.Service;
 
+[TestFixture]
 public class CartServiceTests
 {
     private ICartRepo cartRepo = null!;

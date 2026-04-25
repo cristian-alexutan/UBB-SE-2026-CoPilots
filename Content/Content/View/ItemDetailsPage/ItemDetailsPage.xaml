@@ -14,6 +14,7 @@
             <SolidColorBrush x:Key="CardBorder" Color="#E7EDF3" />
             <SolidColorBrush x:Key="Divider" Color="#E5E7EB" />
             <SolidColorBrush x:Key="DarkText" Color="#111827" />
+            <SolidColorBrush x:Key="DisabledCartBrush" Color="#808080" />
 
             <SolidColorBrush x:Key="DisabledBg" Color="#F3F4F6" />
             <SolidColorBrush x:Key="DisabledBorder" Color="#E5E7EB" />

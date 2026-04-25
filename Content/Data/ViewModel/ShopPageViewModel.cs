@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Content.Data.Service.Interface;
 using Content.Data.ViewModel.Interface;
 using Content.Domain;
-using Content.Service;
 using Content.User;
 using Content.ViewModel.Interface;
 

@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Input;
 using Content.Domain;
 using Content.Helper;
-using Content.Service;
+using Content.Data.Service.Interface;
 using Content.User;
 using Content.ViewModel.Interface;
 
@@ -20,9 +19,8 @@ namespace Content.ViewModel
         private readonly IShopItemService shopItemService;
         private readonly UserSession session;
         private readonly ShopItem item;
-        private Cart cart;
 
-        private int quantity = MinimumQuantity;
+        private int quantity;
         private string editName;
         private string editDescription;
         private string editPrice;
@@ -74,13 +72,12 @@ namespace Content.ViewModel
 
             private set
             {
-                var clamped = Math.Max(MinimumQuantity, Math.Min(MaximumQuantity, value));
-                if (quantity == clamped)
+                if (quantity == value)
                 {
                     return;
                 }
 
-                quantity = clamped;
+                quantity = value;
                 OnPropertyChanged(nameof(Quantity));
             }
         }
@@ -177,6 +174,7 @@ namespace Content.ViewModel
             editDescription = item.Description;
             editPrice = item.Price.ToString(CultureInfo.InvariantCulture);
             editStock = item.Quantity.ToString(CultureInfo.InvariantCulture);
+            quantity = MinimumQuantity;
 
             AddToCartCommand = new RelayCommand(AddToCart);
             IncrementQuantityCommand = new RelayCommand(IncrementQuantity);
@@ -186,9 +184,9 @@ namespace Content.ViewModel
 
         public void SetQuantityFromText(string text)
         {
-            if (int.TryParse(text, out var parsed))
+            if (int.TryParse(text, out int parsedQuantity))
             {
-                Quantity = parsed;
+                Quantity = this.LimitQuantityToValidRange(parsedQuantity);
             }
             else
             {
@@ -198,92 +196,80 @@ namespace Content.ViewModel
 
         private void IncrementQuantity()
         {
-            Quantity++;
+            Quantity = this.LimitQuantityToValidRange(Quantity + 1);
         }
 
         private void DecrementQuantity()
         {
-            Quantity--;
+            Quantity = this.LimitQuantityToValidRange(Quantity - 1);
         }
 
         private void AddToCart()
         {
-            if (quantity > item.Quantity)
-            {
-                ErrorOccurred?.Invoke(this, $"You requested {quantity} item(s), but only {item.Quantity} are available.");
-                return;
-            }
-
-            EnsureCartExists();
+            Cart cart = this.cartService.GetOrCreateCart(session.UserId);
 
             try
             {
                 cartService.AddItemToCart(cart.Id, new CartItem(0, item, quantity));
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException exception)
             {
-                ErrorOccurred?.Invoke(this, ex.Message);
+                ErrorOccurred?.Invoke(this, exception.Message);
                 return;
             }
 
             AddedToCartSuccessfully?.Invoke(this, EventArgs.Empty);
         }
 
-        private void EnsureCartExists()
-        {
-            var existingCart = cartService.GetCartById(session.UserId);
-            if (existingCart != null)
-            {
-                cart = existingCart;
-                return;
-            }
-
-            var newCart = new Cart(
-                session.UserId,
-                new Client(session.UserId, "Current Client"),
-                new Dictionary<int, CartItem>());
-
-            cartService.AddCart(newCart);
-            cart = newCart;
-        }
-
         private void SaveChanges()
         {
-            var name = (editName ?? string.Empty).Trim();
-            var description = editDescription ?? string.Empty;
-            var priceText = (editPrice ?? string.Empty).Trim();
+            string trimmedName = (editName ?? string.Empty).Trim();
+            string trimmedDescription = editDescription ?? string.Empty;
+            string trimmedPriceText = (editPrice ?? string.Empty).Trim();
 
-            if (!int.TryParse(editStock, out var parsedStock) || parsedStock < 0)
+            if (!int.TryParse(editStock, out int parsedStock))
             {
-                StatusMessage = "Error: Stock must be a non-negative number.";
+                StatusMessage = "Error: Stock must be a number.";
                 return;
             }
 
-            if (!float.TryParse(priceText, NumberStyles.Any, CultureInfo.InvariantCulture, out var parsedPrice) || parsedPrice <= 0)
+            if (!float.TryParse(trimmedPriceText, NumberStyles.Any, CultureInfo.InvariantCulture, out float parsedPrice))
             {
-                StatusMessage = "Error: Price must be a positive number.";
+                StatusMessage = "Error: Price must be a number.";
                 return;
             }
 
-            item.Name = name;
-            item.Description = description;
+            item.Name = trimmedName;
+            item.Description = trimmedDescription;
             item.Price = parsedPrice;
             item.Quantity = parsedStock;
 
-            shopItemService.UpdateShopItem(
-                new ShopItem(item.Id, item.Quantity, item.Price, item.ShopId, item.Photo, item.Name, item.Description));
+            try
+            {
+                shopItemService.UpdateShopItem(
+                    new ShopItem(item.Id, item.Quantity, item.Price, item.ShopId, item.Photo, item.Name, item.Description));
 
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Description));
-            OnPropertyChanged(nameof(FormattedPrice));
-            OnPropertyChanged(nameof(Stock));
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Description));
+                OnPropertyChanged(nameof(FormattedPrice));
+                OnPropertyChanged(nameof(Stock));
 
-            StatusMessage = "Saved";
+                StatusMessage = "Saved";
+            }
+            catch (ArgumentException exception)
+            {
+                StatusMessage = exception.Message;
+            }
         }
 
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private int LimitQuantityToValidRange(int quantity)
+        {
+            return Math.Max(MinimumQuantity, Math.Min(MaximumQuantity, quantity));
         }
     }
 }

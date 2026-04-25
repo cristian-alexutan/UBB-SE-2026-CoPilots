@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Content.Domain;
-using Content.Service;
+using Content.Data.Service.Interface;
 using Content.User;
 using Content.ViewModel.Interface;
 

@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Domain;
 using Content.Repository.Interface;
+using Content.Data.Service.Interface;
 
 namespace Content.Service
 {
     public class ShopItemService : IShopItemService
     {
-        private readonly IShopItemRepo shopItemRepo;
+        private readonly IShopItemRepo shopItemRepository;
 
-        public ShopItemService(IShopItemRepo shopItemRepo)
+        public ShopItemService(IShopItemRepo shopItemRepository)
         {
-            this.shopItemRepo = shopItemRepo;
+            this.shopItemRepository = shopItemRepository;
         }
 
         public IEnumerable<ShopItem> GetAll()
         {
-            return this.shopItemRepo.GetAll();
+            return this.shopItemRepository.GetAll();
         }
 
         public ShopItem GetById(int shopItemId)
         {
-            ShopItem? shopItem = this.shopItemRepo.GetById(shopItemId);
+            ShopItem? shopItem = this.shopItemRepository.GetById(shopItemId);
             if (shopItem == null)
             {
                 throw new InvalidOperationException($"Shop item with id {shopItemId} does not exist.");
@@ -33,16 +34,13 @@ namespace Content.Service
 
         public IEnumerable<ShopItem> GetItemsByShopId(int shopId)
         {
-            return this.shopItemRepo.GetAll()
+            return this.shopItemRepository.GetAll()
                 .Where(shopItem => shopItem.ShopId == shopId);
         }
 
         public IEnumerable<ShopItem> SearchItemsByName(int shopId, string searchText)
         {
-            if (searchText == null)
-            {
-                searchText = string.Empty;
-            }
+            searchText ??= string.Empty;
 
             return this.GetItemsByShopId(shopId)
                 .Where(shopItem => shopItem.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase));
@@ -50,26 +48,26 @@ namespace Content.Service
 
         public void RemoveShopItem(int shopItemId)
         {
-            this.shopItemRepo.Delete(shopItemId);
+            this.shopItemRepository.Delete(shopItemId);
         }
 
         public void AddShopItem(ShopItem shopItem)
         {
             ValidateShopItem(shopItem);
-            this.shopItemRepo.Add(shopItem);
+            this.shopItemRepository.Add(shopItem);
         }
 
         public void UpdateShopItem(ShopItem shopItem)
         {
             ValidateShopItem(shopItem);
-            this.shopItemRepo.Update(shopItem);
+            this.shopItemRepository.Update(shopItem);
         }
 
         public IEnumerable<ShopItem> GetItemsSortedByPrice(Shop currentShop)
         {
             if (currentShop == null)
             {
-                throw new ArgumentNullException("shop cannot be null");
+                throw new ArgumentNullException(nameof(currentShop));
             }
 
             return this.GetItemsByShopId(currentShop.Id)
@@ -80,7 +78,7 @@ namespace Content.Service
         {
             if (currentShop == null)
             {
-                throw new ArgumentNullException("shop cannot be null");
+                throw new ArgumentNullException(nameof(currentShop));
             }
 
             return this.GetItemsByShopId(currentShop.Id)
