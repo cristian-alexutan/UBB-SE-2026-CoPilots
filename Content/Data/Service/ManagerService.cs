@@ -30,27 +30,27 @@ namespace Content.Service
         {
             if (manager == null)
             {
-                throw new ArgumentNullException(nameof(manager));
+                throw new Exception("Manager must not be null");
             }
 
             if (string.IsNullOrWhiteSpace(manager.Name))
             {
-                throw new ArgumentException("Name is required", nameof(manager.Name));
+                throw new Exception("Name field must not be empty");
             }
 
             if (string.IsNullOrWhiteSpace(manager.Email))
             {
-                throw new ArgumentException("Email is required", nameof(manager.Email));
+                throw new Exception("Email field must not be empty");
             }
 
             if (!manager.Email.Contains("@"))
             {
-                throw new ArgumentException("Email is invalid", nameof(manager.Email));
+                throw new Exception("Email field must be valid");
             }
 
             if (string.IsNullOrWhiteSpace(manager.Phone))
             {
-                throw new ArgumentException("Phone is required", nameof(manager.Phone));
+                throw new Exception("Phone number field must not be empty");
             }
 
             managerRepo.Add(manager);
@@ -65,27 +65,27 @@ namespace Content.Service
         {
             if (manager == null)
             {
-                throw new ArgumentNullException(nameof(manager));
+                throw new Exception("Manager must not be null");
             }
 
             if (string.IsNullOrWhiteSpace(manager.Name))
             {
-                throw new ArgumentException("Name is required", nameof(manager.Name));
+                throw new Exception("Name field must not be empty");
             }
 
             if (string.IsNullOrWhiteSpace(manager.Email))
             {
-                throw new ArgumentException("Email is required", nameof(manager.Email));
+                throw new Exception("Email field must not be empty");
             }
 
             if (!manager.Email.Contains("@"))
             {
-                throw new ArgumentException("Email is invalid", nameof(manager.Email));
+                throw new Exception("Email field must be valid");
             }
 
             if (string.IsNullOrWhiteSpace(manager.Phone))
             {
-                throw new ArgumentException("Phone is required", nameof(manager.Phone));
+                throw new Exception("Phone number field must not be empty");
             }
 
             return managerRepo.Update(manager);
