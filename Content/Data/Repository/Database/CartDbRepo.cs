@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Content.Domain;
-using Content.Repository.Interface;
-using Microsoft.Data.SqlClient;
-
-namespace Content.Repository.Database
+﻿namespace Content.Repository.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using Content.Domain;
+    using Content.Repository.Interface;
+    using Microsoft.Data.SqlClient;
+
     public class CartDbRepo : ICartRepo
     {
-        private string connectionString;
+        private readonly string connectionString;
         private readonly IClientRepo clientRepo;
         private readonly IShopItemRepo shopItemRepo;
 
@@ -23,11 +23,11 @@ namespace Content.Repository.Database
         {
             var carts = new List<Cart>();
 
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Cart", conn);
-                var reader = cmd.ExecuteReader();
+                connection.Open();
+                var selectAllCartsCommand = new SqlCommand("SELECT * FROM Cart", connection);
+                var reader = selectAllCartsCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -52,12 +52,12 @@ namespace Content.Repository.Database
         {
             Cart cart = null;
 
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Cart WHERE cart_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                var reader = cmd.ExecuteReader();
+                connection.Open();
+                var selectCartByIdCommand = new SqlCommand("SELECT * FROM Cart WHERE cart_id=@Id", connection);
+                selectCartByIdCommand.Parameters.AddWithValue("@Id", id);
+                var reader = selectCartByIdCommand.ExecuteReader();
 
                 if (reader.Read())
                 {
@@ -79,77 +79,77 @@ namespace Content.Repository.Database
 
         public void Add(Cart cart)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand(
+                connection.Open();
+                var insertCartCommand = new SqlCommand(
                     "INSERT INTO Cart(client_id, status) VALUES(@ClientId, @Status); SELECT SCOPE_IDENTITY();",
-                    conn);
-                cmd.Parameters.AddWithValue("@ClientId", cart.Client.Id);
-                cmd.Parameters.AddWithValue("@Status", "active");
-                cart.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                    connection);
+                insertCartCommand.Parameters.AddWithValue("@ClientId", cart.Client.Id);
+                insertCartCommand.Parameters.AddWithValue("@Status", "active");
+                cart.Id = Convert.ToInt32(insertCartCommand.ExecuteScalar());
             }
         }
 
         public void Delete(int id)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("DELETE FROM Cart WHERE cart_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                var deleteCartCommand = new SqlCommand("DELETE FROM Cart WHERE cart_id=@Id", connection);
+                deleteCartCommand.Parameters.AddWithValue("@Id", id);
+                deleteCartCommand.ExecuteNonQuery();
             }
         }
 
         public void AddItemToCart(int cartId, CartItem item)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand(
+                connection.Open();
+                var insertCartItemCommand = new SqlCommand(
                     "INSERT INTO CartItem(cart_id, item_id, quantity) VALUES(@CartId, @ItemId, @Quantity); SELECT SCOPE_IDENTITY();",
-                    conn);
-                cmd.Parameters.AddWithValue("@CartId", cartId);
-                cmd.Parameters.AddWithValue("@ItemId", item.ShopItem.Id);
-                cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
-                item.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                    connection);
+                insertCartItemCommand.Parameters.AddWithValue("@CartId", cartId);
+                insertCartItemCommand.Parameters.AddWithValue("@ItemId", item.ShopItem.Id);
+                insertCartItemCommand.Parameters.AddWithValue("@Quantity", item.Quantity);
+                item.Id = Convert.ToInt32(insertCartItemCommand.ExecuteScalar());
             }
         }
 
         public void RemoveItemFromCart(int cartId, int cartItemId)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("DELETE FROM CartItem WHERE cart_item_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", cartItemId);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                var deleteCartItemCommand = new SqlCommand("DELETE FROM CartItem WHERE cart_item_id=@Id", connection);
+                deleteCartItemCommand.Parameters.AddWithValue("@Id", cartItemId);
+                deleteCartItemCommand.ExecuteNonQuery();
             }
         }
 
         public void UpdateItemQuantity(int cartId, int cartItemId, int quantity)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand(
+                connection.Open();
+                var updateCartItemQuantityCommand = new SqlCommand(
                     "UPDATE CartItem SET quantity=@Quantity WHERE cart_item_id=@Id",
-                    conn);
-                cmd.Parameters.AddWithValue("@Quantity", quantity);
-                cmd.Parameters.AddWithValue("@Id", cartItemId);
-                cmd.ExecuteNonQuery();
+                    connection);
+                updateCartItemQuantityCommand.Parameters.AddWithValue("@Quantity", quantity);
+                updateCartItemQuantityCommand.Parameters.AddWithValue("@Id", cartItemId);
+                updateCartItemQuantityCommand.ExecuteNonQuery();
             }
         }
 
         public void ClearCart(int cartId)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("DELETE FROM CartItem WHERE cart_id=@CartId", conn);
-                cmd.Parameters.AddWithValue("@CartId", cartId);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                var deleteAllCartItemsCommand = new SqlCommand("DELETE FROM CartItem WHERE cart_id=@CartId", connection);
+                deleteAllCartItemsCommand.Parameters.AddWithValue("@CartId", cartId);
+                deleteAllCartItemsCommand.ExecuteNonQuery();
             }
         }
 
@@ -157,12 +157,12 @@ namespace Content.Repository.Database
         {
             var items = new Dictionary<int, CartItem>();
 
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM CartItem WHERE cart_id=@CartId", conn);
-                cmd.Parameters.AddWithValue("@CartId", cartId);
-                var reader = cmd.ExecuteReader();
+                connection.Open();
+                var selectCartItemsByCartIdCommand = new SqlCommand("SELECT * FROM CartItem WHERE cart_id=@CartId", connection);
+                selectCartItemsByCartIdCommand.Parameters.AddWithValue("@CartId", cartId);
+                var reader = selectCartItemsByCartIdCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
