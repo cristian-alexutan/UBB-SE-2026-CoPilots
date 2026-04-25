@@ -147,11 +147,12 @@ namespace Content
         {
             ViewCartButton.IsEnabled = !isAdmin;
 
-            var foreground = isAdmin ? Colors.Gray : ColorHelper.FromArgb(255, 17, 24, 39);
-            var brush = new SolidColorBrush(foreground);
+            SolidColorBrush cartForeground = isAdmin
+                ? (SolidColorBrush)Root.Resources["DisabledCartBrush"]
+                : (SolidColorBrush)Root.Resources["DarkText"];
 
-            ViewCartIcon.Foreground = brush;
-            ViewCartText.Foreground = brush;
+            ViewCartIcon.Foreground = cartForeground;
+            ViewCartText.Foreground = cartForeground;
 
             ClientActionsPanel.Visibility = isAdmin ? Visibility.Collapsed : Visibility.Visible;
             AdminActionsPanel.Visibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;

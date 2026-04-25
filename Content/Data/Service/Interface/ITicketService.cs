@@ -1,6 +1,6 @@
 using Content.Domain;
 
-namespace Content.Service
+namespace Content.Data.Service.Interface
 {
     public interface ITicketService
     {

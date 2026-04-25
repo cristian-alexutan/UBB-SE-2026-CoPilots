@@ -7,11 +7,11 @@ namespace Content.Repository.Interface
     {
         IEnumerable<ShopItem> GetAll();
 
-        ShopItem? GetById(int id);
+        ShopItem? GetById(int shopItemId);
 
         void Add(ShopItem shopItem);
 
-        void Delete(int id);
+        void Delete(int shopItemId);
 
         void Update(ShopItem shopItem);
     }

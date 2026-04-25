@@ -1,5 +1,6 @@
 using Content.Domain;
 using Content.Repository.Interface;
+using Content.Data.Service.Interface;
 
 namespace Content.Service
 {

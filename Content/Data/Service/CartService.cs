@@ -1,10 +1,11 @@
-﻿namespace Content.Service
-{
-    using System;
-    using System.Collections.Generic;
-    using Content.Domain;
-    using Content.Repository.Interface;
+﻿using System;
+using System.Collections.Generic;
+using Content.Domain;
+using Content.Repository.Interface;
+using Content.Data.Service.Interface;
 
+namespace Content.Service
+{
     public class CartService : ICartService
     {
         private const int MinimumCartItemQuantity = 1;
@@ -22,9 +23,9 @@
             return this.cartRepo.GetAll();
         }
 
-        public Cart GetCartById(int id)
+        public Cart GetCartById(int cartId)
         {
-            return this.cartRepo.GetById(id);
+            return this.cartRepo.GetById(cartId);
         }
 
         public Cart GetOrCreateCart(int userId)
@@ -44,9 +45,9 @@
             this.cartRepo.Add(cart);
         }
 
-        public void DeleteCart(int id)
+        public void DeleteCart(int cartId)
         {
-            this.cartRepo.Delete(id);
+            this.cartRepo.Delete(cartId);
         }
 
         public void AddItemToCart(int cartId, CartItem item)
@@ -68,7 +69,7 @@
             var shopItem = this.shopItemService.GetById(item.ShopItem.Id);
             int totalQuantity = (existing?.Quantity ?? 0) + item.Quantity;
 
-            if (shopItem == null || totalQuantity > shopItem.Quantity)
+            if (totalQuantity > shopItem.Quantity)
             {
                 throw new InvalidOperationException("Not enough stock.");
             }
@@ -107,7 +108,7 @@
             if (cartItem != null)
             {
                 var shopItem = this.shopItemService.GetById(cartItem.ShopItem.Id);
-                if (shopItem != null && quantity > shopItem.Quantity)
+                if (quantity > shopItem.Quantity)
                 {
                     throw new InvalidOperationException("Not enough stock.");
                 }

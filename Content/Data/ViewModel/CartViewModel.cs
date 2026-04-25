@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Content.Data.Service.Interface;
 using Content.Domain;
-using Content.Service;
 using Content.User;
 using Content.ViewModel.Interface;
 
