@@ -10,13 +10,11 @@
     {
         private readonly string connectionString;
         private readonly IClientRepo clientRepo;
-        private readonly IShopItemRepo shopItemRepo;
 
-        public CartDbRepo(string connectionString, IClientRepo clientRepo, IShopItemRepo shopItemRepo)
+        public CartDbRepo(string connectionString, IClientRepo clientRepo)
         {
             this.connectionString = connectionString;
             this.clientRepo = clientRepo;
-            this.shopItemRepo = shopItemRepo;
         }
 
         public IEnumerable<Cart> GetAll()
@@ -42,7 +40,7 @@
 
             foreach (var cart in carts)
             {
-                cart.CartItems = this.GetCartItems(cart.Id);
+                cart.CartItems = new Dictionary<int, CartItem>();
             }
 
             return carts;
@@ -71,7 +69,7 @@
 
             if (cart != null)
             {
-                cart.CartItems = this.GetCartItems(cart.Id);
+                cart.CartItems = new Dictionary<int, CartItem>();
             }
 
             return cart;
@@ -153,9 +151,9 @@
             }
         }
 
-        private Dictionary<int, CartItem> GetCartItems(int cartId)
+        public IEnumerable<(int CartItemId, int ItemId, int Quantity)> GetRawCartItems(int cartId)
         {
-            var items = new Dictionary<int, CartItem>();
+            var rawItems = new List<(int CartItemId, int ItemId, int Quantity)>();
 
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
@@ -166,16 +164,14 @@
 
                 while (reader.Read())
                 {
-                    int id = (int)reader["cart_item_id"];
+                    int cartItemId = (int)reader["cart_item_id"];
                     int itemId = (int)reader["item_id"];
                     int quantity = (int)reader["quantity"];
-                    var shopItem = this.shopItemRepo.GetById(itemId);
-                    var cartItem = new CartItem(id, shopItem, quantity);
-                    items[id] = cartItem;
+                    rawItems.Add((cartItemId, itemId, quantity));
                 }
             }
 
-            return items;
+            return rawItems;
         }
     }
 }

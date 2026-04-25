@@ -19,12 +19,22 @@
 
         public IEnumerable<Cart> GetAllCarts()
         {
-            return this.cartRepo.GetAll();
+            var carts = this.cartRepo.GetAll();
+            foreach (var cart in carts)
+            {
+                cart.CartItems = this.BuildCartItemList(cart.Id);
+            }
+            return carts;
         }
 
         public Cart GetCartById(int id)
         {
-            return this.cartRepo.GetById(id);
+            var cart = this.cartRepo.GetById(id);
+            if (cart != null)
+            {
+                cart.CartItems = this.BuildCartItemList(id);
+            }
+            return cart;
         }
 
         public Cart GetOrCreateCart(int userId)
@@ -35,7 +45,10 @@
                 cart = new Cart(userId, new Client(userId, "Current Client"), new Dictionary<int, CartItem>());
                 this.cartRepo.Add(cart);
             }
-
+            else
+            {
+                cart.CartItems = this.BuildCartItemList(userId);
+            }
             return cart;
         }
 
@@ -51,31 +64,38 @@
 
         public void AddItemToCart(int cartId, CartItem item)
         {
-            var cart = this.cartRepo.GetById(cartId);
-            CartItem existing = null;
-            if (cart != null)
+            var rawItems = this.cartRepo.GetRawCartItems(cartId);
+            int existingCartItemId = 0;
+            int existingQuantity = 0;
+            bool existingFound = false;
+
+            foreach (var (cartItemId, itemId, quantity) in rawItems)
             {
-                foreach (var currentCartItem in cart.CartItems.Values)
+                if (itemId == item.ShopItem.Id)
                 {
-                    if (currentCartItem.ShopItem?.Id == item.ShopItem.Id)
-                    {
-                        existing = currentCartItem;
-                        break;
-                    }
+                    existingCartItemId = cartItemId;
+                    existingQuantity = quantity;
+                    existingFound = true;
+                    break;
                 }
             }
 
             var shopItem = this.shopItemService.GetById(item.ShopItem.Id);
-            int totalQuantity = (existing?.Quantity ?? 0) + item.Quantity;
+            int alreadyInCartQuantity = 0;
+            if (existingFound)
+            {
+                alreadyInCartQuantity = existingQuantity;
+            }
+            int totalQuantity = alreadyInCartQuantity + item.Quantity;
 
             if (shopItem == null || totalQuantity > shopItem.Quantity)
             {
                 throw new InvalidOperationException("Not enough stock.");
             }
 
-            if (existing != null)
+            if (existingFound)
             {
-                this.cartRepo.UpdateItemQuantity(cartId, existing.Id, totalQuantity);
+                this.cartRepo.UpdateItemQuantity(cartId, existingCartItemId, totalQuantity);
             }
             else
             {
@@ -90,23 +110,23 @@
 
         public void UpdateItemQuantity(int cartId, int cartItemId, int quantity)
         {
-            var cart = this.cartRepo.GetById(cartId);
-            CartItem cartItem = null;
-            if (cart != null)
+            var rawItems = this.cartRepo.GetRawCartItems(cartId);
+            int foundItemId = 0;
+            bool found = false;
+
+            foreach (var (rawCartItemId, itemId, rawQuantity) in rawItems)
             {
-                foreach (var currentCartItem in cart.CartItems.Values)
+                if (rawCartItemId == cartItemId)
                 {
-                    if (currentCartItem.Id == cartItemId)
-                    {
-                        cartItem = currentCartItem;
-                        break;
-                    }
+                    foundItemId = itemId;
+                    found = true;
+                    break;
                 }
             }
 
-            if (cartItem != null)
+            if (found)
             {
-                var shopItem = this.shopItemService.GetById(cartItem.ShopItem.Id);
+                var shopItem = this.shopItemService.GetById(foundItemId);
                 if (shopItem != null && quantity > shopItem.Quantity)
                 {
                     throw new InvalidOperationException("Not enough stock.");
@@ -129,33 +149,39 @@
                 return 0;
             }
 
-            return cart.GetOverallPrice();
+            double total = 0;
+            var cartItems = this.BuildCartItemList(cartId);
+            foreach (var cartItem in cartItems.Values)
+            {
+                total += cartItem.GetTotalPrice();
+            }
+            return total;
         }
 
         public void DecreaseItemQuantity(int cartId, int cartItemId)
         {
-            var cart = this.cartRepo.GetById(cartId);
-            CartItem cartItem = null;
-            if (cart != null)
+            var rawItems = this.cartRepo.GetRawCartItems(cartId);
+            int foundQuantity = 0;
+            bool found = false;
+
+            foreach (var (rawCartItemId, itemId, quantity) in rawItems)
             {
-                foreach (var currentCartItem in cart.CartItems.Values)
+                if (rawCartItemId == cartItemId)
                 {
-                    if (currentCartItem.Id == cartItemId)
-                    {
-                        cartItem = currentCartItem;
-                        break;
-                    }
+                    foundQuantity = quantity;
+                    found = true;
+                    break;
                 }
             }
 
-            if (cartItem == null)
+            if (!found)
             {
                 return;
             }
 
-            if (cartItem.Quantity > MinimumCartItemQuantity)
+            if (foundQuantity > MinimumCartItemQuantity)
             {
-                this.cartRepo.UpdateItemQuantity(cartId, cartItemId, cartItem.Quantity - MinimumCartItemQuantity);
+                this.cartRepo.UpdateItemQuantity(cartId, cartItemId, foundQuantity - MinimumCartItemQuantity);
             }
             else
             {
@@ -165,23 +191,32 @@
 
         public bool IsLastCartItem(int cartId, int cartItemId)
         {
-            var cart = this.cartRepo.GetById(cartId);
-            if (cart == null)
-            {
-                return false;
-            }
+            var rawItems = this.cartRepo.GetRawCartItems(cartId);
 
-            CartItem cartItem = null;
-            foreach (var currentCartItem in cart.CartItems.Values)
+            foreach (var (rawCartItemId, itemId, quantity) in rawItems)
             {
-                if (currentCartItem.Id == cartItemId)
+                if (rawCartItemId == cartItemId)
                 {
-                    cartItem = currentCartItem;
-                    break;
+                    return quantity == MinimumCartItemQuantity;
                 }
             }
 
-            return cartItem != null && cartItem.Quantity == MinimumCartItemQuantity;
+            return false;
+        }
+
+        private Dictionary<int, CartItem> BuildCartItemList(int cartId)
+        {
+            var result = new Dictionary<int, CartItem>();
+            var rawItems = this.cartRepo.GetRawCartItems(cartId);
+            foreach (var (cartItemId, itemId, quantity) in rawItems)
+            {
+                var shopItem = this.shopItemService.GetById(itemId);
+                if (shopItem != null)
+                {
+                    result[cartItemId] = new CartItem(cartItemId, shopItem, quantity);
+                }
+            }
+            return result;
         }
     }
 }

@@ -19,5 +19,6 @@ namespace Content.Repository.Interface
         void RemoveItemFromCart(int cartId, int cartItemId);
         void UpdateItemQuantity(int cartId, int cartItemId, int quantity);
         void ClearCart(int cartId);
+        IEnumerable<(int CartItemId, int ItemId, int Quantity)> GetRawCartItems(int cartId);
     }
 }

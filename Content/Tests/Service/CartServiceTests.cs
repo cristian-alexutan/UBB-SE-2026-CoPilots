@@ -25,6 +25,7 @@ public class CartServiceTests
     {
         Cart existingCart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
         this.cartRepo.GetById(1).Returns(existingCart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)>());
 
         Cart result = this.cartService.GetOrCreateCart(1);
 
@@ -45,9 +46,8 @@ public class CartServiceTests
     public void AddItemToCart_ItemNotInCartAndStockSufficient_AddsItemToRepo()
     {
         ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
         CartItem cartItem = new CartItem(0, shopItem, 2);
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)>());
         this.shopItemService.GetById(1).Returns(shopItem);
 
         this.cartService.AddItemToCart(1, cartItem);
@@ -59,10 +59,8 @@ public class CartServiceTests
     public void AddItemToCart_ItemAlreadyInCart_UpdatesCombinedQuantityInRepo()
     {
         ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem existingCartItem = new CartItem(1, shopItem, 3);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, existingCartItem } });
         CartItem newCartItem = new CartItem(0, shopItem, 2);
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 3) });
         this.shopItemService.GetById(1).Returns(shopItem);
 
         this.cartService.AddItemToCart(1, newCartItem);
@@ -74,9 +72,8 @@ public class CartServiceTests
     public void AddItemToCart_QuantityExceedsStock_ThrowsInvalidOperationException()
     {
         ShopItem shopItem = new ShopItem(1, 2, 5.0f, 1, string.Empty, "Test Item", "desc");
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
         CartItem cartItem = new CartItem(0, shopItem, 5);
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)>());
         this.shopItemService.GetById(1).Returns(shopItem);
 
         var exception = Assert.Catch<InvalidOperationException>(() => this.cartService.AddItemToCart(1, cartItem));
@@ -88,10 +85,8 @@ public class CartServiceTests
     public void AddItemToCart_CombinedQuantityExceedsStock_ThrowsInvalidOperationException()
     {
         ShopItem shopItem = new ShopItem(1, 5, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem existingCartItem = new CartItem(1, shopItem, 3);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, existingCartItem } });
         CartItem newCartItem = new CartItem(0, shopItem, 4);
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 3) });
         this.shopItemService.GetById(1).Returns(shopItem);
 
         var exception = Assert.Catch<InvalidOperationException>(() => this.cartService.AddItemToCart(1, newCartItem));
@@ -103,9 +98,8 @@ public class CartServiceTests
     public void AddItemToCart_ShopItemNotFound_ThrowsInvalidOperationException()
     {
         ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
         CartItem cartItem = new CartItem(0, shopItem, 2);
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)>());
         this.shopItemService.GetById(1).Returns((ShopItem)null);
 
         var exception = Assert.Catch<InvalidOperationException>(() => this.cartService.AddItemToCart(1, cartItem));
@@ -117,9 +111,7 @@ public class CartServiceTests
     public void UpdateItemQuantity_NewQuantityWithinStock_UpdatesQuantityInRepo()
     {
         ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem existingCartItem = new CartItem(1, shopItem, 2);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, existingCartItem } });
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 2) });
         this.shopItemService.GetById(1).Returns(shopItem);
 
         this.cartService.UpdateItemQuantity(1, 1, 5);
@@ -131,9 +123,7 @@ public class CartServiceTests
     public void UpdateItemQuantity_NewQuantityExceedsStock_ThrowsInvalidOperationException()
     {
         ShopItem shopItem = new ShopItem(1, 5, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem existingCartItem = new CartItem(1, shopItem, 2);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, existingCartItem } });
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 2) });
         this.shopItemService.GetById(1).Returns(shopItem);
 
         var exception = Assert.Catch<InvalidOperationException>(() => this.cartService.UpdateItemQuantity(1, 1, 10));
@@ -155,9 +145,10 @@ public class CartServiceTests
     public void GetCartTotal_CartWithItems_ReturnsCorrectTotal()
     {
         ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem cartItem = new CartItem(1, shopItem, 3);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, cartItem } });
+        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
         this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 3) });
+        this.shopItemService.GetById(1).Returns(shopItem);
 
         double total = this.cartService.GetCartTotal(1);
 
@@ -167,10 +158,7 @@ public class CartServiceTests
     [Test]
     public void DecreaseItemQuantity_QuantityGreaterThanOne_DecreasesQuantityByOneInRepo()
     {
-        ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem cartItem = new CartItem(1, shopItem, 3);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, cartItem } });
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 3) });
 
         this.cartService.DecreaseItemQuantity(1, 1);
 
@@ -180,10 +168,7 @@ public class CartServiceTests
     [Test]
     public void DecreaseItemQuantity_QuantityIsOne_RemovesItemFromRepo()
     {
-        ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem cartItem = new CartItem(1, shopItem, 1);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, cartItem } });
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 1) });
 
         this.cartService.DecreaseItemQuantity(1, 1);
 
@@ -193,8 +178,7 @@ public class CartServiceTests
     [Test]
     public void DecreaseItemQuantity_CartItemNotFound_NoRepoCallsMade()
     {
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)>());
 
         this.cartService.DecreaseItemQuantity(1, 999);
 
@@ -205,10 +189,7 @@ public class CartServiceTests
     [Test]
     public void IsLastCartItem_QuantityIsOne_ReturnsTrue()
     {
-        ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem cartItem = new CartItem(1, shopItem, 1);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, cartItem } });
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 1) });
 
         bool result = this.cartService.IsLastCartItem(1, 1);
 
@@ -218,20 +199,7 @@ public class CartServiceTests
     [Test]
     public void IsLastCartItem_QuantityGreaterThanOne_ReturnsFalse()
     {
-        ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
-        CartItem cartItem = new CartItem(1, shopItem, 3);
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, cartItem } });
-        this.cartRepo.GetById(1).Returns(cart);
-
-        bool result = this.cartService.IsLastCartItem(1, 1);
-
-        Assert.That(result, Is.False);
-    }
-
-    [Test]
-    public void IsLastCartItem_CartNotFound_ReturnsFalse()
-    {
-        this.cartRepo.GetById(1).Returns((Cart)null);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)> { (1, 1, 3) });
 
         bool result = this.cartService.IsLastCartItem(1, 1);
 
@@ -241,8 +209,7 @@ public class CartServiceTests
     [Test]
     public void IsLastCartItem_CartItemNotFound_ReturnsFalse()
     {
-        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
-        this.cartRepo.GetById(1).Returns(cart);
+        this.cartRepo.GetRawCartItems(1).Returns(new List<(int CartItemId, int ItemId, int Quantity)>());
 
         bool result = this.cartService.IsLastCartItem(1, 999);
 
