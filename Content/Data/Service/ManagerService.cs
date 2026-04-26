@@ -93,7 +93,12 @@ namespace Content.Service
 
         public Manager? GetAnyManager()
         {
-            return managerRepo.GetAll().FirstOrDefault();
+            Manager? manager = managerRepo.GetAll().FirstOrDefault();
+            if (manager == null)
+            {
+                throw new Exception();
+            }
+            return manager;
         }
     }
 }

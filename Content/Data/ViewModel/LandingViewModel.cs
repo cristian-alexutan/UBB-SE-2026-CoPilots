@@ -31,26 +31,30 @@ namespace Content.ViewModel
 
         private void SetAdmin()
         {
-            var manager = managerService.GetAnyManager();
-            if (manager == null)
+            try
+            {
+                var manager = managerService.GetAnyManager();
+                session.SetAdmin(manager.Id);
+                IsRoleSelected = true;
+            }
+            catch (Exception)
             {
                 ErrorMessage = "No admin found.";
-                return;
             }
-            session.SetAdmin(manager.Id);
-            IsRoleSelected = true;
         }
 
         private void SetClient()
         {
-            var client = clientService.GetAnyClient();
-            if (client == null)
+            try
+            {
+                var client = clientService.GetAnyClient();
+                session.SetClient(client.Id);
+                IsRoleSelected = true;
+            }
+            catch
             {
                 ErrorMessage = "No client found.";
-                return;
             }
-            session.SetClient(client.Id);
-            IsRoleSelected = true;
         }
     }
 }
