@@ -9,20 +9,20 @@ namespace Tests.Service
     [TestFixture]
     public class ShopItemServiceTests
     {
-        private IShopItemRepo shopItemRepo;
+        private IShopItemRepo shopItemRepository;
         private ShopItemService shopItemService;
 
         [SetUp]
         public void SetUp()
         {
-            shopItemRepo = Substitute.For<IShopItemRepo>();
-            shopItemService = new ShopItemService(shopItemRepo);
+            shopItemRepository = Substitute.For<IShopItemRepo>();
+            shopItemService = new ShopItemService(shopItemRepository);
         }
 
         [Test]
         public void GetById_ItemDoesNotExist_ThrowsInvalidOperationException()
         {
-            shopItemRepo.GetById(1).Returns((ShopItem)null);
+            shopItemRepository.GetById(1).Returns((ShopItem)null);
 
             Assert.Throws<InvalidOperationException>(() => shopItemService.GetById(1));
         }
@@ -30,66 +30,66 @@ namespace Tests.Service
         [Test]
         public void GetById_ItemExists_ReturnsItem()
         {
-            ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
-            shopItemRepo.GetById(1).Returns(shopItem);
+            ShopItem existingShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
+            shopItemRepository.GetById(1).Returns(existingShopItem);
 
-            ShopItem result = shopItemService.GetById(1);
+            ShopItem getByIdResult = shopItemService.GetById(1);
 
-            Assert.That(result, Is.EqualTo(shopItem));
+            Assert.That(getByIdResult, Is.EqualTo(existingShopItem));
         }
 
         [Test]
-        public void GetItemsByShopId_ItemsWithMatchingShopExist_ReturnsOnlyMatchingItems()
+        public void GetItemsByShopId_ItemsInSameShopExist_ReturnsMatchingItems()
         {
-            ShopItem item1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
-            ShopItem item2 = new ShopItem(2, 10, 5.0f, 2, string.Empty, "Other", string.Empty);
-            shopItemRepo.GetAll().Returns(new List<ShopItem> { item1, item2 });
+            ShopItem existingShopItem1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem existingShopItem2 = new ShopItem(2, 10, 5.0f, 2, string.Empty, "Other", string.Empty);
+            shopItemRepository.GetAll().Returns(new List<ShopItem> { existingShopItem1, existingShopItem2 });
 
-            IEnumerable<ShopItem> result = shopItemService.GetItemsByShopId(1);
+            IEnumerable<ShopItem> itemsByShopIdResult = shopItemService.GetItemsByShopId(1);
 
-            Assert.That(result, Does.Not.Contain(item2));
+            Assert.That(itemsByShopIdResult, Does.Not.Contain(existingShopItem2));
         }
 
         [Test]
         public void GetItemsByShopId_NoMatchingItems_ReturnsEmptyCollection()
         {
-            shopItemRepo.GetAll().Returns(new List<ShopItem>());
+            shopItemRepository.GetAll().Returns(new List<ShopItem>());
 
-            IEnumerable<ShopItem> result = shopItemService.GetItemsByShopId(1);
+            IEnumerable<ShopItem> emptyShopItemsCollection = shopItemService.GetItemsByShopId(1);
 
-            Assert.That(result, Is.Empty);
+            Assert.That(emptyShopItemsCollection, Is.Empty);
         }
 
         [Test]
-        public void SearchItemsByName_NullSearchText_ReturnsAllItemsForShop()
+        public void SearchItemsByName_NullSearchText_ReturnsAllItemsInShop()
         {
-            ShopItem item1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "A Item", string.Empty);
-            shopItemRepo.GetAll().Returns(new List<ShopItem> { item1 });
+            ShopItem existingShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
+            shopItemRepository.GetAll().Returns(new List<ShopItem> { existingShopItem });
 
             IEnumerable<ShopItem> result = shopItemService.SearchItemsByName(1, null);
 
-            Assert.That(result, Contains.Item(item1));
+            Assert.That(result, Contains.Item(existingShopItem));
         }
 
         [Test]
         public void SearchItemsByName_TextMatchesItemName_ReturnsMatchingItem()
         {
-            ShopItem item1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "A Item", string.Empty);
-            ShopItem item2 = new ShopItem(2, 10, 5.0f, 1, string.Empty, "B Item", string.Empty);
-            shopItemRepo.GetAll().Returns(new List<ShopItem> { item1, item2 });
+            ShopItem existingShopItem1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "A Item", string.Empty);
+            ShopItem existingShopItem2 = new ShopItem(2, 10, 5.0f, 1, string.Empty, "B Item", string.Empty);
+            shopItemRepository.GetAll().Returns(new List<ShopItem> { existingShopItem1, existingShopItem2 });
 
             IEnumerable<ShopItem> result = shopItemService.SearchItemsByName(1, "A");
 
-            Assert.That(result, Does.Not.Contain(item2));
+            Assert.That(result, Does.Not.Contain(existingShopItem2));
         }
 
         [Test]
         public void SearchItemsByName_TextMatchesNone_ReturnsEmptyCollection()
         {
-            ShopItem item1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "A Item", string.Empty);
-            shopItemRepo.GetAll().Returns(new List<ShopItem> { item1 });
+            ShopItem existingShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
+            shopItemRepository.GetAll().Returns(new List<ShopItem> { existingShopItem });
 
-            IEnumerable<ShopItem> result = shopItemService.SearchItemsByName(1, "xyz");
+            IEnumerable<ShopItem> result = shopItemService.SearchItemsByName(1, "test");
 
             Assert.That(result, Is.Empty);
         }
@@ -97,85 +97,85 @@ namespace Tests.Service
         [Test]
         public void AddShopItem_ShopIdIsZero_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(0, 10, 5.0f, 0, string.Empty, "Item", string.Empty);
+            ShopItem invalidShopItem = new ShopItem(0, 10, 5.0f, 0, string.Empty, "Item", string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(invalidShopItem));
         }
 
         [Test]
         public void AddShopItem_NegativeQuantity_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(0, -1, 5.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem invalidShopItem = new ShopItem(0, -1, 5.0f, 1, string.Empty, "Item", string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(invalidShopItem));
         }
 
         [Test]
         public void AddShopItem_PriceIsZero_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(0, 10, 0.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem invalidShopItem = new ShopItem(0, 10, 0.0f, 1, string.Empty, "Item", string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(invalidShopItem));
         }
 
         [Test]
         public void AddShopItem_EmptyName_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(0, 10, 5.0f, 1, string.Empty, string.Empty, string.Empty);
+            ShopItem invalidShopItem = new ShopItem(0, 10, 5.0f, 1, string.Empty, string.Empty, string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.AddShopItem(invalidShopItem));
         }
 
         [Test]
         public void AddShopItem_ValidItem_CallsRepositoryAdd()
         {
-            ShopItem shopItem = new ShopItem(0, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem validShopItem = new ShopItem(0, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
 
-            shopItemService.AddShopItem(shopItem);
+            shopItemService.AddShopItem(validShopItem);
 
-            shopItemRepo.Received().Add(shopItem);
+            shopItemRepository.Received().Add(validShopItem);
         }
 
         [Test]
         public void UpdateShopItem_ShopIdIsZero_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(1, 10, 5.0f, 0, string.Empty, "Item", string.Empty);
+            ShopItem invalidShopItem = new ShopItem(1, 10, 5.0f, 0, string.Empty, "Item", string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(invalidShopItem));
         }
 
         [Test]
         public void UpdateShopItem_NegativeQuantity_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(1, -1, 5.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem invalidShopItem = new ShopItem(1, -1, 5.0f, 1, string.Empty, "Item", string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(invalidShopItem));
         }
 
         [Test]
         public void UpdateShopItem_PriceIsZero_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(1, 10, 0.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem invalidShopItem = new ShopItem(1, 10, 0.0f, 1, string.Empty, "Item", string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(invalidShopItem));
         }
 
         [Test]
         public void UpdateShopItem_EmptyName_ThrowsArgumentException()
         {
-            ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, string.Empty, string.Empty);
+            ShopItem invalidShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, string.Empty, string.Empty);
 
-            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(shopItem));
+            Assert.Throws<ArgumentException>(() => shopItemService.UpdateShopItem(invalidShopItem));
         }
 
         [Test]
         public void UpdateShopItem_ValidItem_CallsRepositoryUpdate()
         {
-            ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
+            ShopItem validShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Item", string.Empty);
 
-            shopItemService.UpdateShopItem(shopItem);
+            shopItemService.UpdateShopItem(validShopItem);
 
-            shopItemRepo.Received().Update(shopItem);
+            shopItemRepository.Received().Update(validShopItem);
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace Tests.Service
         {
             shopItemService.RemoveShopItem(1);
 
-            shopItemRepo.Received().Delete(1);
+            shopItemRepository.Received().Delete(1);
         }
 
         [Test]
@@ -195,14 +195,14 @@ namespace Tests.Service
         [Test]
         public void GetItemsSortedByPrice_ValidShop_ReturnsCheapestItemFirst()
         {
-            ShopItem item1 = new ShopItem(1, 10, 1.0f, 1, string.Empty, "A Item", string.Empty);
-            ShopItem item2 = new ShopItem(2, 10, 10.0f, 1, string.Empty, "B Item", string.Empty);
-            shopItemRepo.GetAll().Returns(new List<ShopItem> { item2, item1 });
+            ShopItem cheapShopItem = new ShopItem(1, 10, 1.0f, 1, string.Empty, "Cheap item", string.Empty);
+            ShopItem expensiveShopItem = new ShopItem(2, 10, 10.0f, 1, string.Empty, "Expensive item", string.Empty);
+            shopItemRepository.GetAll().Returns(new List<ShopItem> { expensiveShopItem, cheapShopItem });
             Shop shop = new Shop(1, "Shop", string.Empty, 0);
 
             IEnumerable<ShopItem> result = shopItemService.GetItemsSortedByPrice(shop);
 
-            Assert.That(result.First(), Is.EqualTo(item1));
+            Assert.That(result.First(), Is.EqualTo(cheapShopItem));
         }
 
         [Test]
@@ -214,14 +214,14 @@ namespace Tests.Service
         [Test]
         public void GetItemsSortedAlphabetically_ValidShop_ReturnsFirstItemAlphabetically()
         {
-            ShopItem item1 = new ShopItem(1, 10, 5.0f, 1, string.Empty, "B Item", string.Empty);
-            ShopItem item2 = new ShopItem(2, 10, 5.0f, 1, string.Empty, "A Item", string.Empty);
-            shopItemRepo.GetAll().Returns(new List<ShopItem> { item1, item2 });
+            ShopItem secondShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Second item", string.Empty);
+            ShopItem firstShopItem = new ShopItem(2, 10, 5.0f, 1, string.Empty, "First item", string.Empty);
+            shopItemRepository.GetAll().Returns(new List<ShopItem> { secondShopItem, firstShopItem });
             Shop shop = new Shop(1, "Shop", string.Empty, 0);
 
             IEnumerable<ShopItem> result = shopItemService.GetItemsSortedAlphabetically(shop);
 
-            Assert.That(result.First(), Is.EqualTo(item2));
+            Assert.That(result.First(), Is.EqualTo(firstShopItem));
         }
     }
 }
