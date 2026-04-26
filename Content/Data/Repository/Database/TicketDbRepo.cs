@@ -7,7 +7,7 @@ namespace Content.Repository.Database
 {
     public class TicketDbRepo : ITicketRepo
     {
-        private string connectionString;
+        private readonly string connectionString;
 
         public TicketDbRepo(string connectionString)
         {
@@ -18,11 +18,11 @@ namespace Content.Repository.Database
         {
             var tickets = new List<Ticket>();
 
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Ticket", conn);
-                var reader = cmd.ExecuteReader();
+                connection.Open();
+                var selectAllTicketsCommand = new SqlCommand("SELECT * FROM Ticket", connection);
+                var reader = selectAllTicketsCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -39,13 +39,13 @@ namespace Content.Repository.Database
 
         public Ticket GetById(int id)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT * FROM Ticket WHERE ticket_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
+                connection.Open();
+                var selectTicketByIdCommand = new SqlCommand("SELECT * FROM Ticket WHERE ticket_id=@Id", connection);
+                selectTicketByIdCommand.Parameters.AddWithValue("@Id", id);
 
-                var reader = cmd.ExecuteReader();
+                var reader = selectTicketByIdCommand.ExecuteReader();
                 if (reader.Read())
                 {
                     return new Ticket(
@@ -60,38 +60,38 @@ namespace Content.Repository.Database
 
         public void Add(Ticket ticket)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand(
+                connection.Open();
+                var insertTicketCommand = new SqlCommand(
                     "INSERT INTO Ticket (category, subcategory) VALUES (@Category, @Subcategory); " +
                     "SELECT CAST(SCOPE_IDENTITY() AS int);",
-                    conn);
-                cmd.Parameters.AddWithValue("@Category", ticket.Category);
-                cmd.Parameters.AddWithValue("@Subcategory", ticket.Subcategory);
-                ticket.Id = (int)cmd.ExecuteScalar();
+                    connection);
+                insertTicketCommand.Parameters.AddWithValue("@Category", ticket.Category);
+                insertTicketCommand.Parameters.AddWithValue("@Subcategory", ticket.Subcategory);
+                ticket.Id = (int)insertTicketCommand.ExecuteScalar();
             }
         }
 
         public void Delete(int id)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("DELETE FROM Ticket WHERE ticket_id=@Id", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-                cmd.ExecuteNonQuery();
+                connection.Open();
+                var deleteTicketCommand = new SqlCommand("DELETE FROM Ticket WHERE ticket_id=@Id", connection);
+                deleteTicketCommand.Parameters.AddWithValue("@Id", id);
+                deleteTicketCommand.ExecuteNonQuery();
             }
         }
 
         public int CountBySubcategory(string subcategory)
         {
-            using (SqlConnection conn = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                conn.Open();
-                var cmd = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE subcategory=@Subcategory", conn);
-                cmd.Parameters.AddWithValue("@Subcategory", subcategory);
-                return (int)cmd.ExecuteScalar();
+                connection.Open();
+                var selectCountCommand = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE subcategory=@Subcategory", connection);
+                selectCountCommand.Parameters.AddWithValue("@Subcategory", subcategory);
+                return (int)selectCountCommand.ExecuteScalar();
             }
         }
     }

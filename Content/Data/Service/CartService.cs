@@ -69,7 +69,7 @@ namespace Content.Service
             var shopItem = this.shopItemService.GetById(item.ShopItem.Id);
             int totalQuantity = (existing?.Quantity ?? 0) + item.Quantity;
 
-            if (totalQuantity > shopItem.Quantity)
+            if (shopItem == null || totalQuantity > shopItem.Quantity)
             {
                 throw new InvalidOperationException("Not enough stock.");
             }
