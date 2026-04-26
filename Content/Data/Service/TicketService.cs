@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Domain;
 using Content.Repository.Interface;
 using Content.Data.Service.Interface;
@@ -15,7 +16,12 @@ namespace Content.Service
 
         public int CountTicketsBySubcategory(string subcategory)
         {
-            return this.ticketRepo.CountBySubcategory(subcategory);
+            if (string.IsNullOrEmpty(subcategory))
+            {
+                throw new ArgumentException("Subcategory cannot be null or empty.", nameof(subcategory));
+            }
+
+            return this.ticketRepo.GetAll().Count(ticket => ticket.Subcategory == subcategory);
         }
 
         public void AddTicket(Ticket ticket)

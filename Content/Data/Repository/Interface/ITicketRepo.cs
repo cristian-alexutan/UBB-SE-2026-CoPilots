@@ -12,7 +12,5 @@ namespace Content.Repository.Interface
         void Add(Ticket ticket);
 
         void Delete(int ticketId);
-
-        int CountBySubcategory(string subcategory);
     }
 }

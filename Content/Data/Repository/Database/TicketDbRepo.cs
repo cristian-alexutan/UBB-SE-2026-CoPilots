@@ -84,15 +84,5 @@ namespace Content.Repository.Database
             }
         }
 
-        public int CountBySubcategory(string subcategory)
-        {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
-            {
-                connection.Open();
-                var selectCountCommand = new SqlCommand("SELECT COUNT(*) FROM Ticket WHERE subcategory=@Subcategory", connection);
-                selectCountCommand.Parameters.AddWithValue("@Subcategory", subcategory);
-                return (int)selectCountCommand.ExecuteScalar();
-            }
-        }
     }
 }
