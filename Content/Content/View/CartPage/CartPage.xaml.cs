@@ -10,8 +10,6 @@ namespace Content
 {
     public sealed partial class CartPage : Page
     {
-        public Visibility BoolToVisibility(bool value) => value ? Visibility.Visible : Visibility.Collapsed;
-
         public ICartViewModel ViewModel { get; }
 
         public CartPage()
@@ -20,25 +18,35 @@ namespace Content
             this.InitializeComponent();
         }
 
-        private async void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
+        public Visibility BoolToVisibility(bool value)
         {
-            var button = sender as Button;
-            var shopItem = button.DataContext as CartShopItem;
-
-            if (shopItem != null)
+            if (value)
             {
-                if (this.ViewModel.IsLastItem(shopItem))
+                return Visibility.Visible;
+            }
+
+            return Visibility.Collapsed;
+        }
+
+        private async void DecreaseQuantity_Click(object sender, RoutedEventArgs eventArgs)
+        {
+            var clickedButton = sender as Button;
+            var cartShopItem = clickedButton.DataContext as CartShopItem;
+
+            if (cartShopItem != null)
+            {
+                if (this.ViewModel.IsLastItem(cartShopItem))
                 {
-                    await this.ShowDeleteConfirmationAsync(shopItem);
+                    await this.ShowDeleteConfirmationAsync(cartShopItem);
                 }
                 else
                 {
-                    this.ViewModel.DecreaseQuantity(shopItem);
+                    this.ViewModel.DecreaseQuantity(cartShopItem);
                 }
             }
         }
 
-        private async Task ShowDeleteConfirmationAsync(CartShopItem shopItem)
+        private async Task ShowDeleteConfirmationAsync(CartShopItem cartShopItem)
         {
             ContentDialog deleteDialog = new ContentDialog
             {
@@ -50,33 +58,33 @@ namespace Content
                 XamlRoot = this.XamlRoot,
             };
 
-            ContentDialogResult result = await deleteDialog.ShowAsync();
+            ContentDialogResult dialogResult = await deleteDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary)
+            if (dialogResult == ContentDialogResult.Primary)
             {
-                this.ViewModel.RemoveShopItem(shopItem);
+                this.ViewModel.RemoveShopItem(cartShopItem);
             }
         }
 
-        private async void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
+        private async void IncreaseQuantity_Click(object sender, RoutedEventArgs eventArgs)
         {
-            var button = sender as Button;
-            var shopItem = button.DataContext as CartShopItem;
+            var clickedButton = sender as Button;
+            var cartShopItem = clickedButton.DataContext as CartShopItem;
 
-            if (shopItem != null)
+            if (cartShopItem != null)
             {
                 try
                 {
-                    this.ViewModel.ChangeQuantity(shopItem, shopItem.Quantity + 1);
+                    this.ViewModel.ChangeQuantity(cartShopItem, cartShopItem.Quantity + 1);
                 }
-                catch (InvalidOperationException ex)
+                catch (InvalidOperationException exception)
                 {
-                    await this.ShowErrorDialogAsync("Cannot increase quantity", ex.Message);
+                    await this.ShowErrorDialogAsync("Cannot increase quantity", exception.Message);
                 }
             }
         }
 
-        private async void EmptyCart_Click(object sender, RoutedEventArgs e)
+        private async void EmptyCart_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (this.ViewModel.CartShopItems.Count == 0)
             {
@@ -93,9 +101,9 @@ namespace Content
                 XamlRoot = this.XamlRoot,
             };
 
-            ContentDialogResult result = await emptyDialog.ShowAsync();
+            ContentDialogResult dialogResult = await emptyDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary)
+            if (dialogResult == ContentDialogResult.Primary)
             {
                 this.ViewModel.EmptyCart();
             }
@@ -115,7 +123,7 @@ namespace Content
             await errorDialog.ShowAsync();
         }
 
-        private async void Reserve_Click(object sender, RoutedEventArgs e)
+        private async void Reserve_Click(object sender, RoutedEventArgs eventArgs)
         {
             if (this.ViewModel.CartShopItems.Count > 0)
             {
@@ -123,27 +131,27 @@ namespace Content
                 {
                     this.ViewModel.ReserveCart();
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    await this.ShowErrorDialogAsync("Reservation Error", ex.Message);
+                    await this.ShowErrorDialogAsync("Reservation Error", exception.Message);
                 }
             }
         }
 
-        private async void CancelReservation_Click(object sender, RoutedEventArgs e)
+        private async void CancelReservation_Click(object sender, RoutedEventArgs eventArgs)
         {
             try
             {
                 this.ViewModel.CancelReservation();
                 this.ViewModel.Reload();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                await this.ShowErrorDialogAsync("Cancellation Error", ex.Message);
+                await this.ShowErrorDialogAsync("Cancellation Error", exception.Message);
             }
         }
 
-        private async void BackButton_Click(object sender, RoutedEventArgs e)
+        private async void BackButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             ContentDialog backDialog = new ContentDialog
             {
@@ -155,15 +163,15 @@ namespace Content
                 XamlRoot = this.XamlRoot,
             };
 
-            ContentDialogResult result = await backDialog.ShowAsync();
+            ContentDialogResult dialogResult = await backDialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary)
+            if (dialogResult == ContentDialogResult.Primary)
             {
                 this.Frame.Navigate(typeof(ShopPage));
             }
         }
 
-        private void ProfileButton_Click(object sender, RoutedEventArgs e)
+        private void ProfileButton_Click(object sender, RoutedEventArgs eventArgs)
         {
             this.Frame.Navigate(typeof(LandingPage));
         }
