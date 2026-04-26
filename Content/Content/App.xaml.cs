@@ -24,7 +24,7 @@ namespace Content
             this.InitializeComponent();
         }
 
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected override void OnLaunched(LaunchActivatedEventArgs launchActivatedEventArgs)
         {
             Services = ConfigureServices();
 
@@ -34,57 +34,50 @@ namespace Content
 
         private static IServiceProvider ConfigureServices()
         {
-            string conn = ConfigurationManager
+            string connectionString = ConfigurationManager
                 .ConnectionStrings["DefaultConnection"]
                 .ConnectionString;
 
-            var services = new ServiceCollection();
+            var serviceCollection = new ServiceCollection();
 
-            services.AddSingleton<IClientRepo>(_ => new ClientDbRepo(conn));
-            services.AddSingleton<ITicketRepo>(_ => new TicketDbRepo(conn));
-            services.AddSingleton<IManagerRepo>(_ => new ManagerDbRepo(conn));
-            services.AddSingleton<IShopRepo>(_ => new ShopDbRepo(conn));
-            services.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(conn));
-            services.AddSingleton<ICartRepo>(sp => new CartDbRepo(
-                conn,
-                sp.GetRequiredService<IClientRepo>(),
-                sp.GetRequiredService<IShopItemRepo>()));
+            serviceCollection.AddSingleton<IClientRepo>(_ => new ClientDbRepo(connectionString));
+            serviceCollection.AddSingleton<ITicketRepo>(_ => new TicketDbRepo(connectionString));
+            serviceCollection.AddSingleton<IManagerRepo>(_ => new ManagerDbRepo(connectionString));
+            serviceCollection.AddSingleton<IShopRepo>(_ => new ShopDbRepo(connectionString));
+            serviceCollection.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(connectionString));
+            serviceCollection.AddSingleton<ICartRepo>(_ => new CartDbRepo(connectionString));
+            serviceCollection.AddSingleton<IReservationRepo>(_ => new ReservationDbRepo(connectionString));
 
-            services.AddSingleton<IShopItemService, ShopItemService>();
-            services.AddSingleton<IShopService, ShopService>();
-            services.AddSingleton<ICartService, CartService>();
-            services.AddSingleton<ITicketService, TicketService>();
-            services.AddSingleton<IClientService, ClientService>();
-            services.AddSingleton<IManagerService, ManagerService>();
+            serviceCollection.AddSingleton<IShopItemService, ShopItemService>();
+            serviceCollection.AddSingleton<IShopService, ShopService>();
+            serviceCollection.AddSingleton<ICartService, CartService>();
+            serviceCollection.AddSingleton<ITicketService, TicketService>();
+            serviceCollection.AddSingleton<IClientService, ClientService>();
+            serviceCollection.AddSingleton<IManagerService, ManagerService>();
+            serviceCollection.AddSingleton<IReservationService, ReservationService>();
 
-            services.AddSingleton<IReservationRepo>(sp => new ReservationDbRepo(
-                conn,
-                sp.GetRequiredService<ICartService>()));
+            serviceCollection.AddSingleton<UserSession>();
 
-            services.AddSingleton<IReservationService, ReservationService>();
+            serviceCollection.AddTransient<ILandingViewModel, LandingViewModel>();
+            serviceCollection.AddTransient<IShopPageViewModel, ShopPageViewModel>();
+            serviceCollection.AddTransient<ICartViewModel, CartViewModel>();
 
-            services.AddSingleton<UserSession>();
-
-            services.AddTransient<ILandingViewModel, LandingViewModel>();
-            services.AddTransient<IShopPageViewModel, ShopPageViewModel>();
-            services.AddTransient<ICartViewModel, CartViewModel>();
-
-            services.AddSingleton<Func<Shop, IShopItemsViewModel>>(sp => shop =>
+            serviceCollection.AddSingleton<Func<Shop, IShopItemsViewModel>>(serviceProvider => shop =>
                 new ShopItemsViewModel(
-                    sp.GetRequiredService<IShopItemService>(),
-                    sp.GetRequiredService<ICartService>(),
-                    sp.GetRequiredService<UserSession>(),
+                    serviceProvider.GetRequiredService<IShopItemService>(),
+                    serviceProvider.GetRequiredService<ICartService>(),
+                    serviceProvider.GetRequiredService<UserSession>(),
                     shop));
 
-            services.AddSingleton<Func<ShopItem, Shop, IItemDetailsViewModel>>(sp => (item, shop) =>
+            serviceCollection.AddSingleton<Func<ShopItem, Shop, IItemDetailsViewModel>>(serviceProvider => (shopItem, shop) =>
                 new ItemDetailsViewModel(
-                    sp.GetRequiredService<ICartService>(),
-                    sp.GetRequiredService<IShopItemService>(),
-                    sp.GetRequiredService<UserSession>(),
-                    item,
+                    serviceProvider.GetRequiredService<ICartService>(),
+                    serviceProvider.GetRequiredService<IShopItemService>(),
+                    serviceProvider.GetRequiredService<UserSession>(),
+                    shopItem,
                     shop));
 
-            return services.BuildServiceProvider();
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }

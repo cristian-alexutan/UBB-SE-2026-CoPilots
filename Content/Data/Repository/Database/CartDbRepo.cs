@@ -1,4 +1,4 @@
-﻿namespace Content.Repository.Database
+namespace Content.Repository.Database
 {
     using System;
     using System.Collections.Generic;
@@ -9,43 +9,57 @@
     public class CartDbRepo : ICartRepo
     {
         private readonly string connectionString;
-        private readonly IClientRepo clientRepo;
-        private readonly IShopItemRepo shopItemRepo;
 
-        public CartDbRepo(string connectionString, IClientRepo clientRepo, IShopItemRepo shopItemRepo)
+        public CartDbRepo(string connectionString)
         {
             this.connectionString = connectionString;
-            this.clientRepo = clientRepo;
-            this.shopItemRepo = shopItemRepo;
         }
 
         public IEnumerable<Cart> GetAll()
         {
-            var carts = new List<Cart>();
+            var carts = new Dictionary<int, Cart>();
 
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var selectAllCartsCommand = new SqlCommand("SELECT * FROM Cart", connection);
-                var reader = selectAllCartsCommand.ExecuteReader();
-
+                var selectCartsCommand = new SqlCommand(
+                    "SELECT c.cart_id, cl.client_id, cl.name AS client_name " +
+                    "FROM Cart c JOIN Client cl ON c.client_id = cl.client_id",
+                    connection);
+                var reader = selectCartsCommand.ExecuteReader();
                 while (reader.Read())
                 {
-                    int clientId = (int)reader["client_id"];
                     var cart = new Cart(
                         (int)reader["cart_id"],
-                        this.clientRepo.GetById(clientId),
+                        new Client((int)reader["client_id"], (string)reader["client_name"]),
                         new Dictionary<int, CartItem>());
-                    carts.Add(cart);
+                    carts[cart.Id] = cart;
                 }
             }
 
-            foreach (var cart in carts)
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
-                cart.CartItems = this.GetCartItems(cart.Id);
+                connection.Open();
+                var selectCartItemsCommand = new SqlCommand(
+                    "SELECT ci.cart_item_id, ci.cart_id, ci.quantity, " +
+                    "i.item_id, i.shop_id, i.stock, i.price, i.img, i.name, i.description " +
+                    "FROM CartItem ci JOIN Item i ON ci.item_id = i.item_id",
+                    connection);
+                var reader = selectCartItemsCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    int cartId = (int)reader["cart_id"];
+                    if (!carts.TryGetValue(cartId, out var cart))
+                    {
+                        continue;
+                    }
+
+                    var cartItem = MapCartItem(reader);
+                    cart.CartItems[cartItem.Id] = cartItem;
+                }
             }
 
-            return carts;
+            return carts.Values;
         }
 
         public Cart GetById(int id)
@@ -55,23 +69,43 @@
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
-                var selectCartByIdCommand = new SqlCommand("SELECT * FROM Cart WHERE cart_id=@Id", connection);
-                selectCartByIdCommand.Parameters.AddWithValue("@Id", id);
-                var reader = selectCartByIdCommand.ExecuteReader();
-
+                var selectCartCommand = new SqlCommand(
+                    "SELECT c.cart_id, cl.client_id, cl.name AS client_name " +
+                    "FROM Cart c JOIN Client cl ON c.client_id = cl.client_id " +
+                    "WHERE c.cart_id = @Id",
+                    connection);
+                selectCartCommand.Parameters.AddWithValue("@Id", id);
+                var reader = selectCartCommand.ExecuteReader();
                 if (reader.Read())
                 {
-                    int clientId = (int)reader["client_id"];
                     cart = new Cart(
                         (int)reader["cart_id"],
-                        this.clientRepo.GetById(clientId),
+                        new Client((int)reader["client_id"], (string)reader["client_name"]),
                         new Dictionary<int, CartItem>());
                 }
             }
 
-            if (cart != null)
+            if (cart == null)
             {
-                cart.CartItems = this.GetCartItems(cart.Id);
+                return null;
+            }
+
+            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            {
+                connection.Open();
+                var selectCartItemsCommand = new SqlCommand(
+                    "SELECT ci.cart_item_id, ci.cart_id, ci.quantity, " +
+                    "i.item_id, i.shop_id, i.stock, i.price, i.img, i.name, i.description " +
+                    "FROM CartItem ci JOIN Item i ON ci.item_id = i.item_id " +
+                    "WHERE ci.cart_id = @CartId",
+                    connection);
+                selectCartItemsCommand.Parameters.AddWithValue("@CartId", id);
+                var reader = selectCartItemsCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    var cartItem = MapCartItem(reader);
+                    cart.CartItems[cartItem.Id] = cartItem;
+                }
             }
 
             return cart;
@@ -153,29 +187,20 @@
             }
         }
 
-        private Dictionary<int, CartItem> GetCartItems(int cartId)
+        private static CartItem MapCartItem(SqlDataReader reader)
         {
-            var items = new Dictionary<int, CartItem>();
+            int cartItemId = (int)reader["cart_item_id"];
+            int quantity = (int)reader["quantity"];
+            int itemId = (int)reader["item_id"];
+            int shopId = (int)reader["shop_id"];
+            int stock = (int)reader["stock"];
+            float price = Convert.ToSingle(reader["price"]);
+            string photo = reader["img"] == DBNull.Value ? string.Empty : (string)reader["img"];
+            string name = (string)reader["name"];
+            string description = reader["description"] == DBNull.Value ? string.Empty : (string)reader["description"];
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
-            {
-                connection.Open();
-                var selectCartItemsByCartIdCommand = new SqlCommand("SELECT * FROM CartItem WHERE cart_id=@CartId", connection);
-                selectCartItemsByCartIdCommand.Parameters.AddWithValue("@CartId", cartId);
-                var reader = selectCartItemsByCartIdCommand.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    int id = (int)reader["cart_item_id"];
-                    int itemId = (int)reader["item_id"];
-                    int quantity = (int)reader["quantity"];
-                    var shopItem = this.shopItemRepo.GetById(itemId);
-                    var cartItem = new CartItem(id, shopItem, quantity);
-                    items[id] = cartItem;
-                }
-            }
-
-            return items;
+            var shopItem = new ShopItem(itemId, stock, price, shopId, photo, name, description);
+            return new CartItem(cartItemId, shopItem, quantity);
         }
     }
 }
