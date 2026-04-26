@@ -260,5 +260,66 @@ namespace Tests.Service
 
             reservationRepo.Received().Update(reservation);
         }
+
+        [Test]
+        public void GetActiveReservationForCart_NoReservationsExist_ReturnsNull()
+        {
+            reservationRepo.GetAll().Returns(new List<Reservation>());
+
+            Reservation result = reservationService.GetActiveReservationForCart(10);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void GetActiveReservationForCart_NoReservationMatchesCartId_ReturnsNull()
+        {
+            Cart cart = BuildCart(10);
+            Reservation reservation = new Reservation(1, cart, true, DateTime.Now);
+            reservationRepo.GetAll().Returns(new List<Reservation> { reservation });
+
+            Reservation result = reservationService.GetActiveReservationForCart(99);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void GetActiveReservationForCart_ReservationMatchesCartButInactive_ReturnsNull()
+        {
+            Cart cart = BuildCart(10);
+            Reservation reservation = new Reservation(1, cart, false, DateTime.Now);
+            reservationRepo.GetAll().Returns(new List<Reservation> { reservation });
+
+            Reservation result = reservationService.GetActiveReservationForCart(10);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void GetActiveReservationForCart_ActiveReservationForCart_ReturnsReservation()
+        {
+            Cart cart = BuildCart(10);
+            Reservation reservation = new Reservation(1, cart, true, DateTime.Now);
+            reservationRepo.GetAll().Returns(new List<Reservation> { reservation });
+
+            Reservation result = reservationService.GetActiveReservationForCart(10);
+
+            Assert.That(result, Is.EqualTo(reservation));
+        }
+
+        [Test]
+        public void GetActiveReservationForCart_MultipleReservations_ReturnsActiveMatchingOne()
+        {
+            Cart cart1 = BuildCart(10);
+            Cart cart2 = BuildCart(20);
+            Reservation inactiveReservation = new Reservation(1, cart1, false, DateTime.Now);
+            Reservation activeReservation = new Reservation(2, cart1, true, DateTime.Now);
+            Reservation otherCartReservation = new Reservation(3, cart2, true, DateTime.Now);
+            reservationRepo.GetAll().Returns(new List<Reservation> { inactiveReservation, activeReservation, otherCartReservation });
+
+            Reservation result = reservationService.GetActiveReservationForCart(10);
+
+            Assert.That(result, Is.EqualTo(activeReservation));
+        }
     }
 }

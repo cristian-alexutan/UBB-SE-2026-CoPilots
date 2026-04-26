@@ -28,5 +28,7 @@ namespace Content.Data.Service.Interface
         double GetCartTotal(int cartId);
 
         bool IsLastCartItem(int cartId, int cartItemId);
+
+        IEnumerable<CartItem> GetCartItems(int cartId);
     }
 }

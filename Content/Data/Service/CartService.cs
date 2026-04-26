@@ -164,6 +164,17 @@ namespace Content.Service
             }
         }
 
+        public IEnumerable<CartItem> GetCartItems(int cartId)
+        {
+            var cart = this.cartRepo.GetById(cartId);
+            if (cart == null || cart.CartItems == null)
+            {
+                return new List<CartItem>();
+            }
+
+            return cart.CartItems.Values;
+        }
+
         public bool IsLastCartItem(int cartId, int cartItemId)
         {
             var cart = this.cartRepo.GetById(cartId);

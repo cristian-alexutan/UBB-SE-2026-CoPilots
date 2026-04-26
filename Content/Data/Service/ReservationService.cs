@@ -50,6 +50,19 @@ namespace Content.Service
             reservationRepo.Add(reservation);
         }
 
+        public Reservation GetActiveReservationForCart(int cartId)
+        {
+            foreach (var reservation in this.reservationRepo.GetAll())
+            {
+                if (reservation.ReservationCart.Id == cartId && reservation.Active)
+                {
+                    return reservation;
+                }
+            }
+
+            return null;
+        }
+
         public void DeleteReservation(int reservationId)
         {
             reservationRepo.Delete(reservationId);

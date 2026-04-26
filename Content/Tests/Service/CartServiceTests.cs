@@ -206,6 +206,41 @@ public class CartServiceTests
     }
 
     [Test]
+    public void GetCartItems_CartNotFound_ReturnsEmptyCollection()
+    {
+        this.cartRepo.GetById(1).Returns((Cart)null);
+
+        IEnumerable<CartItem> result = this.cartService.GetCartItems(1);
+
+        Assert.That(result, Is.Empty);
+    }
+
+    [Test]
+    public void GetCartItems_CartHasNoItems_ReturnsEmptyCollection()
+    {
+        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem>());
+        this.cartRepo.GetById(1).Returns(cart);
+
+        IEnumerable<CartItem> result = this.cartService.GetCartItems(1);
+
+        Assert.That(result, Is.Empty);
+    }
+
+    [Test]
+    public void GetCartItems_CartWithItems_ReturnsAllCartItems()
+    {
+        ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");
+        CartItem cartItem1 = new CartItem(1, shopItem, 2);
+        CartItem cartItem2 = new CartItem(2, shopItem, 3);
+        Cart cart = new Cart(1, new Client(1, "Test Client"), new Dictionary<int, CartItem> { { 1, cartItem1 }, { 2, cartItem2 } });
+        this.cartRepo.GetById(1).Returns(cart);
+
+        IEnumerable<CartItem> result = this.cartService.GetCartItems(1);
+
+        Assert.That(result, Is.EquivalentTo(new[] { cartItem1, cartItem2 }));
+    }
+
+    [Test]
     public void IsLastCartItem_QuantityIsOne_ReturnsTrue()
     {
         ShopItem shopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Test Item", "desc");

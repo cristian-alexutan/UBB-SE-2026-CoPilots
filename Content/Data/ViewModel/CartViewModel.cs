@@ -159,17 +159,7 @@ namespace Content.ViewModel
                 return;
             }
 
-            var allReservations = this.reservationService.GetAllReservations();
-            Reservation activeReservation = null;
-            foreach (var reservation in allReservations)
-            {
-                if (reservation.ReservationCart.Id == cart.Id && reservation.Active)
-                {
-                    activeReservation = reservation;
-                    break;
-                }
-            }
-
+            var activeReservation = this.reservationService.GetActiveReservationForCart(cart.Id);
             if (activeReservation != null)
             {
                 this.currentReservationId = activeReservation.Id;
@@ -180,19 +170,14 @@ namespace Content.ViewModel
         private void LoadCartItems()
         {
             this.CartShopItems.Clear();
-            var cart = this.cartService.GetCartById(this.session.UserId);
-
-            if (cart != null && cart.CartItems != null)
+            foreach (var existingCartItem in this.cartService.GetCartItems(this.session.UserId))
             {
-                foreach (var existingCartItem in cart.CartItems.Values)
+                this.CartShopItems.Add(new CartShopItem
                 {
-                    this.CartShopItems.Add(new CartShopItem
-                    {
-                        CartItemId = existingCartItem.Id,
-                        ShopItem = existingCartItem.ShopItem,
-                        Quantity = existingCartItem.Quantity,
-                    });
-                }
+                    CartItemId = existingCartItem.Id,
+                    ShopItem = existingCartItem.ShopItem,
+                    Quantity = existingCartItem.Quantity,
+                });
             }
 
             this.overallTotal = this.cartService.GetCartTotal(this.session.UserId);

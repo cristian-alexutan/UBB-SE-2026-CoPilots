@@ -9,5 +9,7 @@ namespace Content.Data.Service.Interface
         IEnumerable<Reservation> GetAllReservations();
         Reservation GetReservationById(int reservationId);
         void ReserveCart(Reservation reservation);
+
+        Reservation GetActiveReservationForCart(int cartId);
     }
 }
