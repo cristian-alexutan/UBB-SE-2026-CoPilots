@@ -7,11 +7,11 @@ namespace Content.Repository.Interface
     {
         IEnumerable<Client> GetAll();
 
-        Client GetById(int id);
+        Client GetById(int clientId);
 
         void Add(Client client);
 
-        Client? Delete(int id);
+        Client? Delete(int clientId);
 
         Client? Update(Client client);
     }

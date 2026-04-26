@@ -22,9 +22,9 @@ namespace Content.Service
         {
             return reservationRepo.GetAll();
         }
-        public Reservation GetReservationById(int id)
+        public Reservation GetReservationById(int reservationId)
         {
-            return reservationRepo.GetById(id);
+            return reservationRepo.GetById(reservationId);
         }
         public void ReserveCart(Reservation reservation)
         {
@@ -50,14 +50,14 @@ namespace Content.Service
             reservationRepo.Add(reservation);
         }
 
-        public void DeleteReservation(int id)
+        public void DeleteReservation(int reservationId)
         {
-            reservationRepo.Delete(id);
+            reservationRepo.Delete(reservationId);
         }
 
-        public void CancelReservation(int id)
+        public void CancelReservation(int reservationId)
         {
-            Reservation reservation = reservationRepo.GetById(id);
+            Reservation reservation = reservationRepo.GetById(reservationId);
 
             if (!reservation.Active)
             {

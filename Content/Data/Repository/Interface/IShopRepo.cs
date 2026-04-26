@@ -7,11 +7,11 @@
     {
         IEnumerable<Shop> GetAll();
 
-        Shop? GetById(int id);
+        Shop? GetById(int shopId);
 
         void Add(Shop shop);
 
-        Shop? Delete(int id);
+        Shop? Delete(int shopId);
 
         Shop? Update(Shop shop);
     }

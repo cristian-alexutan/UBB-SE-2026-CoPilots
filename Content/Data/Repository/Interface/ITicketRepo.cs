@@ -7,11 +7,11 @@ namespace Content.Repository.Interface
     {
         IEnumerable<Ticket> GetAll();
 
-        Ticket GetById(int id);
+        Ticket GetById(int ticketId);
 
         void Add(Ticket ticket);
 
-        void Delete(int id);
+        void Delete(int ticketId);
 
         int CountBySubcategory(string subcategory);
     }

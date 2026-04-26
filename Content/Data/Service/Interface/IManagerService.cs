@@ -5,10 +5,10 @@ namespace Content.Data.Service.Interface
     public interface IManagerService
     {
         void AddManager(Manager manager);
-        Manager? DeleteManager(int id);
+        Manager? DeleteManager(int managerId);
         IEnumerable<Manager> GetAllManagers();
         Manager? GetAnyManager();
-        Manager GetManagerById(int id);
+        Manager GetManagerById(int managerId);
         Manager? UpdateManager(Manager manager);
     }
 }

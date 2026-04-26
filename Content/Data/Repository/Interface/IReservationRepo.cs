@@ -10,9 +10,9 @@ namespace Content.Repository.Interface
     public interface IReservationRepo
     {
         IEnumerable<Reservation> GetAll();
-        Reservation GetById(int id);
+        Reservation GetById(int reservationId);
         void Add(Reservation reservation);
-        void Delete(int id);
+        void Delete(int reservationId);
         void Update(Reservation reservation);
     }
 }

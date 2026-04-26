@@ -37,13 +37,13 @@ namespace Content.Repository.Database
             return tickets;
         }
 
-        public Ticket GetById(int id)
+        public Ticket GetById(int ticketId)
         {
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 var selectTicketByIdCommand = new SqlCommand("SELECT * FROM Ticket WHERE ticket_id=@Id", connection);
-                selectTicketByIdCommand.Parameters.AddWithValue("@Id", id);
+                selectTicketByIdCommand.Parameters.AddWithValue("@Id", ticketId);
 
                 var reader = selectTicketByIdCommand.ExecuteReader();
                 if (reader.Read())
@@ -73,13 +73,13 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int ticketId)
         {
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 var deleteTicketCommand = new SqlCommand("DELETE FROM Ticket WHERE ticket_id=@Id", connection);
-                deleteTicketCommand.Parameters.AddWithValue("@Id", id);
+                deleteTicketCommand.Parameters.AddWithValue("@Id", ticketId);
                 deleteTicketCommand.ExecuteNonQuery();
             }
         }

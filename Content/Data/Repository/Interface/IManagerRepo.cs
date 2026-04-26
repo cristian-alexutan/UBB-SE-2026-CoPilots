@@ -7,11 +7,11 @@ namespace Content.Repository.Interface
     {
         IEnumerable<Manager> GetAll();
 
-        Manager GetById(int id);
+        Manager GetById(int managerId);
 
         void Add(Manager manager);
 
-        Manager? Delete(int id);
+        Manager? Delete(int managerId);
 
         Manager? Update(Manager manager);
     }

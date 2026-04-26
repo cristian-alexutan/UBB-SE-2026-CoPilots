@@ -40,9 +40,9 @@ namespace Content.Service
             this.shopRepo.Add(shop);
         }
 
-        public void DeleteShop(int id)
+        public void DeleteShop(int shopId)
         {
-            this.shopRepo.Delete(id);
+            this.shopRepo.Delete(shopId);
         }
 
         public IEnumerable<Shop> SortAlphabetically(IEnumerable<Shop> shops)

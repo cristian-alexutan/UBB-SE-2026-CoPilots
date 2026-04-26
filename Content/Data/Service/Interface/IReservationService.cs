@@ -4,10 +4,10 @@ namespace Content.Data.Service.Interface
 {
     public interface IReservationService
     {
-        void CancelReservation(int id);
-        void DeleteReservation(int id);
+        void CancelReservation(int reservationId);
+        void DeleteReservation(int reservationId);
         IEnumerable<Reservation> GetAllReservations();
-        Reservation GetReservationById(int id);
+        Reservation GetReservationById(int reservationId);
         void ReserveCart(Reservation reservation);
     }
 }

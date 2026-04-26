@@ -11,9 +11,9 @@ namespace Content.Repository.Interface
     public interface ICartRepo
     {
         IEnumerable<Cart> GetAll();
-        Cart GetById(int id);
+        Cart GetById(int cartId);
         void Add(Cart cart);
-        void Delete(int id);
+        void Delete(int cartId);
 
         void AddItemToCart(int cartId, CartItem item);
         void RemoveItemFromCart(int cartId, int cartItemId);

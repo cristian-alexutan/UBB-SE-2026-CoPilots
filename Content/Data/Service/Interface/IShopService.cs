@@ -10,7 +10,7 @@ namespace Content.Data.Service.Interface
 
         void AddShop(Shop shop);
 
-        void DeleteShop(int id);
+        void DeleteShop(int shopId);
 
         void UpdateShop(Shop shop);
 

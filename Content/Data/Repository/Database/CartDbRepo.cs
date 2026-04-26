@@ -62,7 +62,7 @@ namespace Content.Repository.Database
             return carts.Values;
         }
 
-        public Cart GetById(int id)
+        public Cart GetById(int cartId)
         {
             Cart cart = null;
 
@@ -74,7 +74,7 @@ namespace Content.Repository.Database
                     "FROM Cart c JOIN Client cl ON c.client_id = cl.client_id " +
                     "WHERE c.cart_id = @Id",
                     connection);
-                selectCartCommand.Parameters.AddWithValue("@Id", id);
+                selectCartCommand.Parameters.AddWithValue("@Id", cartId);
                 var reader = selectCartCommand.ExecuteReader();
                 if (reader.Read())
                 {
@@ -99,7 +99,7 @@ namespace Content.Repository.Database
                     "FROM CartItem ci JOIN Item i ON ci.item_id = i.item_id " +
                     "WHERE ci.cart_id = @CartId",
                     connection);
-                selectCartItemsCommand.Parameters.AddWithValue("@CartId", id);
+                selectCartItemsCommand.Parameters.AddWithValue("@CartId", cartId);
                 var reader = selectCartItemsCommand.ExecuteReader();
                 while (reader.Read())
                 {
@@ -125,13 +125,13 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int cartId)
         {
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 var deleteCartCommand = new SqlCommand("DELETE FROM Cart WHERE cart_id=@Id", connection);
-                deleteCartCommand.Parameters.AddWithValue("@Id", id);
+                deleteCartCommand.Parameters.AddWithValue("@Id", cartId);
                 deleteCartCommand.ExecuteNonQuery();
             }
         }

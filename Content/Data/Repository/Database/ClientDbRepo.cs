@@ -35,13 +35,13 @@ namespace Content.Repository.Database
             return clients;
         }
 
-        public Client GetById(int id)
+        public Client GetById(int clientId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var selectClientByIdCommand = new SqlCommand("SELECT * FROM Client WHERE client_id=@Id", connection);
-                selectClientByIdCommand.Parameters.AddWithValue("@Id", id);
+                selectClientByIdCommand.Parameters.AddWithValue("@Id", clientId);
 
                 var reader = selectClientByIdCommand.ExecuteReader();
                 if (reader.Read())
@@ -66,12 +66,12 @@ namespace Content.Repository.Database
             }
         }
 
-        public Client? Delete(int id)
+        public Client? Delete(int clientId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                Client? existing = GetById(id);
+                Client? existing = GetById(clientId);
 
                 if (existing == null)
                 {
@@ -80,7 +80,7 @@ namespace Content.Repository.Database
 
                 var deleteClientCommand = new SqlCommand("DELETE FROM Client WHERE client_id=@Id", connection);
 
-                deleteClientCommand.Parameters.AddWithValue("@Id", id);
+                deleteClientCommand.Parameters.AddWithValue("@Id", clientId);
                 deleteClientCommand.ExecuteNonQuery();
                 return existing;
             }

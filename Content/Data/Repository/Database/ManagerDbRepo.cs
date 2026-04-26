@@ -40,13 +40,13 @@ namespace Content.Repository.Database
             return managers;
         }
 
-        public Manager GetById(int id)
+        public Manager GetById(int managerId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var selectManagerByIdCommand = new SqlCommand("SELECT * FROM Manager WHERE manager_id=@Id", connection);
-                selectManagerByIdCommand.Parameters.AddWithValue("@Id", id);
+                selectManagerByIdCommand.Parameters.AddWithValue("@Id", managerId);
 
                 var reader = selectManagerByIdCommand.ExecuteReader();
                 if (reader.Read())
@@ -77,19 +77,19 @@ namespace Content.Repository.Database
             }
         }
 
-        public Manager? Delete(int id)
+        public Manager? Delete(int managerId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                Manager? existing = GetById(id);
+                Manager? existing = GetById(managerId);
                 if (existing == null)
                 {
                     return null;
                 }
 
                 var deleteManagerCommand = new SqlCommand("DELETE FROM Manager WHERE manager_id=@Id", connection);
-                deleteManagerCommand.Parameters.AddWithValue("@Id", id);
+                deleteManagerCommand.Parameters.AddWithValue("@Id", managerId);
                 deleteManagerCommand.ExecuteNonQuery();
                 return existing;
             }

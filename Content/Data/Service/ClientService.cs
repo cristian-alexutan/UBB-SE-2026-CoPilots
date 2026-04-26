@@ -21,9 +21,9 @@ namespace Content.Service
             return clientRepo.GetAll();
         }
 
-        public Client GetClientById(int id)
+        public Client GetClientById(int clientId)
         {
-            return clientRepo.GetById(id);
+            return clientRepo.GetById(clientId);
         }
 
         public void AddClient(Client client)
@@ -41,9 +41,9 @@ namespace Content.Service
             clientRepo.Add(client);
         }
 
-        public Client? DeleteClient(int id)
+        public Client? DeleteClient(int clientId)
         {
-            return clientRepo.Delete(id);
+            return clientRepo.Delete(clientId);
         }
 
         public Client? UpdateClient(Client client)

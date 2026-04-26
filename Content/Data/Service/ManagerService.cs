@@ -21,9 +21,9 @@ namespace Content.Service
             return managerRepo.GetAll();
         }
 
-        public Manager GetManagerById(int id)
+        public Manager GetManagerById(int managerId)
         {
-            return managerRepo.GetById(id);
+            return managerRepo.GetById(managerId);
         }
 
         public void AddManager(Manager manager)
@@ -56,9 +56,9 @@ namespace Content.Service
             managerRepo.Add(manager);
         }
 
-        public Manager? DeleteManager(int id)
+        public Manager? DeleteManager(int managerId)
         {
-            return managerRepo.Delete(id);
+            return managerRepo.Delete(managerId);
         }
 
         public Manager? UpdateManager(Manager manager)

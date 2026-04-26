@@ -53,7 +53,7 @@ namespace Content.Repository.Database
             return reservations.Values;
         }
 
-        public Reservation GetById(int id)
+        public Reservation GetById(int reservationId)
         {
             Reservation reservation = null;
             Cart cart = null;
@@ -69,7 +69,7 @@ namespace Content.Repository.Database
                     "JOIN Client cl ON c.client_id = cl.client_id " +
                     "WHERE r.reservation_id = @Id",
                     connection);
-                selectCommand.Parameters.AddWithValue("@Id", id);
+                selectCommand.Parameters.AddWithValue("@Id", reservationId);
                 var reader = selectCommand.ExecuteReader();
                 if (reader.Read())
                 {
@@ -114,13 +114,13 @@ namespace Content.Repository.Database
             }
         }
 
-        public void Delete(int id)
+        public void Delete(int reservationId)
         {
             using (SqlConnection connection = new SqlConnection(this.connectionString))
             {
                 connection.Open();
                 var deleteCommand = new SqlCommand("DELETE FROM Reservation WHERE reservation_id=@Id", connection);
-                deleteCommand.Parameters.AddWithValue("@Id", id);
+                deleteCommand.Parameters.AddWithValue("@Id", reservationId);
                 deleteCommand.ExecuteNonQuery();
             }
         }

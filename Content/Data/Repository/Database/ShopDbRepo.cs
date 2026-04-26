@@ -42,12 +42,12 @@
             return shops;
         }
 
-        public Shop? GetById(int id)
+        public Shop? GetById(int shopId)
         {
             using SqlConnection connection = new (this.connectionString);
             connection.Open();
             var selectShopWithIdCommand = new SqlCommand("SELECT * FROM Shop WHERE shop_id=@Id", connection);
-            selectShopWithIdCommand.Parameters.AddWithValue("@Id", id);
+            selectShopWithIdCommand.Parameters.AddWithValue("@Id", shopId);
             var reader = selectShopWithIdCommand.ExecuteReader();
             if (reader.Read())
             {
@@ -74,9 +74,9 @@
             shop.Id = (int)insertCommand.ExecuteScalar();
         }
 
-        public Shop? Delete(int id)
+        public Shop? Delete(int shopId)
         {
-            Shop? exist = this.GetById(id);
+            Shop? exist = this.GetById(shopId);
             if (exist == null)
             {
                 return null;
@@ -85,7 +85,7 @@
             using SqlConnection connection = new SqlConnection(this.connectionString);
             connection.Open();
             var deleteCommand = new SqlCommand("DELETE FROM Shop WHERE shop_id=@Id", connection);
-            deleteCommand.Parameters.AddWithValue("@Id", id);
+            deleteCommand.Parameters.AddWithValue("@Id", shopId);
             deleteCommand.ExecuteNonQuery();
             return exist;
         }
