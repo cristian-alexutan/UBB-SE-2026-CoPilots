@@ -61,7 +61,12 @@ namespace Content.Service
 
         public Client? GetAnyClient()
         {
-            return clientRepo.GetAll().FirstOrDefault();
+            Client? client = clientRepo.GetAll().FirstOrDefault();
+            if (client == null)
+            {
+                throw new Exception();
+            }
+            return client;
         }
     }
 }
