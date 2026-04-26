@@ -102,5 +102,21 @@ public class ClientServiceTests
         this.clientService.UpdateClient(client);
         this.clientRepo.Received(1).Update(client);
     }
+
+    [Test]
+    public void GetAnyClient_NoClients_ThrowsException()
+    {
+        this.clientRepo.GetAll().Returns(new List<Client>());
+        Assert.Catch<Exception>(() => this.clientService.GetAnyClient());
+    }
+
+    [Test]
+    public void GetAnyClient_ClientExists_ReturnsClient()
+    {
+        Client client = new Client(1, "Test");
+        this.clientRepo.GetAll().Returns(new List<Client> { client });
+        Client? result = this.clientService.GetAnyClient();
+        Assert.That(result, Is.EqualTo(client));
+    }
 }
 

@@ -213,4 +213,20 @@ public class ManagerServiceTests
         this.managerService.UpdateManager(manager);
         this.managerRepo.Received(1).Update(manager);
     }
+
+    [Test]
+    public void GetAnyManager_NoManagers_ThrowsException()
+    {
+        this.managerRepo.GetAll().Returns(new List<Manager>());
+        Assert.Catch<Exception>(() => this.managerService.GetAnyManager());
+    }
+
+    [Test]
+    public void GetAnyManager_ManagerExists_ReturnsManager()
+    {
+        Manager manager = new Manager(1, "name", "test@test.com", "0700000000");
+        this.managerRepo.GetAll().Returns(new List<Manager> { manager });
+        Manager? result = this.managerService.GetAnyManager();
+        Assert.That(result, Is.EqualTo(manager));
+    }
 }
