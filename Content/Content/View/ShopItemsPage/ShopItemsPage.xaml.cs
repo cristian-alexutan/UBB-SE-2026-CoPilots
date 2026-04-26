@@ -67,15 +67,15 @@ namespace Content
             }
         }
 
-        private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs eventArguments)
+        private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (eventArguments.Key == VirtualKey.Enter && sender is TextBox textBox)
+            if (e.Key == VirtualKey.Enter && sender is TextBox textBox)
             {
                 ViewModel.Search(textBox.Text);
             }
         }
 
-        private async void AddButton_Click(object sender, RoutedEventArgs eventArguments)
+        private async void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
 
@@ -130,7 +130,7 @@ namespace Content
             }
         }
 
-        private async void EditButton_Click(object sender, RoutedEventArgs eeventArguments)
+        private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button || button.Tag is not ShopItem item)
             {
@@ -188,7 +188,7 @@ namespace Content
             }
         }
 
-        private async void DeleteButton_Click(object sender, RoutedEventArgs evemtArguments)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button || button.Tag is not ShopItem item)
             {
@@ -211,7 +211,7 @@ namespace Content
             }
         }
 
-        private async void AddItemToCartButton_Click(object sender, RoutedEventArgs eventArguments)
+        private async void AddItemToCartButton_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is not ShopItem item)
             {
@@ -228,24 +228,24 @@ namespace Content
             }
         }
 
-        private void CartButton_Click(object sender, RoutedEventArgs eventArguments)
+        private void CartButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(CartPage));
         }
 
-        private void BackToShops_Click(object sender, RoutedEventArgs eventArguments)
+        private void BackToShops_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ShopPage));
         }
 
-        private void BackToLandingPage_Click(object sender, RoutedEventArgs eventArguments)
+        private void BackToLandingPage_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(LandingPage));
         }
 
-        private void GridView_ItemClick(object sender, ItemClickEventArgs eventArguments)
+        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (eventArguments.ClickedItem is not ShopItem item)
+            if (e.ClickedItem is not ShopItem item)
             {
                 return;
             }

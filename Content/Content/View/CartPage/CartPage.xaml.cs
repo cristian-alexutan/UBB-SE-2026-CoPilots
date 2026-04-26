@@ -28,7 +28,7 @@ namespace Content
             return Visibility.Collapsed;
         }
 
-        private async void DecreaseQuantity_Click(object sender, RoutedEventArgs eventArgs)
+        private async void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
             var clickedButton = sender as Button;
             var cartShopItem = clickedButton.DataContext as CartShopItem;
@@ -66,7 +66,7 @@ namespace Content
             }
         }
 
-        private async void IncreaseQuantity_Click(object sender, RoutedEventArgs eventArgs)
+        private async void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
             var clickedButton = sender as Button;
             var cartShopItem = clickedButton.DataContext as CartShopItem;
@@ -84,7 +84,7 @@ namespace Content
             }
         }
 
-        private async void EmptyCart_Click(object sender, RoutedEventArgs eventArgs)
+        private async void EmptyCart_Click(object sender, RoutedEventArgs e)
         {
             if (this.ViewModel.CartShopItems.Count == 0)
             {
@@ -123,7 +123,7 @@ namespace Content
             await errorDialog.ShowAsync();
         }
 
-        private async void Reserve_Click(object sender, RoutedEventArgs eventArgs)
+        private async void Reserve_Click(object sender, RoutedEventArgs e)
         {
             if (this.ViewModel.CartShopItems.Count > 0)
             {
@@ -138,7 +138,7 @@ namespace Content
             }
         }
 
-        private async void CancelReservation_Click(object sender, RoutedEventArgs eventArgs)
+        private async void CancelReservation_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace Content
             }
         }
 
-        private async void BackButton_Click(object sender, RoutedEventArgs eventArgs)
+        private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog backDialog = new ContentDialog
             {
@@ -171,7 +171,7 @@ namespace Content
             }
         }
 
-        private void ProfileButton_Click(object sender, RoutedEventArgs eventArgs)
+        private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(LandingPage));
         }
