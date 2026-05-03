@@ -1,8 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Content.Data.Service.Interface;
 using Content.Domain;
 using Content.User;
@@ -10,34 +9,26 @@ using Content.ViewModel.Interface;
 
 namespace Content.ViewModel
 {
-    public class CartViewModel : INotifyPropertyChanged, ICartViewModel
+    public partial class CartViewModel : ObservableObject, ICartViewModel
     {
         private readonly ICartService cartService;
         private readonly IReservationService reservationService;
         private readonly UserSession session;
-        private int currentReservationId;
+        private Reservation currentReservation;
 
         private bool isReserved;
-
         private double overallTotal;
 
         public ObservableCollection<CartShopItem> CartShopItems { get; set; }
 
         public bool IsAdmin
         {
-            get
-            {
-                return this.session.IsAdmin;
-            }
+            get { return this.session.IsAdmin; }
         }
 
         public bool IsReserved
         {
-            get
-            {
-                return this.isReserved;
-            }
-
+            get => this.isReserved;
             set
             {
                 this.isReserved = value;
@@ -49,29 +40,18 @@ namespace Content.ViewModel
 
         public bool IsReserveButtonEnabled
         {
-            get
-            {
-                return !this.IsReserved;
-            }
+            get { return !this.IsReserved; }
         }
 
         public bool IsCancelButtonVisible
         {
-            get
-            {
-                return this.IsReserved;
-            }
+            get { return this.IsReserved; }
         }
 
         public string OverallTotal
         {
-            get
-            {
-                return string.Format("${0:0.00}", this.overallTotal);
-            }
+            get { return string.Format("${0:0.00}", this.overallTotal); }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public CartViewModel(ICartService cartService, IReservationService reservationService, UserSession session)
         {
@@ -101,6 +81,7 @@ namespace Content.ViewModel
             this.OnPropertyChanged(nameof(this.OverallTotal));
         }
 
+        [RelayCommand]
         public void RemoveShopItem(CartShopItem cartShopItem)
         {
             this.cartService.RemoveItemFromCart(this.session.UserId, cartShopItem.CartItemId);
@@ -109,6 +90,7 @@ namespace Content.ViewModel
             this.OnPropertyChanged(nameof(this.OverallTotal));
         }
 
+        [RelayCommand]
         public void EmptyCart()
         {
             this.cartService.ClearCart(this.session.UserId);
@@ -117,38 +99,34 @@ namespace Content.ViewModel
             this.OnPropertyChanged(nameof(this.OverallTotal));
         }
 
+        [RelayCommand]
         public void DecreaseQuantity(CartShopItem cartShopItem)
         {
             this.cartService.DecreaseItemQuantity(this.session.UserId, cartShopItem.CartItemId);
             this.Reload();
         }
 
+        [RelayCommand]
         public void ReserveCart()
         {
             var cart = this.cartService.GetCartById(this.session.UserId);
             var newReservation = new Reservation(cart, true, DateTime.Now);
             this.reservationService.ReserveCart(newReservation);
-            this.currentReservationId = newReservation.Id;
+            this.currentReservation = newReservation;
             this.IsReserved = true;
         }
 
+        [RelayCommand]
         public void CancelReservation()
         {
-            this.reservationService.CancelReservation(this.currentReservationId);
+            this.reservationService.CancelReservation(this.currentReservation.Id);
             this.IsReserved = false;
+            this.Reload();
         }
 
         public bool IsLastItem(CartShopItem cartShopItem)
         {
             return this.cartService.IsLastCartItem(this.session.UserId, cartShopItem.CartItemId);
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
 
         private void CheckExistingReservation()
@@ -162,7 +140,7 @@ namespace Content.ViewModel
             var activeReservation = this.reservationService.GetActiveReservationForCart(cart.Id);
             if (activeReservation != null)
             {
-                this.currentReservationId = activeReservation.Id;
+                this.currentReservation = activeReservation;
                 this.IsReserved = true;
             }
         }
@@ -185,8 +163,10 @@ namespace Content.ViewModel
         }
     }
 
-    public class CartShopItem : INotifyPropertyChanged
+    public partial class CartShopItem : ObservableObject
     {
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ItemTotalPrice))]
         private int quantity;
 
         public int CartItemId { get; set; }
@@ -201,7 +181,6 @@ namespace Content.ViewModel
                 {
                     return string.Format("${0:0.00}", this.ShopItem.Price);
                 }
-
                 return "$0.00";
             }
         }
@@ -214,33 +193,7 @@ namespace Content.ViewModel
                 {
                     return string.Format("${0:0.00}", this.Quantity * this.ShopItem.Price);
                 }
-
                 return "$0.00";
-            }
-        }
-
-        public int Quantity
-        {
-            get
-            {
-                return this.quantity;
-            }
-
-            set
-            {
-                this.quantity = value;
-                this.OnPropertyChanged();
-                this.OnPropertyChanged(nameof(this.ItemTotalPrice));
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

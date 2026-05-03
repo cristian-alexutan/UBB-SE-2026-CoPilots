@@ -1,11 +1,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
+using CommunityToolkit.Mvvm.Input;
 namespace Content.ViewModel.Interface
 {
     public interface ICartViewModel : INotifyPropertyChanged
     {
         bool IsCancelButtonVisible { get; }
+        IRelayCommand ReserveCartCommand { get; }
+        IRelayCommand CancelReservationCommand { get; }
         ObservableCollection<CartShopItem> CartShopItems { get; set; }
         bool IsAdmin { get; }
         bool IsReserveButtonEnabled { get; }
