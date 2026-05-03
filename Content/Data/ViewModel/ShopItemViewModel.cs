@@ -52,7 +52,7 @@ namespace Content.ViewModel
                 throw new ArgumentException("Quantity is not a valid number.");
             }
 
-            this.shopItemService.AddShopItem(new ShopItem(quantity, price, this.currentShop.Id, imagePath, name, description));
+            this.shopItemService.AddShopItem(new ShopItem(quantity, price, this.currentShop, imagePath, name, description));
             this.LoadItems();
         }
 
@@ -70,7 +70,7 @@ namespace Content.ViewModel
                 throw new ArgumentException("Quantity is not a valid number.");
             }
 
-            this.shopItemService.UpdateShopItem(new ShopItem(item.Id, quantity, price, item.ShopId, imagePath, name, description));
+            this.shopItemService.UpdateShopItem(new ShopItem(item.Id, quantity, price, item.Shop, imagePath, name, description));
             this.LoadItems();
         }
 
