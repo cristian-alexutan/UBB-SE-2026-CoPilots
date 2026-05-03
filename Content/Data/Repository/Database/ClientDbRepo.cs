@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
+using Content.Repository;
 
 namespace Content.Repository.Database
 {
     public class ClientDbRepo : IClientRepo
     {
-        private readonly string connectionString;
+        private readonly DatabaseConnectionFactory databaseConnectionFactory;
 
-        public ClientDbRepo(string connectionString)
+        public ClientDbRepo(DatabaseConnectionFactory databaseConnectionFactory)
         {
-            this.connectionString = connectionString;
+            this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
         public IEnumerable<Client> GetAll()
         {
             var clients = new List<Client>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectAllClientsCommand = new SqlCommand("SELECT * FROM Client", connection);
@@ -37,7 +38,7 @@ namespace Content.Repository.Database
 
         public Client GetById(int clientId)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectClientByIdCommand = new SqlCommand("SELECT * FROM Client WHERE client_id=@Id", connection);
@@ -56,7 +57,7 @@ namespace Content.Repository.Database
 
         public void Add(Client client)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 var insertClientCommand = new SqlCommand(
@@ -68,7 +69,7 @@ namespace Content.Repository.Database
 
         public Client? Delete(int clientId)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 Client? existing = GetById(clientId);
@@ -88,7 +89,7 @@ namespace Content.Repository.Database
 
         public Client? Update(Client client)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 Client? existing = GetById(client.Id);
