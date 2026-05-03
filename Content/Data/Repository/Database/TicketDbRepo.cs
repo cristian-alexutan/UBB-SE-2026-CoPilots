@@ -7,18 +7,18 @@ namespace Content.Repository.Database
 {
     public class TicketDbRepo : ITicketRepo
     {
-        private readonly string connectionString;
+        private readonly DatabaseConnectionFactory connectionFactory;
 
-        public TicketDbRepo(string connectionString)
+        public TicketDbRepo(DatabaseConnectionFactory databaseConnectionFactory)
         {
-            this.connectionString = connectionString;
+            this.connectionFactory = databaseConnectionFactory;
         }
 
         public IEnumerable<Ticket> GetAll()
         {
             var tickets = new List<Ticket>();
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectAllTicketsCommand = new SqlCommand("SELECT * FROM Ticket", connection);
@@ -39,7 +39,7 @@ namespace Content.Repository.Database
 
         public Ticket GetById(int ticketId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectTicketByIdCommand = new SqlCommand("SELECT * FROM Ticket WHERE ticket_id=@Id", connection);
@@ -60,7 +60,7 @@ namespace Content.Repository.Database
 
         public void Add(Ticket ticket)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var insertTicketCommand = new SqlCommand(
@@ -75,7 +75,7 @@ namespace Content.Repository.Database
 
         public void Delete(int ticketId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var deleteTicketCommand = new SqlCommand("DELETE FROM Ticket WHERE ticket_id=@Id", connection);
