@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
+using TicketSellingModule.Data.Repositories;
 
 namespace Content.Repository.Database
 {
     public class ReservationDbRepo : IReservationRepo
     {
-        private readonly string connectionString;
+        private readonly DatabaseConnectionFactory connectionFactory;
 
-        public ReservationDbRepo(string connectionString)
+        public ReservationDbRepo(DatabaseConnectionFactory connectionFactory)
         {
-            this.connectionString = connectionString;
+            this.connectionFactory = connectionFactory;
         }
 
         public IEnumerable<Reservation> GetAll()
@@ -20,7 +21,7 @@ namespace Content.Repository.Database
             var reservations = new Dictionary<int, Reservation>();
             var carts = new Dictionary<int, Cart>();
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCommand = new SqlCommand(
@@ -58,7 +59,7 @@ namespace Content.Repository.Database
             Reservation reservation = null;
             Cart cart = null;
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCommand = new SqlCommand(
@@ -97,7 +98,7 @@ namespace Content.Repository.Database
 
         public void Add(Reservation reservation)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var insertCommand = new SqlCommand(
@@ -116,7 +117,7 @@ namespace Content.Repository.Database
 
         public void Delete(int reservationId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var deleteCommand = new SqlCommand("DELETE FROM Reservation WHERE reservation_id=@Id", connection);
@@ -127,7 +128,7 @@ namespace Content.Repository.Database
 
         public void Update(Reservation reservation)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var updateCommand = new SqlCommand(
@@ -148,7 +149,7 @@ namespace Content.Repository.Database
                 return;
             }
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCommand = new SqlCommand(

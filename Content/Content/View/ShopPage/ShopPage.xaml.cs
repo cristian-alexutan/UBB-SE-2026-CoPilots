@@ -172,14 +172,14 @@ namespace Content
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    ViewModel.DeleteShop(shop);
+                    ViewModel.DeleteShopCommand.Execute(shop);
                 }
             }
         }
 
         private void SearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
-            ViewModel.Search(sender.Text);
+            ViewModel.SearchCommand.Execute(sender.Text);
         }
 
         private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -190,15 +190,15 @@ namespace Content
 
                 if (selected == "None")
                 {
-                    ViewModel.LoadShops();
+                    ViewModel.LoadShopsCommand.Execute(null);
                 }
                 else if (selected == "Shop Name")
                 {
-                    ViewModel.SortAlphabetically();
+                    ViewModel.SortAlphabeticallyCommand.Execute(null);
                 }
                 else if (selected == "Reviews")
                 {
-                    ViewModel.SortByReviews();
+                    ViewModel.SortByReviewsCommand.Execute(null);
                 }
             }
         }
