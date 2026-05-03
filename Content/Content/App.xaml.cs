@@ -13,7 +13,6 @@ using Content.Data.ViewModel.Interface;
 using Content.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using TicketSellingModule.Data.Repositories;
 
 namespace Content
 {
