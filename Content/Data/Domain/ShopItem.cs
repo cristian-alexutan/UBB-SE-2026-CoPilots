@@ -2,26 +2,30 @@
 {
     public class ShopItem
     {
-        public ShopItem(int id, int quantity, float price, int shopId, string photo, string name, string description)
+        public ShopItem(int id, int quantity, float price, Shop shop, string photo, string name, string description)
         {
             this.Id = id;
             this.Quantity = quantity;
             this.Price = price;
-            this.ShopId = shopId;
+            this.Shop = shop;
             this.Photo = photo;
             this.Name = name;
             this.Description = description;
         }
 
-        public ShopItem(int quantity, float price, int shopId, string photo, string name, string description)
+        public ShopItem(int quantity, float price, Shop shop, string photo, string name, string description)
         {
             this.Id = 0;
             this.Quantity = quantity;
             this.Price = price;
-            this.ShopId = shopId;
+            this.Shop = shop;
             this.Photo = photo;
             this.Name = name;
             this.Description = description;
+        }
+
+        public ShopItem()
+        {
         }
 
         public int Id { get; set; }
@@ -30,7 +34,7 @@
 
         public float Price { get; set; }
 
-        public int ShopId { get; set; }
+        public Shop Shop { get; set; } = null!;
 
         public string Photo { get; set; } = string.Empty;
 

@@ -35,7 +35,7 @@ namespace Content.Service
         public IEnumerable<ShopItem> GetItemsByShopId(int shopId)
         {
             return this.shopItemRepository.GetAll()
-                .Where(shopItem => shopItem.ShopId == shopId);
+                .Where(shopItem => shopItem.Shop != null && shopItem.Shop.Id == shopId);
         }
 
         public IEnumerable<ShopItem> SearchItemsByName(int shopId, string searchText)
@@ -87,7 +87,7 @@ namespace Content.Service
 
         private static void ValidateShopItem(ShopItem shopItem)
         {
-            if (shopItem.ShopId <= 0)
+            if (shopItem.Shop == null || shopItem.Shop.Id <= 0)
             {
                 throw new ArgumentException("Shop item must have a valid shop id.", nameof(shopItem));
             }
