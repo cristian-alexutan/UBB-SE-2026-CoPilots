@@ -38,6 +38,18 @@ namespace Content
             SetMode(ViewModel.IsAdmin);
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            if (ViewModel != null)
+            {
+                ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+                ViewModel.AddedToCartSuccessfully -= OnAddedToCartSuccessfully;
+                ViewModel.ErrorOccurred -= OnErrorOccurred;
+            }
+        }
+
         private void PopulateDisplayFields()
         {
             TitleText.Text = ViewModel.Name;
