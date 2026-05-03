@@ -44,9 +44,9 @@ namespace Content
             var serviceCollection = new ServiceCollection();
 
             serviceCollection.AddSingleton<DatabaseConnectionFactory>();
-            serviceCollection.AddSingleton<IClientRepo>(_ => new ClientDbRepo(connectionString));
+            serviceCollection.AddSingleton<IClientRepo, ClientDbRepo>();
             serviceCollection.AddSingleton<ITicketRepo>(_ => new TicketDbRepo(connectionString));
-            serviceCollection.AddSingleton<IManagerRepo>(_ => new ManagerDbRepo(connectionString));
+            serviceCollection.AddSingleton<IManagerRepo, ManagerDbRepo>();
             serviceCollection.AddSingleton<IShopRepo, ShopDbRepo>();
             serviceCollection.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(connectionString));
             serviceCollection.AddSingleton<ICartRepo, CartDbRepo>();
