@@ -122,35 +122,6 @@ namespace Content
 
             await errorDialog.ShowAsync();
         }
-
-        private async void Reserve_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.ViewModel.CartShopItems.Count > 0)
-            {
-                try
-                {
-                    this.ViewModel.ReserveCart();
-                }
-                catch (Exception exception)
-                {
-                    await this.ShowErrorDialogAsync("Reservation Error", exception.Message);
-                }
-            }
-        }
-
-        private async void CancelReservation_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                this.ViewModel.CancelReservation();
-                this.ViewModel.Reload();
-            }
-            catch (Exception exception)
-            {
-                await this.ShowErrorDialogAsync("Cancellation Error", exception.Message);
-            }
-        }
-
         private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog backDialog = new ContentDialog

@@ -1,8 +1,7 @@
 using System;
 using System.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
 using Content.Data.Service.Interface;
+using Content.Data.ViewModel.Interface;
 using Content.Domain;
 using Content.Repository.Database;
 using Content.Repository.Interface;
@@ -10,7 +9,9 @@ using Content.Service;
 using Content.User;
 using Content.ViewModel;
 using Content.ViewModel.Interface;
-using Content.Data.ViewModel.Interface;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using TicketSellingModule.Data.Repositories;
 
 namespace Content
 {
@@ -40,12 +41,13 @@ namespace Content
 
             var serviceCollection = new ServiceCollection();
 
+            serviceCollection.AddSingleton<DatabaseConnectionFactory>();
             serviceCollection.AddSingleton<IClientRepo>(_ => new ClientDbRepo(connectionString));
             serviceCollection.AddSingleton<ITicketRepo>(_ => new TicketDbRepo(connectionString));
             serviceCollection.AddSingleton<IManagerRepo>(_ => new ManagerDbRepo(connectionString));
             serviceCollection.AddSingleton<IShopRepo>(_ => new ShopDbRepo(connectionString));
             serviceCollection.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(connectionString));
-            serviceCollection.AddSingleton<ICartRepo>(_ => new CartDbRepo(connectionString));
+            serviceCollection.AddSingleton<ICartRepo, CartDbRepo>();
             serviceCollection.AddSingleton<IReservationRepo>(_ => new ReservationDbRepo(connectionString));
 
             serviceCollection.AddSingleton<IShopItemService, ShopItemService>();
