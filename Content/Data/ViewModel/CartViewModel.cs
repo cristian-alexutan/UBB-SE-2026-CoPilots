@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
 using Content.Data.Service.Interface;
 using Content.Domain;
@@ -9,7 +10,7 @@ using Content.ViewModel.Interface;
 
 namespace Content.ViewModel
 {
-    public partial class CartViewModel : ObservableObject, ICartViewModel
+    public partial class CartViewModel : INotifyPropertyChanged, ICartViewModel
     {
         private readonly ICartService cartService;
         private readonly IReservationService reservationService;
@@ -28,7 +29,11 @@ namespace Content.ViewModel
 
         public bool IsReserved
         {
-            get => this.isReserved;
+            get
+            {
+                return this.isReserved;
+            }
+
             set
             {
                 this.isReserved = value;
@@ -52,6 +57,8 @@ namespace Content.ViewModel
         {
             get { return string.Format("${0:0.00}", this.overallTotal); }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public CartViewModel(ICartService cartService, IReservationService reservationService, UserSession session)
         {
@@ -129,6 +136,11 @@ namespace Content.ViewModel
             return this.cartService.IsLastCartItem(this.session.UserId, cartShopItem.CartItemId);
         }
 
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private void CheckExistingReservation()
         {
             var cart = this.cartService.GetCartById(this.session.UserId);
@@ -163,15 +175,22 @@ namespace Content.ViewModel
         }
     }
 
-    public partial class CartShopItem : ObservableObject
+    public partial class CartShopItem : INotifyPropertyChanged
     {
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(ItemTotalPrice))]
         private int quantity;
-
         public int CartItemId { get; set; }
-
         public ShopItem ShopItem { get; set; }
+
+        public int Quantity
+        {
+            get => this.quantity;
+            set
+            {
+                this.quantity = value;
+                this.OnPropertyChanged();
+                this.OnPropertyChanged(nameof(this.ItemTotalPrice));
+            }
+        }
 
         public string DisplayPrice
         {
@@ -195,6 +214,13 @@ namespace Content.ViewModel
                 }
                 return "$0.00";
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
