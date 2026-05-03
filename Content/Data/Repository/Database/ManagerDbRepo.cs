@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
+using Content.Repository;
 
 namespace Content.Repository.Database
 {
     public class ManagerDbRepo : IManagerRepo
     {
-        private readonly string connectionString;
+        private readonly DatabaseConnectionFactory databaseConnectionFactory;
 
-        public ManagerDbRepo(string connectionString)
+        public ManagerDbRepo(DatabaseConnectionFactory databaseConnectionFactory)
         {
-            this.connectionString = connectionString;
+            this.databaseConnectionFactory = databaseConnectionFactory;
         }
 
         public IEnumerable<Manager> GetAll()
         {
             var managers = new List<Manager>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectAllManagersCommand = new SqlCommand("SELECT * FROM Manager", connection);
@@ -42,7 +43,7 @@ namespace Content.Repository.Database
 
         public Manager GetById(int managerId)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectManagerByIdCommand = new SqlCommand("SELECT * FROM Manager WHERE manager_id=@Id", connection);
@@ -64,7 +65,7 @@ namespace Content.Repository.Database
 
         public void Add(Manager manager)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 var addManagerCommand = new SqlCommand(
@@ -79,7 +80,7 @@ namespace Content.Repository.Database
 
         public Manager? Delete(int managerId)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 Manager? existing = GetById(managerId);
@@ -97,7 +98,7 @@ namespace Content.Repository.Database
 
         public Manager? Update(Manager manager)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = this.databaseConnectionFactory.GetConnection())
             {
                 connection.Open();
                 Manager? existing = GetById(manager.Id);
