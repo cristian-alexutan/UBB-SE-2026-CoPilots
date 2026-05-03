@@ -15,6 +15,7 @@ namespace Content.ViewModel
     {
         private readonly IShopService shopService;
         private readonly ITicketService ticketService;
+        private readonly IManagerService managerService;
         private readonly UserSession session;
         private List<Shop> allShops = new ();
         private double clientCartOpacity = 1.0;
@@ -29,23 +30,26 @@ namespace Content.ViewModel
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ShopPageViewModel(IShopService shopService, ITicketService ticketService, UserSession session)
+        public ShopPageViewModel(IShopService shopService, ITicketService ticketService, UserSession session, IManagerService serviceManager)
         {
             this.shopService = shopService ?? throw new ArgumentNullException(nameof(shopService));
             this.ticketService = ticketService ?? throw new ArgumentNullException(nameof(ticketService));
             this.session = session ?? throw new ArgumentNullException(nameof(session));
+            this.managerService = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
             LoadShops();
         }
 
         public void AddShop(string name, string type)
         {
-            shopService.AddShop(new Shop(name, type, session.UserId));
+            Manager manager = managerService.GetManagerById(session.UserId);
+            shopService.AddShop(new Shop(name, type, manager));
             LoadShops();
         }
 
         public void EditShop(Shop shop, string newName, string newType)
         {
-            shopService.UpdateShop(new Shop(shop.Id, newName, newType, session.UserId));
+            Manager manager = managerService.GetManagerById(session.UserId);
+            shopService.UpdateShop(new Shop(shop.Id, newName, newType, manager));
             LoadShops();
         }
 
