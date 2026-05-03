@@ -50,7 +50,7 @@ namespace Content
             serviceCollection.AddSingleton<IShopRepo, ShopDbRepo>();
             serviceCollection.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(connectionString));
             serviceCollection.AddSingleton<ICartRepo, CartDbRepo>();
-            serviceCollection.AddSingleton<IReservationRepo>(_ => new ReservationDbRepo(connectionString));
+            serviceCollection.AddSingleton<IReservationRepo, ReservationDbRepo>();
 
             serviceCollection.AddSingleton<IShopItemService, ShopItemService>();
             serviceCollection.AddSingleton<IShopService, ShopService>();

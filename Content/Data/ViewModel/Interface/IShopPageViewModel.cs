@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Content.Domain;
 
 namespace Content.Data.ViewModel.Interface
@@ -11,6 +12,12 @@ namespace Content.Data.ViewModel.Interface
         bool IsAdmin { get; }
         bool IsCartEnabled { get; }
         ObservableCollection<Shop> Shops { get; }
+
+        IRelayCommand<Shop> DeleteShopCommand { get; }
+        IRelayCommand<string> SearchCommand { get; }
+        IRelayCommand SortByReviewsCommand { get; }
+        IRelayCommand SortAlphabeticallyCommand { get; }
+        IRelayCommand LoadShopsCommand { get; }
 
         event PropertyChangedEventHandler? PropertyChanged;
 

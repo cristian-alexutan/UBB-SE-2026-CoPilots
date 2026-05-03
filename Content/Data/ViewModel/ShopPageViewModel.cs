@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.Input;
 using Content.Data.Service.Interface;
 using Content.Data.ViewModel.Interface;
 using Content.Domain;
@@ -11,7 +13,7 @@ using Content.ViewModel.Interface;
 
 namespace Content.ViewModel
 {
-    public class ShopPageViewModel : IShopPageViewModel
+    public partial class ShopPageViewModel : IShopPageViewModel
     {
         private readonly IShopService shopService;
         private readonly ITicketService ticketService;
@@ -53,17 +55,20 @@ namespace Content.ViewModel
             LoadShops();
         }
 
+        [RelayCommand]
         public void DeleteShop(Shop shop)
         {
             shopService.DeleteShop(shop.Id);
             LoadShops();
         }
 
+        [RelayCommand]
         public void Search(string query)
         {
             ReplaceShops(shopService.SearchByName(query));
         }
 
+        [RelayCommand]
         public void SortByReviews()
         {
             var sorted = shopService
@@ -72,6 +77,7 @@ namespace Content.ViewModel
             ReplaceShops(sorted);
         }
 
+        [RelayCommand]
         public void SortAlphabetically()
         {
             ReplaceShops(shopService.SortAlphabetically(allShops));
@@ -86,9 +92,16 @@ namespace Content.ViewModel
                 Shops.Add(shop);
             }
         }
+
+        [RelayCommand]
         public void LoadShops()
         {
             this.ReplaceShops(shopService.GetAllAvailableShops());
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
