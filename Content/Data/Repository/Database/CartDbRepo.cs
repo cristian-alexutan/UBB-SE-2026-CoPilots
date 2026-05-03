@@ -5,7 +5,6 @@ namespace Content.Repository.Database
     using Content.Domain;
     using Content.Repository.Interface;
     using Microsoft.Data.SqlClient;
-    using TicketSellingModule.Data.Repositories;
 
     public class CartDbRepo : ICartRepo
     {
@@ -24,8 +23,12 @@ namespace Content.Repository.Database
             {
                 connection.Open();
                 var selectCartsCommand = new SqlCommand(
-                    "SELECT c.cart_id, cl.client_id, cl.name AS client_name " +
-                    "FROM Cart c JOIN Client cl ON c.client_id = cl.client_id",
+                    "SELECT ci.cart_item_id, ci.cart_id, ci.quantity, " +
+                    "i.item_id, i.stock, i.price, i.img, i.name, i.description, " +
+                    "s.shop_id, s.name AS shop_name, s.type AS shop_type " +
+                    "FROM CartItem ci " +
+                    "JOIN Item i ON ci.item_id = i.item_id " +
+                    "JOIN Shop s ON i.shop_id = s.shop_id",
                     connection);
                 var reader = selectCartsCommand.ExecuteReader();
                 while (reader.Read())
@@ -71,9 +74,13 @@ namespace Content.Repository.Database
             {
                 connection.Open();
                 var selectCartCommand = new SqlCommand(
-                    "SELECT c.cart_id, cl.client_id, cl.name AS client_name " +
-                    "FROM Cart c JOIN Client cl ON c.client_id = cl.client_id " +
-                    "WHERE c.cart_id = @Id",
+                   "SELECT ci.cart_item_id, ci.cart_id, ci.quantity, " +
+                    "i.item_id, i.stock, i.price, i.img, i.name, i.description, " +
+                    "s.shop_id, s.name AS shop_name, s.type AS shop_type " +
+                    "FROM CartItem ci " +
+                    "JOIN Item i ON ci.item_id = i.item_id " +
+                    "JOIN Shop s ON i.shop_id = s.shop_id " +
+                    "WHERE ci.cart_id = @CartId",
                     connection);
                 selectCartCommand.Parameters.AddWithValue("@Id", cartId);
                 var reader = selectCartCommand.ExecuteReader();
@@ -194,13 +201,16 @@ namespace Content.Repository.Database
             int quantity = (int)reader["quantity"];
             int itemId = (int)reader["item_id"];
             int shopId = (int)reader["shop_id"];
+            string shopName = (string)reader["shop_name"];
+            string shopType = (string)reader["shop_type"];
             int stock = (int)reader["stock"];
             float price = Convert.ToSingle(reader["price"]);
             string photo = reader["img"] == DBNull.Value ? string.Empty : (string)reader["img"];
             string name = (string)reader["name"];
             string description = reader["description"] == DBNull.Value ? string.Empty : (string)reader["description"];
 
-            var shopItem = new ShopItem(itemId, stock, price, shopId, photo, name, description);
+            var shop = new Shop(shopId, shopName, shopType, null!);
+            var shopItem = new ShopItem(itemId, stock, price, shop, photo, name, description);
             return new CartItem(cartItemId, shopItem, quantity);
         }
     }

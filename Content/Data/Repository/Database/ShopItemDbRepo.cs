@@ -1,7 +1,6 @@
 ﻿using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
-using TicketSellingModule.Data.Repositories;
 
 namespace Content.Repository.Database
 {
