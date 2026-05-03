@@ -1,6 +1,6 @@
 using System.Windows.Input;
 using Content.Data.Service.Interface;
-using Content.Helper;
+using CommunityToolkit.Mvvm.Input;
 using Content.User;
 using Content.ViewModel.Interface;
 
