@@ -83,6 +83,5 @@ namespace Content.Repository.Database
                 deleteTicketCommand.ExecuteNonQuery();
             }
         }
-
     }
 }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content.Data", "Data\Conten
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{7C436A10-CC74-4AC2-AC01-E72781207C28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoPilotsMVC", "CoPilotsMVC\CoPilotsMVC.csproj", "{DF2B01C2-95AD-4181-83FB-1C42F60487FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -61,6 +63,18 @@ Global
 		{7C436A10-CC74-4AC2-AC01-E72781207C28}.Release|x64.Build.0 = Release|Any CPU
 		{7C436A10-CC74-4AC2-AC01-E72781207C28}.Release|x86.ActiveCfg = Release|Any CPU
 		{7C436A10-CC74-4AC2-AC01-E72781207C28}.Release|x86.Build.0 = Release|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Debug|x64.Build.0 = Debug|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Debug|x86.Build.0 = Debug|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Release|ARM64.Build.0 = Release|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Release|x64.ActiveCfg = Release|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Release|x64.Build.0 = Release|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Release|x86.ActiveCfg = Release|Any CPU
+		{DF2B01C2-95AD-4181-83FB-1C42F60487FA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
