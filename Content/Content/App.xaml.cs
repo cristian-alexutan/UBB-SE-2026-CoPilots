@@ -11,6 +11,7 @@ using Content.User;
 using Content.ViewModel;
 using Content.ViewModel.Interface;
 using Content.Data.ViewModel.Interface;
+using Content.Repository;
 
 namespace Content
 {
@@ -39,11 +40,12 @@ namespace Content
                 .ConnectionString;
 
             var serviceCollection = new ServiceCollection();
-
+            var databaseConnectionFactory = new DatabaseConnectionFactory();
+            serviceCollection.AddSingleton(databaseConnectionFactory);
             serviceCollection.AddSingleton<IClientRepo>(_ => new ClientDbRepo(connectionString));
             serviceCollection.AddSingleton<ITicketRepo>(_ => new TicketDbRepo(connectionString));
             serviceCollection.AddSingleton<IManagerRepo>(_ => new ManagerDbRepo(connectionString));
-            serviceCollection.AddSingleton<IShopRepo>(_ => new ShopDbRepo(connectionString));
+            serviceCollection.AddSingleton<IShopRepo>(_ => new ShopDbRepo(databaseConnectionFactory));
             serviceCollection.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(connectionString));
             serviceCollection.AddSingleton<ICartRepo>(_ => new CartDbRepo(connectionString));
             serviceCollection.AddSingleton<IReservationRepo>(_ => new ReservationDbRepo(connectionString));

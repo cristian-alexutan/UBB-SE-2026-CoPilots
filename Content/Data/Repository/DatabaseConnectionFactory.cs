@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 
-namespace TicketSellingModule.Data.Repositories
+namespace Content.Repository
 {
     public class DatabaseConnectionFactory
     {

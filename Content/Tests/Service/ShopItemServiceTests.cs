@@ -198,7 +198,7 @@ namespace Tests.Service
             ShopItem cheapShopItem = new ShopItem(1, 10, 1.0f, 1, string.Empty, "Cheap item", string.Empty);
             ShopItem expensiveShopItem = new ShopItem(2, 10, 10.0f, 1, string.Empty, "Expensive item", string.Empty);
             shopItemRepository.GetAll().Returns(new List<ShopItem> { expensiveShopItem, cheapShopItem });
-            Shop shop = new Shop(1, "Shop", string.Empty, 0);
+            Shop shop = new Shop(1, "Shop", string.Empty, new Manager(1, "Manager", "manager@test.com", "0700000000"));
 
             IEnumerable<ShopItem> result = shopItemService.GetItemsSortedByPrice(shop);
 
@@ -217,7 +217,7 @@ namespace Tests.Service
             ShopItem secondShopItem = new ShopItem(1, 10, 5.0f, 1, string.Empty, "Second item", string.Empty);
             ShopItem firstShopItem = new ShopItem(2, 10, 5.0f, 1, string.Empty, "First item", string.Empty);
             shopItemRepository.GetAll().Returns(new List<ShopItem> { secondShopItem, firstShopItem });
-            Shop shop = new Shop(1, "Shop", string.Empty, 0);
+            Shop shop = new Shop(1, "Shop", string.Empty, new Manager(1, "Manager", "manager@test.com", "0700000000"));
 
             IEnumerable<ShopItem> result = shopItemService.GetItemsSortedAlphabetically(shop);
 
