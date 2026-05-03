@@ -5,21 +5,22 @@ namespace Content.Repository.Database
     using Content.Domain;
     using Content.Repository.Interface;
     using Microsoft.Data.SqlClient;
+    using TicketSellingModule.Data.Repositories;
 
     public class CartDbRepo : ICartRepo
     {
-        private readonly string connectionString;
+        private readonly DatabaseConnectionFactory connectionFactory;
 
-        public CartDbRepo(string connectionString)
+        public CartDbRepo(DatabaseConnectionFactory connectionFactory)
         {
-            this.connectionString = connectionString;
+            this.connectionFactory = connectionFactory;
         }
 
         public IEnumerable<Cart> GetAll()
         {
             var carts = new Dictionary<int, Cart>();
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCartsCommand = new SqlCommand(
@@ -37,7 +38,7 @@ namespace Content.Repository.Database
                 }
             }
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCartItemsCommand = new SqlCommand(
@@ -66,7 +67,7 @@ namespace Content.Repository.Database
         {
             Cart cart = null;
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCartCommand = new SqlCommand(
@@ -90,7 +91,7 @@ namespace Content.Repository.Database
                 return null;
             }
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var selectCartItemsCommand = new SqlCommand(
@@ -113,7 +114,7 @@ namespace Content.Repository.Database
 
         public void Add(Cart cart)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var insertCartCommand = new SqlCommand(
@@ -127,7 +128,7 @@ namespace Content.Repository.Database
 
         public void Delete(int cartId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var deleteCartCommand = new SqlCommand("DELETE FROM Cart WHERE cart_id=@Id", connection);
@@ -138,7 +139,7 @@ namespace Content.Repository.Database
 
         public void AddItemToCart(int cartId, CartItem item)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var insertCartItemCommand = new SqlCommand(
@@ -153,7 +154,7 @@ namespace Content.Repository.Database
 
         public void RemoveItemFromCart(int cartId, int cartItemId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var deleteCartItemCommand = new SqlCommand("DELETE FROM CartItem WHERE cart_item_id=@Id", connection);
@@ -164,7 +165,7 @@ namespace Content.Repository.Database
 
         public void UpdateItemQuantity(int cartId, int cartItemId, int quantity)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var updateCartItemQuantityCommand = new SqlCommand(
@@ -178,7 +179,7 @@ namespace Content.Repository.Database
 
         public void ClearCart(int cartId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 var deleteAllCartItemsCommand = new SqlCommand("DELETE FROM CartItem WHERE cart_id=@CartId", connection);

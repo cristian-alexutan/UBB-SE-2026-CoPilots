@@ -1,12 +1,11 @@
-using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Input;
 using Content.Domain;
-using Content.Helper;
 using Content.Data.Service.Interface;
 using Content.User;
 using Content.ViewModel.Interface;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Content.ViewModel
 {
@@ -247,7 +246,7 @@ namespace Content.ViewModel
             try
             {
                 shopItemService.UpdateShopItem(
-                    new ShopItem(item.Id, item.Quantity, item.Price, item.ShopId, item.Photo, item.Name, item.Description));
+                    new ShopItem(item.Id, item.Quantity, item.Price, item.Shop, item.Photo, item.Name, item.Description));
 
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Description));

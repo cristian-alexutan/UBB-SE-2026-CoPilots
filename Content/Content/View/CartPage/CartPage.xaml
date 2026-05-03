@@ -103,12 +103,12 @@
 
                 <Button Content="Reserve" Width="140" Height="50" Background="#2bb8c0" Foreground="White" FontSize="16" FontWeight="SemiBold" 
             IsEnabled="{x:Bind ViewModel.IsReserveButtonEnabled, Mode=OneWay}"
-            Click="Reserve_Click"/>
+            Command="{x:Bind ViewModel.ReserveCartCommand}"/>
 
                 <Button Content="Cancel Reservation" Width="170" Height="50" Background="LightPink" Foreground="DarkRed" FontSize="16" FontWeight="SemiBold" 
             Visibility="{x:Bind BoolToVisibility(ViewModel.IsCancelButtonVisible), Mode=OneWay}"
             Margin="15,0,0,0"
-            Click="CancelReservation_Click"/>
+            Command="{x:Bind ViewModel.CancelReservationCommand}"/>
 
             </StackPanel>
         </Grid>

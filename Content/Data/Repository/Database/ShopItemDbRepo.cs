@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using Content.Domain;
+﻿using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
+using TicketSellingModule.Data.Repositories;
 
 namespace Content.Repository.Database
 {
     public class ShopItemDbRepo : IShopItemRepo
     {
-        private readonly string connectionString;
+        private readonly DatabaseConnectionFactory connectionFactory;
 
-        public ShopItemDbRepo(string connectionString)
+        public ShopItemDbRepo(DatabaseConnectionFactory connectionFactory)
         {
-            this.connectionString = connectionString;
+            this.connectionFactory = connectionFactory;
         }
 
         public IEnumerable<ShopItem> GetAll()
         {
             List<ShopItem> shopItems = new List<ShopItem>();
 
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand("SELECT item_id, shop_id, stock, price, img, name, description FROM Item", connection))
@@ -38,7 +37,7 @@ namespace Content.Repository.Database
 
         public ShopItem? GetById(int shopItemId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand("SELECT item_id, shop_id, stock, price, img, name, description FROM Item WHERE item_id = @shopItemId", connection))
@@ -58,7 +57,7 @@ namespace Content.Repository.Database
 
         public void Add(ShopItem shopItem)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(
@@ -66,7 +65,7 @@ namespace Content.Repository.Database
                     "SELECT SCOPE_IDENTITY();",
                     connection))
                 {
-                    command.Parameters.AddWithValue("@shopId", shopItem.ShopId);
+                    command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
                     command.Parameters.AddWithValue("@quantity", shopItem.Quantity);
                     command.Parameters.AddWithValue("@price", shopItem.Price);
                     command.Parameters.AddWithValue("@photo", string.IsNullOrEmpty(shopItem.Photo) ? (object)DBNull.Value : shopItem.Photo);
@@ -80,7 +79,7 @@ namespace Content.Repository.Database
 
         public void Delete(int shopItemId)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand("DELETE FROM Item WHERE item_id = @shopItemId", connection))
@@ -94,14 +93,14 @@ namespace Content.Repository.Database
 
         public void Update(ShopItem shopItem)
         {
-            using (SqlConnection connection = new SqlConnection(this.connectionString))
+            using (SqlConnection connection = this.connectionFactory.GetConnection())
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(
                     "UPDATE Item SET shop_id = @shopId, stock = @quantity, price = @price, img = @photo, name = @name, description = @description WHERE item_id = @shopItemId",
                     connection))
                 {
-                    command.Parameters.AddWithValue("@shopId", shopItem.ShopId);
+                    command.Parameters.AddWithValue("@shopId", shopItem.Shop.Id);
                     command.Parameters.AddWithValue("@quantity", shopItem.Quantity);
                     command.Parameters.AddWithValue("@price", shopItem.Price);
                     command.Parameters.AddWithValue("@photo", string.IsNullOrEmpty(shopItem.Photo) ? (object)DBNull.Value : shopItem.Photo);
@@ -124,7 +123,9 @@ namespace Content.Repository.Database
             string name = (string)dataReader["name"];
             string description = dataReader["description"] == DBNull.Value ? string.Empty : (string)dataReader["description"];
 
-            return new ShopItem(shopItemId, quantity, price, shopId, photo, name, description);
+            Shop shop = new Shop(shopId, string.Empty, string.Empty, 0);
+
+            return new ShopItem(shopItemId, quantity, price, shop, photo, name, description);
         }
     }
 }

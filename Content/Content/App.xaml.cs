@@ -1,8 +1,7 @@
 using System;
 using System.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
 using Content.Data.Service.Interface;
+using Content.Data.ViewModel.Interface;
 using Content.Domain;
 using Content.Repository.Database;
 using Content.Repository.Interface;
@@ -12,6 +11,9 @@ using Content.ViewModel;
 using Content.ViewModel.Interface;
 using Content.Data.ViewModel.Interface;
 using Content.Repository;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using TicketSellingModule.Data.Repositories;
 
 namespace Content
 {
