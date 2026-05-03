@@ -122,7 +122,8 @@ namespace Content.Repository.Database
             string name = (string)dataReader["name"];
             string description = dataReader["description"] == DBNull.Value ? string.Empty : (string)dataReader["description"];
 
-            Shop shop = new Shop(shopId, string.Empty, string.Empty, 0);
+            Manager manager = new Manager(0, string.Empty, string.Empty, string.Empty);
+            Shop shop = new Shop(shopId, string.Empty, string.Empty, manager);
 
             return new ShopItem(shopItemId, quantity, price, shop, photo, name, description);
         }

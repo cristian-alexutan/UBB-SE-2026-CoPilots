@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Content.Domain;
 using Content.Repository.Interface;
 using Microsoft.Data.SqlClient;
-using TicketSellingModule.Data.Repositories;
+using Content.Repository.Database;
 
 namespace Content.Repository.Database
 {
@@ -176,7 +176,10 @@ namespace Content.Repository.Database
                     string name = (string)reader["name"];
                     string description = reader["description"] == DBNull.Value ? string.Empty : (string)reader["description"];
 
-                    var shopItem = new ShopItem(itemId, stock, price, shopId, photo, name, description);
+                    Manager manager = new Manager(0, string.Empty, string.Empty, string.Empty);
+                    Shop shop = new Shop(shopId, string.Empty, string.Empty, manager);
+
+                    var shopItem = new ShopItem(itemId, stock, price, shop, photo, name, description);
                     cart.CartItems[cartItemId] = new CartItem(cartItemId, shopItem, quantity);
                 }
             }

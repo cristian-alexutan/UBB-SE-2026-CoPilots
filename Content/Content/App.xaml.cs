@@ -47,7 +47,7 @@ namespace Content
             serviceCollection.AddSingleton<ITicketRepo>(_ => new TicketDbRepo(connectionString));
             serviceCollection.AddSingleton<IManagerRepo, ManagerDbRepo>();
             serviceCollection.AddSingleton<IShopRepo, ShopDbRepo>();
-            serviceCollection.AddSingleton<IShopItemRepo>(_ => new ShopItemDbRepo(connectionString));
+            serviceCollection.AddSingleton<IShopItemRepo, ShopItemDbRepo>();
             serviceCollection.AddSingleton<ICartRepo, CartDbRepo>();
             serviceCollection.AddSingleton<IReservationRepo, ReservationDbRepo>();
 
