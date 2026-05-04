@@ -35,9 +35,12 @@ namespace Tests.Service
             return new Cart(cartId, new Client(1, "TestClient"), cartItemsDictionary);
         }
 
+        private static readonly Manager TestManager = new Manager(1, "Manager", "manager@test.com", "0700000000");
+        private static readonly Shop TestShop = new Shop(1, "Test Shop", "Type", TestManager);
+
         private static ShopItem BuildShopItem(int id, int quantity)
         {
-            return new ShopItem(id, quantity, 5.0f, 1, string.Empty, "Item" + id, string.Empty);
+            return new ShopItem(id, quantity, 5.0f, TestShop, string.Empty, "Item" + id, string.Empty);
         }
 
         [Test]
